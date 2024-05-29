@@ -10,16 +10,11 @@
                     Bỏ chọn</span
                 >
             </div>
-            <inforUserOrder />
+            <div class="inforUserOrder">
+                <inforUserOrder />
+            </div>
         </div>
         <div class="productOrderDiv">
-            <div class="title">
-                <span class="inforText"> Sản phẩm </span>
-                <span class="showProduct" @click="uncheckedText">
-                    <AkChevronDownSmall />
-                </span>
-            </div>
-           
             <inforOrder />
         </div>
     </div>
@@ -39,17 +34,15 @@ const uncheckedText = () => {
 .main {
     display: flex;
     flex: 1;
-    height: 100vh;
     flex-direction: column;
     background-color: #f0f2f5;
     gap: 20px;
-
     .titlePage {
         background-color: white;
-        /* border-bottom: 2px solid #b587f6; */
         box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
         text-align: center;
         h1 {
+            padding-top: 15px;
             font-size: 20px;
             font-weight: bold;
         }
@@ -85,36 +78,16 @@ const uncheckedText = () => {
                 padding-inline-end: 10px;
             }
         }
+        .inforUserOrder {
+            display: flex;
+        }
     }
     .productOrderDiv {
         display: flex;
         flex-direction: column;
         background-color: white;
         padding-block: 20px;
-
-        .title {
-            display: flex;
-            flex-direction: row;
-            flex: 1;
-            padding-inline: 10px;
-
-            span {
-                font-size: 16px;
-            }
-            .inforText {
-                font-weight: bold;
-                display: flex;
-                flex: 1;
-            }
-            .uncheckedText {
-                display: flex;
-                justify-content: end;
-                color: red;
-            }
-            .showProduct {
-                padding-inline-end: 10px;
-            }
-        }
+        border-bottom: 1px solid #8c8c8c;
     }
 }
 </style>

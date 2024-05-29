@@ -19,6 +19,7 @@ import {
     Tag,
     Row,
     Col,
+    Dropdown
 } from "ant-design-vue";
 
 const app = createApp(App);
@@ -39,4 +40,5 @@ app.use(router)
     .use(Tag)
     .use(Row)
     .use(Col)
+    .use(Dropdown)
     .mount("#app");
