@@ -1,5 +1,9 @@
 <template>
-    <div class="main">
+    <div class="mainInforUserOrder">
+        <div class="title">
+            <span class="inforText"> Thông tin khách hàng </span>
+            <span class="uncheckedText"> Bỏ chọn</span>
+        </div>
         <div class="detailInforUser">
             <div class="nameUser">
                 <span> Lan Anh | 0388911165</span>
@@ -23,6 +27,14 @@
             </div>
         </div>
         <div class="addressUserDiv">
+            <div class="inforAddress">
+                <div class="inforAddressText">
+                    <span>Thông tin giao hàng</span>
+                </div>
+                <div class="swapAddress">
+                    <span> Đổi địa chỉ</span>
+                </div>
+            </div>
             <div class="nameUser">
                 <span> Lan Anh | 0388911165</span>
             </div>
@@ -34,13 +46,32 @@
     </div>
 </template>
 <style scoped>
-.main {
+.mainInforUserOrder {
     display: flex;
+    flex-direction: column;
     flex: 1;
     background-color: white !important;
-
+    padding-block: 10px;
+    .title {
+        display: flex;
+        flex: 1;
+        padding: 0px 10px 10px;
+        border-bottom: 2px solid #f0f0f0;
+        .inforText {
+            font-size: 16px;
+            font-weight: bold;
+            justify-content: start;
+        }
+        .uncheckedText {
+            display: flex;
+            flex: 1;
+            justify-content: end;
+            font-size: 14px;
+            color: red;
+        }
+    }
     .detailInforUser {
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 2px solid #f0f0f0;
         display: flex;
         flex-direction: column;
         margin-inline: 10px;
@@ -77,7 +108,7 @@
                 padding-inline: 0;
             }
             .cancelOrder {
-                border-inline: 1px solid gray;
+                border-inline: 2px solid #f0f0f0;
             }
         }
         .seeMoreDiv {
@@ -90,10 +121,30 @@
     .addressUserDiv {
         padding-inline: 10px;
         color: #8c8c8c;
+        .inforAddress {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            padding-block: 10px;
+            .inforAddressText {
+                span {
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: black;
+                }
+            }
+            .swapAddress {
+                display: flex;
+                flex: 1;
+                justify-content: end;
+                color: #1890ff;
+                font-size: 12px;
+            }
+        }
         .nameUser {
             padding-block: 10px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
             color: black;
         }
     }

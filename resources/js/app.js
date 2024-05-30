@@ -19,7 +19,10 @@ import {
     Tag,
     Row,
     Col,
-    Dropdown
+    Dropdown,
+    Input,
+    Checkbox,
+    Image
 } from "ant-design-vue";
 
 const app = createApp(App);
@@ -41,4 +44,7 @@ app.use(router)
     .use(Row)
     .use(Col)
     .use(Dropdown)
+    .use(Input)
+    .use(Checkbox)
+    .use(Image)
     .mount("#app");
