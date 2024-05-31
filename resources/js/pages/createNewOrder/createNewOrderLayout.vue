@@ -9,12 +9,25 @@
         <div class="productOrderDiv">
             <inforOrder />
         </div>
+        <div class="voucherAndTax">
+            <voucherAndTax />
+        </div>
+        <div class="noteOrder">
+            <noteOrder />
+        </div>
+        <div class="inforPayment">
+            <inforPayment />
+        </div>
+        <div style="height: 1000px" />
     </div>
 </template>
 
 <script setup>
 import inforUserOrder from "./inforUserOrder/inforUserOrder.vue";
 import inforOrder from "./inforOrder/inforOrder.vue";
+import voucherAndTax from "./voucher&tax/voucherAndTax.vue";
+import noteOrder from "./note/noteOrder.vue";
+import inforPayment from "./inforPayment/inforPayment.vue";
 </script>
 
 <style scoped>
@@ -38,6 +51,8 @@ import inforOrder from "./inforOrder/inforOrder.vue";
     .inforUserOrderDiv {
     }
     .productOrderDiv {
+    }
+    .voucherAndTax {
     }
 }
 </style>

@@ -3,45 +3,148 @@
         <div class="header">
             <div class="title">
                 <span class="inforText"> Sản phẩm </span>
-                <span class="showMore"> <AkChevronDownSmall /></span>
+                <span class="showMore" @click="show" v-if="showOrder">
+                    <AkChevronDownSmall />
+                </span>
+                <span class="showMore" @click="show" v-else>
+                    <AkChevronUpSmall />
+                </span>
             </div>
-            <div class="button">
-                <a-button class="buttonAdd">
+            <div class="button" v-if="showOrder">
+                <a-button class="buttonAdd" @click="nothing">
                     <CaAddAlt />Thêm sản phẩm</a-button
                 >
-                <a-button class="buttonScan"> <BxScan />Quét mã</a-button>
+                <a-button class="buttonScan" @click="nothing">
+                    <BxScan />Quét mã</a-button
+                >
             </div>
         </div>
-        <div class="content">
-            <div class="product">
-                <div class="imgDiv">
-                    <a-image
-                        :width="80"
-                        :height="80"
-                        src="https://s3-alpha-sig.figma.com/img/27b2/3acc/b01a8548b32136d8258ebb5131b4b5b4?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ki-IpgNmUleGIka9Y2E6aih9HChCU90LUwrolhQyV2wTr~scB1GDPUIlkFAnATLM-4ooNUMCZtxvuS7a4ev~qkEX3TWeDmLStLTsNhYun6V~Pqd31vVyQ0aT~5lxaubUkgHOsblQaM6hOs3a72AUO-XS-0IvMb0y4ak2EfYOQz6ieqON4rnXmE48ggUitCy4Sk4MYeMsA95Xju0LavyvaTPmMreGLi8o6f28AVfpDaA74l2cKn3~-YWOWc2O07gnOEDX1s2HIDA1eV9nni28DLyjboOTd8D2HES26RgHze~0vZUplJJM7T7mqb0xIj48fl9ck1AB~2VbWp0EuZ8WyA__"
-                    />
+        <div class="content" v-if="showOrder">
+            <div class="totalProduct">
+                <div class="product">
+                    <div class="imgDiv">
+                        <a-image
+                            :width="80"
+                            :height="80"
+                            src="https://s3-alpha-sig.figma.com/img/27b2/3acc/b01a8548b32136d8258ebb5131b4b5b4?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ki-IpgNmUleGIka9Y2E6aih9HChCU90LUwrolhQyV2wTr~scB1GDPUIlkFAnATLM-4ooNUMCZtxvuS7a4ev~qkEX3TWeDmLStLTsNhYun6V~Pqd31vVyQ0aT~5lxaubUkgHOsblQaM6hOs3a72AUO-XS-0IvMb0y4ak2EfYOQz6ieqON4rnXmE48ggUitCy4Sk4MYeMsA95Xju0LavyvaTPmMreGLi8o6f28AVfpDaA74l2cKn3~-YWOWc2O07gnOEDX1s2HIDA1eV9nni28DLyjboOTd8D2HES26RgHze~0vZUplJJM7T7mqb0xIj48fl9ck1AB~2VbWp0EuZ8WyA__"
+                        />
+                    </div>
+                    <div class="detailProduct">
+                        <div class="products">
+                            <span class="nameProduct">
+                                Tên sản phẩm có phân loại</span
+                            >
+                            <span class="typeProduct"> Phân loại sản phẩm</span>
+                            <span class="costProduct">
+                                200.000đ <AnOutlinedEdit @click="nothing"
+                            /></span>
+                        </div>
+                        <div class="changeQuantityOrder">
+                            <div class="buttonChangeQuantityOrder">
+                                <button
+                                    class="buttonAddOrder"
+                                    @click="buttonAddOrder"
+                                >
+                                    +
+                                </button>
+                                <input
+                                    class="inputQuantityOrder"
+                                    v-model="value1"
+                                    type="number"
+                                    required
+                                />
+                                <button
+                                    class="buttonDelOrder"
+                                    @click="buttonDelOrder"
+                                >
+                                    -
+                                </button>
+                            </div>
+                            <div class="delOrderDiv">
+                                <span @click="nothing">Xóa</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="detailProduct">
-                    <div class="products">
-                        <span class="nameProduct">
-                            Tên sản phẩm có phân loại</span
-                        >
-                        <span class="typeProduct"> Phân loại sản phẩm</span>
-                        <span class="costProduct">
-                            200.000đ <AnOutlinedEdit
-                        /></span>
+                <div class="product">
+                    <div class="imgDiv">
+                        <a-image
+                            :width="80"
+                            :height="80"
+                            src="https://s3-alpha-sig.figma.com/img/437a/b313/0b936eb81d043d5545d8b6c5a271f7d6?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GM7YL~rr8mSP0q~KN6FYKrGncZF-eJVa3P7qJcBYK8VD-XLPiarXKMzweJBEMRvarqAgT-JKGhxjYuKSEbLmkJ1Wnu-v7S2JDjuveRwulvjIoRhldmahtFPshtE63ZWDKwUCt2uIFNGRWZASP2RDeQ~wulDPQZOggp4ouI5DqOCGeEbZ2QQ46cjYFf68EE3MlhS38gEQyZDI4EoKHKVBKpxoBy8Hn3fLRoVcaPw2L1Ue5Cw8jO0FeFMF66fRI2d7-wBv583YBKMIF8asbJnTDUZnglm5wgvFMHZiSOhj1dCtEl75JIIbLcJziYIQG3e17QolIyIwMwxBYJi13Ez-Ow__"
+                        />
+                    </div>
+                    <div class="detailProduct">
+                        <div class="products">
+                            <span class="nameProduct">
+                                Tên sản phẩm không có phân loại</span
+                            >
+                            <span class="typeProduct"> Phân loại sản phẩm</span>
+                            <span class="costProduct">
+                                1.900.000đ <AnOutlinedEdit @click="nothing"
+                            /></span>
+                        </div>
+                        <div class="changeQuantityOrder">
+                            <div class="buttonChangeQuantityOrder">
+                                <button
+                                    class="buttonAddOrder"
+                                    @click="buttonAddOrder"
+                                >
+                                    +
+                                </button>
+                                <input
+                                    class="inputQuantityOrder"
+                                    v-model="value1"
+                                    type="number"
+                                    required
+                                />
+                                <button
+                                    class="buttonDelOrder"
+                                    @click="buttonDelOrder"
+                                >
+                                    -
+                                </button>
+                            </div>
+                            <div class="delOrderDiv">
+                                <span @click="nothing">Xóa</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="height" />
+        <div class="totalCostOrder">
+            <span class="countOrder">Tạm tính (8 sản phẩm)</span>
+            <span class="costOrder"> 2.900.000đ</span>
+        </div>
     </div>
 </template>
 <script setup>
-import { AkChevronDownSmall } from "@kalimahapps/vue-icons";
+import { AkChevronDownSmall, AkChevronUpSmall } from "@kalimahapps/vue-icons";
 import { CaAddAlt } from "@kalimahapps/vue-icons";
 import { BxScan } from "@kalimahapps/vue-icons";
 import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
+import { ref } from "vue";
+
+const showOrder = ref(true);
+const value1 = ref(1);
+const show = () => {
+    showOrder.value = !showOrder.value;
+};
+const buttonAddOrder = () => {
+    value1.value++;
+};
+const buttonDelOrder = () => {
+    if (value1.value <= 0) {
+        return (value1.value = 0);
+    } else {
+        value1.value--;
+    }
+};
+
+const nothing = () => {
+    alert("Chưa xử lý sự kiện này");
+};
 </script>
 
 <style scoped>
@@ -51,9 +154,7 @@ import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
     background-color: white;
 
     .header {
-        border-bottom: 1px solid #f0f0f0;
         padding-bottom: 10px;
-
         .title {
             display: flex;
             flex: 1;
@@ -112,44 +213,98 @@ import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
     .content {
         display: flex;
         flex: 1;
-        flex-direction: row;
-        .product {
+        flex-direction: column;
+        .totalProduct {
+            border-top: 1px solid #d9d9d9;
             display: flex;
-            flex-direction: row;
-            padding: 10px;
-            gap: 10px;
-            /* .imgDiv {
+            flex: 1;
+            flex-direction: column;
+            .product {
                 display: flex;
-                width: 80px;
-                height: 80px;
-                
-            } */
-            .detailProduct {
-                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                gap: 10px;
                 flex: 1;
-                flex-direction: column;
-                .products {
+
+                /* .imgDiv {
+                    display: flex;
+                    width: 80px;
+                    height: 80px;
+                    
+                } */
+                .detailProduct {
                     display: flex;
                     flex: 1;
                     flex-direction: column;
-                    gap:10px;
-                    .nameProduct {
-                        font-size: 14px;
-                        font-weight: 400;
-                    }
-                    .typeProduct {
-                        font-size: 12px;
-                        font-weight: 400;
-                        color: #8c8c8c;
-                    }
-                    .costProduct {
+                    border-bottom: 1px solid #d9d9d9;
+                    padding-bottom: 12px;
+                    .products {
                         display: flex;
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: #f26722;
+                        flex: 1;
+                        flex-direction: column;
+                        gap: 10px;
+                        .nameProduct {
+                            font-size: 14px;
+                            font-weight: 400;
+                        }
+                        .typeProduct {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: #8c8c8c;
+                        }
+                        .costProduct {
+                            display: flex;
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #f26722;
+                            align-items: center;
+                            gap: 5px;
+                            svg {
+                                color: #1890ff;
+                            }
+                        }
+                    }
+                    .changeQuantityOrder {
+                        display: flex;
+                        flex: 1;
+                        flex-direction: row;
                         align-items: center;
-                        gap: 5px;
-                        svg {
+                        margin-top: 10px;
+                        .buttonChangeQuantityOrder {
+                            button {
+                                border: 1px solid #d9d9d9;
+                            }
+                            input {
+                                border-block: 1px solid #d9d9d9;
+                                border-inline: 0;
+                                padding: 4px 12px 4px 12px;
+                                border-radius: 0;
+                            }
+                            input:focus {
+                                outline: none;
+                            }
+
+                            .buttonAddOrder {
+                                border-radius: 2px 0px 0px 2px;
+                                padding: 0px 8px 0px 8px;
+                            }
+                            .buttonDelOrder {
+                                border-radius: 0px 2px 2px 0px;
+                                padding: 0px 8px 0px 8px;
+                            }
+                            font-size: 14px;
+                            display: flex;
+                            flex-direction: row;
+                            input {
+                                width: 60px;
+                                text-align: center;
+                            }
+                        }
+                        .delOrderDiv {
+                            display: flex;
+                            flex: 1;
+                            justify-content: end;
+                            font-size: 12px;
                             color: #1890ff;
                         }
                     }
@@ -157,10 +312,25 @@ import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
             }
         }
     }
-
-    .height {
-        width: 100%;
-        height: 1000px;
+    .totalCostOrder {
+        border-top: 1px solid #d9d9d9;
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        padding: 10px;
+        align-items: center;
+        .countOrder {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .costOrder {
+            display: flex;
+            flex: 1;
+            justify-content: end;
+            font-size: 16px;
+            font-weight: 400;
+            color: #1890ff;
+        }
     }
 }
 </style>
