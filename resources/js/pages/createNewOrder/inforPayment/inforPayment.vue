@@ -33,13 +33,21 @@ const checked = ref(false);
     flex: 1;
     flex-direction: column;
     background-color: white;
-    padding: 10px;
     .title {
         display: flex;
         flex-direction: row;
         flex: 1;
-        align-items: center;
-        text-align: center;
+        align-items: end;
+        gap: 5px;
+        border-bottom: 1px solid #d9d9d9;
+        padding:10px
+    }
+    .typePayment{
+        display: flex;
+        flex:1;
+        flex-direction: column;
+        padding: 10px;
+        gap:10px;
     }
 }
 </style>
