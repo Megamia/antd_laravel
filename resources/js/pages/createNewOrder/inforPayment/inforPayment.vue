@@ -11,11 +11,15 @@
         <div class="typePayment">
             <div class="selectType">
                 <span>Hình thức</span>
-                <span> Chọn hình thức <AkChevronRight /></span>
+                <span @click="nothing" class="choosePaymentMethod">
+                    Chọn hình thức <AkChevronRight
+                /></span>
             </div>
             <div class="statusPayment">
                 <span>Đã thanh toán</span>
-                <span><a-switch v-model:checked="checked" /></span>
+                <span class="isPaid"
+                    ><a-switch v-model:checked="checked"
+                /></span>
             </div>
         </div>
     </div>
@@ -25,6 +29,10 @@ import { AkChevronRight } from "@kalimahapps/vue-icons";
 import { ref } from "vue";
 
 const checked = ref(false);
+
+const nothing = () => {
+    alert("Chưa xử lý sự kiện này");
+};
 </script>
 
 <style scoped>
@@ -40,14 +48,37 @@ const checked = ref(false);
         align-items: end;
         gap: 5px;
         border-bottom: 1px solid #d9d9d9;
-        padding:10px
-    }
-    .typePayment{
-        display: flex;
-        flex:1;
-        flex-direction: column;
         padding: 10px;
-        gap:10px;
+        span {
+            font-weight: 500;
+            font-size: 16px;
+        }
+    }
+    .typePayment {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding-inline: 10px;
+
+        .selectType,
+        .statusPayment {
+            display: flex;
+            flex: 1;
+            border-bottom: 1px solid #d9d9d9;
+            padding-block: 10px;
+            span {
+                display: flex;
+                align-items: center;
+            }
+            .choosePaymentMethod,
+            .isPaid {
+                display: flex;
+                flex: 1;
+                justify-content: end;
+                color: #00000073;
+                gap: 5px;
+            }
+        }
     }
 }
 </style>
