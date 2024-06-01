@@ -1,25 +1,21 @@
 <template>
     <div class="mainInforPayment">
         <div class="title">
-            <a-image
-                :width="20"
-                :height="20"
-                src="https://s3-alpha-sig.figma.com/img/ae60/71b5/d9cf2f0acaf1b3b98a0e1097490e64ef?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=bGOWMCjB61PaZvMUsEicVMqPgJM8pcUVciasFaAEn~VvBlikGVj-UFpdyYskbD6FKFNH~lRntJbJFjgbyYdVZkkrzZ5nwXUJ82zf0Y9nUnejC~wAcyq6YnKtpy-nbiJ5pu4oO46IkXqNU6wjnPCvcbOhr3iH1GET26PQE-4muYRFh6y8dDdYpe5OdKCS1Jq0tCLlwZh0c14MXZjr12qHPgB08zDU4oUItbDZH4-IIxfoGoX0fwrYxgrLAG76mPm430sOWea~V2sqqI4ojPRAZVVDBBDklBeXkkgU6Pc6CZwhgwKXfDT2qJPOnBgpV3qIfexWrJA2Agx7-IyymlLo5Q__"
-            />
+            <a-image :width="20" :height="20"
+                src="https://s3-alpha-sig.figma.com/img/ae60/71b5/d9cf2f0acaf1b3b98a0e1097490e64ef?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=bGOWMCjB61PaZvMUsEicVMqPgJM8pcUVciasFaAEn~VvBlikGVj-UFpdyYskbD6FKFNH~lRntJbJFjgbyYdVZkkrzZ5nwXUJ82zf0Y9nUnejC~wAcyq6YnKtpy-nbiJ5pu4oO46IkXqNU6wjnPCvcbOhr3iH1GET26PQE-4muYRFh6y8dDdYpe5OdKCS1Jq0tCLlwZh0c14MXZjr12qHPgB08zDU4oUItbDZH4-IIxfoGoX0fwrYxgrLAG76mPm430sOWea~V2sqqI4ojPRAZVVDBBDklBeXkkgU6Pc6CZwhgwKXfDT2qJPOnBgpV3qIfexWrJA2Agx7-IyymlLo5Q__" />
             <span>Thông tin thanh toán</span>
         </div>
         <div class="typePayment">
             <div class="selectType">
                 <span>Hình thức</span>
                 <span @click="nothing" class="choosePaymentMethod">
-                    Chọn hình thức <AkChevronRight
-                /></span>
+                    Chọn hình thức
+                    <AkChevronRight />
+                </span>
             </div>
             <div class="statusPayment">
                 <span>Đã thanh toán</span>
-                <span class="isPaid"
-                    ><a-switch v-model:checked="checked"
-                /></span>
+                <span class="isPaid"><a-switch v-model:checked="checked" /></span>
             </div>
         </div>
     </div>
@@ -41,6 +37,7 @@ const nothing = () => {
     flex: 1;
     flex-direction: column;
     background-color: white;
+
     .title {
         display: flex;
         flex-direction: row;
@@ -49,11 +46,13 @@ const nothing = () => {
         gap: 5px;
         border-bottom: 1px solid #d9d9d9;
         padding: 10px;
+
         span {
             font-weight: 500;
             font-size: 16px;
         }
     }
+
     .typePayment {
         display: flex;
         flex: 1;
@@ -64,12 +63,13 @@ const nothing = () => {
         .statusPayment {
             display: flex;
             flex: 1;
-            border-bottom: 1px solid #d9d9d9;
             padding-block: 10px;
+
             span {
                 display: flex;
                 align-items: center;
             }
+
             .choosePaymentMethod,
             .isPaid {
                 display: flex;
@@ -78,6 +78,10 @@ const nothing = () => {
                 color: #00000073;
                 gap: 5px;
             }
+        }
+
+        .selectType {
+            border-bottom: 1px solid #d9d9d9;
         }
     }
 }

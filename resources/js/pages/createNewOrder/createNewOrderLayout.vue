@@ -18,6 +18,12 @@
         <div class="inforPayment">
             <inforPayment />
         </div>
+        <div class="shippingMethod">
+            <shippingMethod />
+        </div>
+        <div class="anthoerInfor">
+            <anthoerInfor />
+        </div>
         <div style="height: 1000px" />
     </div>
 </template>
@@ -28,6 +34,8 @@ import inforOrder from "./inforOrder/inforOrder.vue";
 import voucherAndTax from "./voucher&tax/voucherAndTax.vue";
 import noteOrder from "./note/noteOrder.vue";
 import inforPayment from "./inforPayment/inforPayment.vue";
+import shippingMethod from "./shippingMethod/shippingMethod.vue";
+import anthoerInfor from './anthoerInfor/anotherInfor.vue';
 </script>
 
 <style scoped>
@@ -42,17 +50,18 @@ import inforPayment from "./inforPayment/inforPayment.vue";
         background-color: white;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
         text-align: center;
+
         h1 {
             padding-top: 15px;
             font-size: 20px;
             font-weight: bold;
         }
     }
-    .inforUserOrderDiv {
-    }
-    .productOrderDiv {
-    }
-    .voucherAndTax {
-    }
+
+    .inforUserOrderDiv {}
+
+    .productOrderDiv {}
+
+    .voucherAndTax {}
 }
 </style>
