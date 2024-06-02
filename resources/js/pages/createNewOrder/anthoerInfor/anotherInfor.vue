@@ -21,50 +21,33 @@
             <div class="formAnotherInforDiv">
                 <a-form :model="formState" name="basic" autocomplete="off" @finish="onFinish"
                     @finishFailed="onFinishFailed">
-                    <a-form-item label="Tên trường dạng text" name="Text" class="test"
-                        :rules="[{ required: true, message: 'Please input type Text!' }]">
-                        <a-input v-model:value="formState.Text" placeholder="Nội dung placehoder" />
-                    </a-form-item>
 
-                    <a-form-item label="Tên trường dạng số" name="Number"
-                        :rules="[{ required: true, message: 'Please input type Number!' }]">
-                        <a-input v-model:value="formState.Number" placeholder="Nội dung placehoder" type="number" />
-                    </a-form-item>
+                        <a-form-item label="Tên trường dạng text" name="Text" class="test"
+                            :rules="[{ required: true, message: 'Please input type Text!' }]">
+                            <a-input v-model:value="formState.Text" placeholder="Nội dung placehoder" />
+                        </a-form-item>
 
-                    <a-form-item label="Tên trường dạng thời gian" name="DateTime"
-                        :rules="[{ required: true, message: 'Please input type DateTime!' }]">
-                        <a-input v-model:value="formState.DateTime" placeholder="Nội dung placehoder" type="date" />
-                    </a-form-item>
+                        <a-form-item label="Tên trường dạng số" name="Number"
+                            :rules="[{ required: true, message: 'Please input type Number!' }]">
+                            <a-input v-model:value="formState.Number" placeholder="Nội dung placehoder" type="number" />
+                        </a-form-item>
 
-                    <a-form-item label="Tên trường dạng dropdown list" name="DropDownList"
-                        :rules="[{ validator: (rule, value) => value !== undefined && value !== null, message: 'Please input type DropDownList!' }]">
-                        <a-select v-model:value="formState.DropDownListItem" :options="options"
-                            placeholder="Please select" style="width: 100%" />
-                    </a-form-item>
+                        <a-form-item label="Tên trường dạng thời gian" name="DateTime"
+                            :rules="[{ required: true, message: 'Please input type DateTime!' }]">
+                            <a-input v-model:value="formState.DateTime" placeholder="Nội dung placehoder" type="date" />
+                        </a-form-item>
 
-                    <a-form-item label="Tên trường dạng checkbox" name="CheckBox"
-                        :rules="[{ required: true, message: 'Please input type CheckBox!' }]">
-                        <a-select v-model:value="formState.Checkbox" :options="options" mode="multiple" :size="size"
-                            placeholder="Please select" style="width: 100%" />
-                    </a-form-item>
+                        <a-form-item-rest label="Tên trường dạng dropdown list" name="DropDownList"
+                            :rules="[{ validator: (rule, value) => value !== undefined && value !== null, message: 'Please input type DropDownList!' }]">
+                            <a-select v-model:value="formState.DropDownListItem" :options="options"
+                                placeholder="Please select" style="width: 100%" />
+                        </a-form-item-rest>
 
-                    <a-form-item label="Tên trường dạng địa chỉ" name="Address" class="formAddress"
-                        :rules="[{ required: true, validator: value => value !== undefined && value !== null, message: 'Please input type Address!' }]">
-                        <div class="formAddressDiv">
 
-                            <a-select v-model="formState.SelectCity" :options="options"
-                                placeholder="Chọn tỉnh/thành phố" style="width: 100%" />
-                            <a-select v-model="formState.District" :options="options" placeholder="Chọn quận/huyện"
-                                style="width: 100%" />
-                            <a-select v-model="formState.Wards" :options="options" placeholder="Chọn xã/phường"
-                                style="width: 100%" />
-                            <input placeholder="Địa chỉ cụ thể" />
-                        </div>
-                    </a-form-item>
 
-                    <a-form-item>
-                        <a-button type="primary" html-type="submit">Submit</a-button>
-                    </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">Submit</a-button>
+                        </a-form-item>
                 </a-form>
 
             </div>
@@ -94,12 +77,12 @@ const formState = ref({
     Wards: Wards.value,
 });
 
-const onFinish = () => {
-    console.log('Success:', formState.value);
+const onFinish = (values) => {
+    console.log('Success:', values);
 };
 
-const onFinishFailed = () => {
-    console.log('Failed:', formState.value);
+const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
 };
 
 const size = ref('middle');
@@ -165,34 +148,7 @@ const options = [...Array(25)].map((_, i) => ({ value: `Tag${i + 1}` }));
                     margin-top: -24px;
                 }
 
-                .formAddress {
-                    .formAddressDiv {
-                        display: flex;
-                        flex: 1;
-                        flex-direction: column;
-                        gap: 18px;
 
-                        .ant-select {
-                            /* background-color: red; */
-                            border-radius: 0;
-                        }
-
-                        input {
-                            border: 1px solid #d9d9d9;
-                            padding: 5px 12px 5px 12px;
-                            border-radius: 7px;
-                        }
-
-                        input:focus {
-                            outline: none;
-                        }
-
-                        input::placeholder {
-                            color: #00000040;
-                            font-size: 14px;
-                        }
-                    }
-                }
             }
         }
     }
