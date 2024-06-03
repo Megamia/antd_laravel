@@ -24,6 +24,9 @@
         <div class="anthoerInfor">
             <anthoerInfor />
         </div>
+        <div class="costOrder">
+            <costOrder />
+        </div>
         <div style="height: 1000px" />
     </div>
 </template>
@@ -36,6 +39,7 @@ import noteOrder from "./note/noteOrder.vue";
 import inforPayment from "./inforPayment/inforPayment.vue";
 import shippingMethod from "./shippingMethod/shippingMethod.vue";
 import anthoerInfor from './anthoerInfor/anotherInfor.vue';
+import costOrder from "./costOrder/costOrder.vue";
 </script>
 
 <style scoped>
