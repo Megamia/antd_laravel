@@ -38,8 +38,9 @@ import voucherAndTax from "./voucher&tax/voucherAndTax.vue";
 import noteOrder from "./note/noteOrder.vue";
 import inforPayment from "./inforPayment/inforPayment.vue";
 import shippingMethod from "./shippingMethod/shippingMethod.vue";
-import anthoerInfor from './anthoerInfor/anotherInfor.vue';
+import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
+
 </script>
 
 <style scoped>
@@ -62,10 +63,13 @@ import costOrder from "./costOrder/costOrder.vue";
         }
     }
 
-    .inforUserOrderDiv {}
+    .inforUserOrderDiv {
+    }
 
-    .productOrderDiv {}
+    .productOrderDiv {
+    }
 
-    .voucherAndTax {}
+    .voucherAndTax {
+    }
 }
 </style>
