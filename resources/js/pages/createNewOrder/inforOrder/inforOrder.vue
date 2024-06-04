@@ -124,12 +124,15 @@ import { AkChevronDownSmall, AkChevronUpSmall } from "@kalimahapps/vue-icons";
 import { CaAddAlt } from "@kalimahapps/vue-icons";
 import { BxScan } from "@kalimahapps/vue-icons";
 import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 
 const showOrder = ref(true);
+const emit = defineEmits(["show"]);
+
 const value1 = ref(1);
 const show = () => {
     showOrder.value = !showOrder.value;
+    emit("show");
 };
 const buttonAddOrder = () => {
     value1.value++;

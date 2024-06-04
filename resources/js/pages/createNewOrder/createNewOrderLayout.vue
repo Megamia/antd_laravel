@@ -7,7 +7,7 @@
             <inforUserOrder />
         </div>
         <div class="productOrderDiv">
-            <inforOrder />
+            <inforOrder @show="showOrHidden"/>
         </div>
         <div class="voucherAndTax">
             <voucherAndTax />
@@ -22,7 +22,7 @@
             <shippingMethod />
         </div>
         <div class="anthoerInfor">
-            <anthoerInfor />
+            <anthoerInfor v-if="isOpen"  />
         </div>
         <div class="costOrder">
             <costOrder />
@@ -40,7 +40,12 @@ import inforPayment from "./inforPayment/inforPayment.vue";
 import shippingMethod from "./shippingMethod/shippingMethod.vue";
 import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
+import { ref } from "vue";
 
+const isOpen = ref(true);
+const showOrHidden = () => {
+    isOpen.value = !isOpen.value;
+};
 </script>
 
 <style scoped>
@@ -61,15 +66,6 @@ import costOrder from "./costOrder/costOrder.vue";
             font-size: 20px;
             font-weight: bold;
         }
-    }
-
-    .inforUserOrderDiv {
-    }
-
-    .productOrderDiv {
-    }
-
-    .voucherAndTax {
     }
 }
 </style>
