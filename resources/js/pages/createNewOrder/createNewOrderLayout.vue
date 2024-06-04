@@ -7,7 +7,8 @@
             <inforUserOrder />
         </div>
         <div class="productOrderDiv">
-            <inforOrder @show="showOrHidden"/>
+            <inforOrder @show="showOrHidden" @showModal="ClickShowModal" />
+            <modalCostOrder v-if="showModal" @showModal="ClickShowModal"/>
         </div>
         <div class="voucherAndTax">
             <voucherAndTax />
@@ -22,7 +23,7 @@
             <shippingMethod />
         </div>
         <div class="anthoerInfor">
-            <anthoerInfor v-if="isOpen"  />
+            <anthoerInfor v-if="isOpen" />
         </div>
         <div class="costOrder">
             <costOrder />
@@ -40,11 +41,18 @@ import inforPayment from "./inforPayment/inforPayment.vue";
 import shippingMethod from "./shippingMethod/shippingMethod.vue";
 import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
+import modalCostOrder from "./inforOrder/modalCostOrder.vue";
+
 import { ref } from "vue";
 
 const isOpen = ref(true);
+const showModal = ref(false);
+
 const showOrHidden = () => {
     isOpen.value = !isOpen.value;
+};
+const ClickShowModal = () => {
+    showModal.value = !showModal.value;
 };
 </script>
 

@@ -8,6 +8,7 @@ import inforPayment from "./pages/createNewOrder/inforPayment/inforPayment.vue";
 import shippingMethod from "./pages/createNewOrder/shippingMethod/shippingMethod.vue";
 import anthoerInfor from "./pages/createNewOrder/anthoerInfor/anotherInfor.vue";
 import costOrder from "./pages/createNewOrder/costOrder/costOrder.vue";
+import modalCostOrder from "./pages/createNewOrder/inforOrder/modalCostOrder.vue";
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -56,6 +57,11 @@ const router = createRouter({
             path: "/costOrder",
             component: costOrder,
             name: "costOrder",
+        },
+        {
+            path: "/modalCostOrder",
+            component: modalCostOrder,
+            name: "modalCostOrder",
         },
 
         {

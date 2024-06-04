@@ -21,7 +21,7 @@
         </div>
         <div class="content" v-if="showOrder">
             <div class="totalProduct">
-                <div class="product">
+                <div class="product" @click="clickShowModal">
                     <div class="imgDiv">
                         <a-image
                             :width="80"
@@ -127,7 +127,11 @@ import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
 import { ref, defineEmits } from "vue";
 
 const showOrder = ref(true);
-const emit = defineEmits(["show"]);
+
+const clickShowModal = () => {
+    emit("showModal");
+};
+const emit = defineEmits(["show", "showModal"]);
 
 const value1 = ref(1);
 const show = () => {
