@@ -24,7 +24,8 @@ import {
     Checkbox,
     Image,
     Switch,
-    Select
+    Select,
+    Radio
 } from "ant-design-vue";
 
 const app = createApp(App);
@@ -51,4 +52,5 @@ app.use(router)
     .use(Image)
     .use(Switch)
     .use(Select)
+    .use(Radio)
     .mount("#app");

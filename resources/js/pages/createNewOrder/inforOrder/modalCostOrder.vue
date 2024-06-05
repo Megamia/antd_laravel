@@ -11,19 +11,67 @@
                     </div>
                     <div class="content">
                         <div class="typeChange">
-                            <a-button>Trực tiếp</a-button>
-                            <a-button>Theo %</a-button>
+                            <a-button
+                                :class="{ active: currentChange === 'direct' }"
+                                @click="currentChange = 'direct'"
+                                >Trực tiếp</a-button
+                            >
+                            <a-button
+                                :class="{ active: currentChange === 'percent' }"
+                                @click="currentChange = 'percent'"
+                                >Theo %</a-button
+                            >
                         </div>
-                        <div class="cost">
+                        <div class="cost" v-if="currentChange === 'direct'">
                             <span>Giá bán </span>
-                            <a-input v-model:value="cost" />
+                            <a-input v-model:value="cost" type="number" />
+                        </div>
+                        <div class="percent" v-else>
+                            <a-radio-group v-model:value="selectOptions">
+                                <div class="changPercent">
+                                    <a-radio :value="1">Tăng</a-radio>
+                                    <div class="inputChangePercent">
+                                        <a-input
+                                            type="number"
+                                            v-model:value="upNumberPercent"
+                                            :disabled="selectOptions === 2"
+                                            placeholder="Nhập số"
+                                        >
+                                            <template #prefix>
+                                                <AkPercentage
+                                                    class="site-form-item-icon"
+                                                />
+                                            </template>
+                                        </a-input>
+                                    </div>
+                                </div>
+                                <div class="changPercent">
+                                    <a-radio :value="2">Giảm</a-radio>
+                                    <div
+                                        class="inputChangePercent inputUpChangePercent"
+                                    >
+                                        <a-input
+                                            type="number"
+                                            v-model:value="downNumberPercent"
+                                            :disabled="selectOptions === 1"
+                                            placeholder="Nhập số"
+                                        >
+                                            <template #prefix>
+                                                <AkPercentage
+                                                    class="site-form-item-icon"
+                                                />
+                                            </template>
+                                        </a-input>
+                                    </div>
+                                </div>
+                            </a-radio-group>
                         </div>
                     </div>
                     <div class="buttonChange">
                         <button class="buttonCancel" @click="Cancel">
                             Hủy
                         </button>
-                        <button class="buttonApply" @click="Cancel">
+                        <button class="buttonApply" @click="Apply">
                             Áp dụng
                         </button>
                     </div>
@@ -34,16 +82,53 @@
 </template>
 
 <script setup>
+import { AkPercentage } from "@kalimahapps/vue-icons";
 import { ref, defineEmits } from "vue";
-const cost = ref("249.0000");
 
-const refresh = () => {
-};
+const upNumberPercent = ref("");
+const downNumberPercent = ref("");
+const selectOptions = ref(1);
+
+const cost = ref("249.000");
+const newCost = ref("");
+const currentChange = ref("direct");
+
+const refresh = () => {};
 const emit = defineEmits(["showModal"]);
 
 const Cancel = () => {
     console.log("close modal");
     emit("showModal");
+};
+const Apply = () => {
+    if (selectOptions.value === 1 && upNumberPercent.value) {
+        newCost.value =
+            parseFloat(cost.value) *
+            (1 + parseFloat(upNumberPercent.value) / 100);
+        alert(
+            `Tăng lên ${upNumberPercent.value}% thành ${parseFloat(
+                newCost.value
+            ).toFixed(4)} thành công`
+        );
+        upNumberPercent.value = null;
+    } else if (selectOptions.value === 2 && downNumberPercent.value) {
+        newCost.value =
+            parseFloat(cost.value) *
+            (1 - parseFloat(downNumberPercent.value) / 100);
+        alert(
+            `Giảm xuống ${downNumberPercent.value}% thành ${parseFloat(
+                newCost.value
+            ).toFixed(4)} thành công`
+        );
+        downNumberPercent.value = null;
+    }
+    currentChange.value = "direct";
+    cost.value = parseFloat(newCost.value).toFixed(4);
+    console.log("Cost: " + cost.value + "\n Type: " + typeof cost.value);
+    if (parseFloat(cost.value) === 0) {
+        cost.value = parseFloat(cost.value).toFixed(2);
+        console.log(cost.value);
+    }
 };
 </script>
 <style scoped>
@@ -114,6 +199,34 @@ const Cancel = () => {
             flex-direction: column;
             gap: 20px;
         }
+        .percent {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            span {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+            .changPercent {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                gap: 10px;
+                .inputChangePercent {
+                    margin-left: 30px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #d9d9d9;
+                }
+                .inputUpChangePercent {
+                    border: 0;
+                }
+            }
+            .ant-radio-group {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
     }
     .buttonChange {
         display: flex;
@@ -151,5 +264,9 @@ const Cancel = () => {
 .modal-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
+}
+.active {
+    border-color: #1890ff;
+    color: #1890ff;
 }
 </style>
