@@ -1,5 +1,5 @@
 <template>
-    <div class="mainInforUserOrder">
+    <div class="mainDetailInforUserOrder">
         <div class="title">
             <span class="inforText"> Thông tin khách hàng </span>
             <span class="uncheckedText"> Bỏ chọn</span>
@@ -46,7 +46,7 @@
     </div>
 </template>
 <style scoped>
-.mainInforUserOrder {
+.mainDetailInforUserOrder {
     display: flex;
     flex-direction: column;
     flex: 1;

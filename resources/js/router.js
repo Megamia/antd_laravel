@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import CreateNewOrderLayout from "./pages/createNewOrder/createNewOrderLayout.vue";
-import inforUserOrder from "./pages/createNewOrder/inforUserOrder/inforUserOrder.vue";
+import detailInforUserOrder from "./pages/createNewOrder/inforUserOrder/detailInforUserOrder.vue";
+import userOrder from "./pages/createNewOrder/inforUserOrder/userOrder.vue";
 import inforOrder from "./pages/createNewOrder/inforOrder/inforOrder.vue";
 import voucherAndTax from "./pages/createNewOrder/voucher&tax/voucherAndTax.vue";
 import noteOrder from "./pages/createNewOrder/note/noteOrder.vue";
@@ -18,10 +19,16 @@ const router = createRouter({
             component: CreateNewOrderLayout,
             name: "CreateNewOrderLayout",
         },
+
         {
-            path: "/inforUserOrder",
-            component: inforUserOrder,
-            name: "inforUserOrder",
+            path: "/userOrder",
+            component: userOrder,
+            name: "userOrder",
+        },
+        {
+            path: "/detailInforUserOrder",
+            component: detailInforUserOrder,
+            name: "detailInforUserOrder",
         },
         {
             path: "/inforOrder",

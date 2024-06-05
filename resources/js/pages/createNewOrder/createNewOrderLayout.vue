@@ -3,9 +3,12 @@
         <div class="title">
             <h1>Tạo mới đơn hàng</h1>
         </div>
-        <div class="inforUserOrderDiv">
-            <inforUserOrder />
+        <div class="userOrder">
+            <userOrder />
         </div>
+        <!-- <div class="inforUserOrderDiv">
+            <detailInforUserOrder />
+        </div> -->
         <div class="productOrderDiv">
             <inforOrder @show="showOrHidden" @showModal="ClickShowModal" />
             <modalCostOrder v-if="showModal" @showModal="ClickShowModal"/>
@@ -33,7 +36,8 @@
 </template>
 
 <script setup>
-import inforUserOrder from "./inforUserOrder/inforUserOrder.vue";
+// import detailInforUserOrder from "./inforUserOrder/detailInforUserOrder.vue";
+import userOrder from "./inforUserOrder/userOrder.vue";
 import inforOrder from "./inforOrder/inforOrder.vue";
 import voucherAndTax from "./voucher&tax/voucherAndTax.vue";
 import noteOrder from "./note/noteOrder.vue";
