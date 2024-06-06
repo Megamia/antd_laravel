@@ -6,55 +6,30 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search
-                    v-model:value="value"
-                    placeholder="Nhập tên và số điện thoại"
-                    search
-                />
+                <a-input-search v-model:value="value" placeholder="Nhập tên và số điện thoại" search />
             </div>
             <div class="userInfor">
                 <a-button type="text" @click="addNewUser">
                     <CaAddAlt />Thêm mới khách hàng
                 </a-button>
                 <div class="userItems">
-                    <a-radio v-model:checked="checked">
+                    <a-radio v-model="checked" @change="click">
                         <div class="userInforRadio">
                             <span class="nameUser">Khách lẻ</span>
                         </div>
                     </a-radio>
                 </div>
-                <div class="userItems">
-                    <a-radio v-model:checked="checked" />
+                <div class="userItems" v-for="user in data" :key="user.id">
+                    <a-radio v-model="checked" @change="click(user.id)" />
                     <div class="userInforRadio">
-                        <span class="nameUser">Đỗ Phúc Lộc</span>
-                        <span class="phoneNumberUser">0388911562</span>
-                    </div>
-                </div>
-                <div class="userItems">
-                    <a-radio v-model:checked="checked" />
-                    <div class="userInforRadio">
-                        <span class="nameUser">Đỗ Phúc Lộc</span>
-                        <span class="phoneNumberUser">0388911562</span>
-                    </div>
-                </div>
-                <div class="userItems">
-                    <a-radio v-model:checked="checked" />
-                    <div class="userInforRadio">
-                        <span class="nameUser">Đỗ Phúc Lộc</span>
-                        <span class="phoneNumberUser">0388911562</span>
-                    </div>
-                </div>
-                <div class="userItems">
-                    <a-radio v-model:checked="checked" />
-                    <div class="userInforRadio">
-                        <span class="nameUser">Đỗ Phúc Lộc</span>
-                        <span class="phoneNumberUser">0388911562</span>
+                        <span class="nameUser">{{ user.name }}</span>
+                        <span class="phoneNumberUser">{{ user.phoneNumer }}</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="saveDive">
-            <a-button type="primary">Lưu</a-button>
+            <a-button type="primary" @click="buttonSave">Lưu</a-button>
         </div>
     </div>
 </template>
@@ -64,9 +39,22 @@ import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
-const checked = ref();
+const checked = ref(false);
 const value = ref("");
 const router = useRouter();
+
+const click = (b) => {
+    const a = data.value.find(user => user.id === b);
+    console.log(a.id)
+}
+
+const data = ref([
+    { id: 1, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
+    { id: 2, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
+    { id: 3, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
+    { id: 4, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
+
+])
 
 const back = () => {
     router.back();
@@ -74,6 +62,28 @@ const back = () => {
 
 const addNewUser = () => {
     router.push("/inforNewUser");
+};
+
+const buttonSave = () => {
+    try {
+        // if (checkedUser.value === "guest") {
+        //     console.log("Đã chọn Khách lẻ");
+        // } else if (checkedUser.value != null) {
+        //     const selectedUser = data.value.find(user => user.id === checkedUser.value.users);
+        //     if (selectedUser) {
+        //         console.log("Đã chọn user có id: " + selectedUser.id);
+        //     } else {
+        //         console.log("User không tồn tại");
+        //     }
+        // } else {
+        //     console.log("Chưa chọn user nào");
+        // }
+        if (checked.value != null) {
+            console.log(typeof (checked.value))
+        }
+    } catch (e) {
+        console.log("Lỗi: " + e);
+    }
 };
 </script>
 
@@ -84,6 +94,7 @@ const addNewUser = () => {
     flex-direction: column;
     background-color: #f0f2f5;
     gap: 20px;
+
     .title {
         background-color: white;
         display: flex;
@@ -94,6 +105,7 @@ const addNewUser = () => {
             position: relative;
             font-size: 25px;
         }
+
         span {
             font-size: 20px;
             line-height: 28px;
@@ -103,17 +115,21 @@ const addNewUser = () => {
             justify-content: center;
         }
     }
+
     .content {
         display: flex;
         flex-direction: column;
         background-color: white;
+
         .search {
             padding: 10px 12px 10px 12px;
             border-bottom: 1px solid #d9d9dd;
         }
+
         .userInfor {
             display: flex;
             flex-direction: column;
+
             button {
                 display: flex;
                 flex: 1;
@@ -123,6 +139,7 @@ const addNewUser = () => {
                 color: #1890ff;
                 gap: 10px;
             }
+
             .userItems {
                 display: flex;
                 flex-direction: row;
@@ -130,13 +147,16 @@ const addNewUser = () => {
                 border-top: 1px solid #d9d9dd;
                 margin-inline: 10px;
                 padding-block: 10px;
+
                 .userInforRadio {
                     display: flex;
                     flex-direction: column;
                 }
+
                 .nameUser {
                     font-size: 14px;
                 }
+
                 .phoneNumberUser {
                     font-size: 14px;
                     color: #00000073;
@@ -144,6 +164,7 @@ const addNewUser = () => {
             }
         }
     }
+
     .saveDive {
         position: absolute;
         display: flex;
