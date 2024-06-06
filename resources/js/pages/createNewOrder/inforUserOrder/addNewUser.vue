@@ -13,7 +13,7 @@
                 />
             </div>
             <div class="userInfor">
-                <a-button type="text">
+                <a-button type="text" @click="addNewUser">
                     <CaAddAlt />Thêm mới khách hàng
                 </a-button>
                 <div class="userItems">
@@ -70,6 +70,10 @@ const router = useRouter();
 
 const back = () => {
     router.back();
+};
+
+const addNewUser = () => {
+    router.push("/inforNewUser");
 };
 </script>
 
