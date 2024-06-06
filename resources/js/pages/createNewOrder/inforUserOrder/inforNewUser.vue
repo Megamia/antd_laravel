@@ -4,58 +4,35 @@
             <AnOutlinedArrowLeft @click="back" />
             <span> Thêm mới khách hàng </span>
         </div>
-        <a-form
-            :model="formState"
-            name="basic"
-            autocomplete="off"
-            @finish="onFinish"
-            @finishFailed="onFinishFailed"
-        >
+        <a-form :model="formState" name="basic" autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
             <div class="content">
-                <a-form-item
-                    label="Họ và tên"
-                    name="username"
-                    :rules="[
-                        {
-                            required: true,
-                            message: 'Nhập họ và tên',
-                        },
-                    ]"
-                >
-                    <a-input v-model:value="formState.username" />
+                <a-form-item label="Họ và tên" name="username" :rules="[
+                    {
+                        required: true,
+                        message: 'Nhập họ và tên',
+                    },
+                ]">
+                    <a-input v-model:value="formState.username" placeholder="Nhập họ và tên" />
                 </a-form-item>
 
-                <a-form-item
-                    label="Số điện thoại"
-                    name="phoneNumber"
-                    :rules="[
-                        {
-                            required: true,
-                            message: 'Nhập số điện thoại',
-                        },
-                    ]"
-                >
-                    <a-input
-                        v-model:value="formState.phoneNumber"
-                        type="number"
-                    />
+                <a-form-item label="Số điện thoại" name="phoneNumber" :rules="[
+                    {
+                        required: true,
+                        message: 'Nhập số điện thoại',
+                    },
+                ]">
+                    <a-input v-model:value="formState.phoneNumber" type="number" placeholder="Nhập số điện thoại" />
                 </a-form-item>
-                <a-form-item
-                    label="Email"
-                    name="email"
-                    :rules="[
-                        {
-                            message: 'Nhập email',
-                        },
-                    ]"
-                >
-                    <a-input v-model:value="formState.email" type="email" />
+                <a-form-item label="Email" name="email" :rules="[
+                    {
+                        message: 'Nhập email',
+                    },
+                ]">
+                    <a-input v-model:value="formState.email" type="email" placeholder="Nhập email" />
                 </a-form-item>
 
                 <a-form-item class="buttonSubmit">
-                    <a-button type="primary" html-type="submit" class="buttonSave"
-                        >Submit</a-button
-                    >
+                    <a-button type="primary" html-type="submit" class="buttonSave">Thêm mới</a-button>
                 </a-form-item>
             </div>
         </a-form>
@@ -92,6 +69,7 @@ const back = () => {
     flex-direction: column;
     background-color: #f0f2f5;
     gap: 20px;
+
     .title {
         background-color: white;
         display: flex;
@@ -102,6 +80,7 @@ const back = () => {
             position: relative;
             font-size: 25px;
         }
+
         span {
             font-size: 20px;
             line-height: 28px;
@@ -111,26 +90,32 @@ const back = () => {
             justify-content: center;
         }
     }
+
     .content {
         display: flex;
         flex: 1;
         flex-direction: column;
         background-color: white;
 
+        .ant-form-item {
+            padding-inline: 10px;
+        }
+
         .buttonSubmit {
             position: absolute;
-            display: flex;
             background-color: white;
             bottom: 0;
             width: 100%;
             padding: 12px;
+            margin: 0;
+
             button {
                 position: relative;
                 border-radius: 0;
             }
-            .buttonSave{
-                width: 100%;
 
+            .buttonSave {
+                width: 100%;
             }
         }
     }
