@@ -48,7 +48,7 @@ const nothing = () => {
         padding: 10px;
 
         span {
-            font-weight: 500;
+            font-weight: bold;
             font-size: 16px;
         }
     }

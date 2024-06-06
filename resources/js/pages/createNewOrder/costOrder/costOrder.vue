@@ -10,11 +10,20 @@
             </div>
         </div>
         <div class="order">
-            <button>Tạo đơn hàng</button>
+            <button @click="createOrder">Tạo đơn hàng</button>
         </div>
     </div>
 </template>
-<script setup></script>
+<script setup>
+// import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const createOrder = () => {
+    router.push("/createOrderSuccess");
+};
+</script>
 
 <style scoped>
 .mainCostOrder {
@@ -54,7 +63,7 @@
             background-color: #1890ff;
             color: white;
             border: 0;
-            padding:6px 15px 6px 15px;
+            padding: 6px 15px 6px 15px;
             font-size: 16px;
         }
     }

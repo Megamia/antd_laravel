@@ -167,10 +167,11 @@ const nothing = () => {
             flex: 1;
             padding: 0px 10px 10px;
             padding-block: 10px;
+            
 
             .inforText {
                 font-size: 16px;
-                font-weight: 500;
+                font-weight: bold;
                 justify-content: start;
             }
 

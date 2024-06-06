@@ -1,5 +1,5 @@
 <template>
-    <RouterView />
+    <RouterView class="view"/>
 </template>
 
 <script></script>
@@ -10,5 +10,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+}
+.view{
+    height: 100vh;
 }
 </style>
