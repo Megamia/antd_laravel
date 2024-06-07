@@ -11,8 +11,8 @@
                     placeholder="Nhập tên và số điện thoại"
                 />
             </div>
-            <div class="userInfor" >
-                <a-radio-group v-model:value="a" @change="click">
+            <div class="userInfor">
+                <a-radio-group v-model:value="a">
                     <a-button type="text" @click="addNewUser">
                         <CaAddAlt />Thêm mới khách hàng
                     </a-button>
@@ -23,7 +23,11 @@
                             </div>
                         </a-radio>
                     </div>
-                    <div class="userItems" v-for="user in filter" :key="user.id">
+                    <div
+                        class="userItems"
+                        v-for="user in filter"
+                        :key="user.id"
+                    >
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
@@ -53,18 +57,18 @@ const selectedUser = ref("");
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
 
-const click = () => {
-    if (a.value === "guest") {
-        console.log("Đã chọn khách lẻ");
-    } else {
-        selectedUser.value = data.value.find((user) => user.id === a.value);
-        if (selectedUser.value) {
-            console.log("Đã chọn user: ", selectedUser.value.name);
-        } else {
-            console.log(a.value);
-        }
-    }
-};
+// const click = () => {
+//     if (a.value === "guest") {
+//         console.log("Đã chọn khách lẻ");
+//     } else {
+//         selectedUser.value = data.value.find((user) => user.id === a.value);
+//         if (selectedUser.value) {
+//             console.log("Đã chọn user: ", selectedUser.value.name);
+//         } else {
+//             console.log(a.value);
+//         }
+//     }
+// };
 
 const data = ref([
     { id: 1, name: "Đỗ Phúc Lộc", phoneNumer: "123" },
@@ -98,7 +102,16 @@ const buttonSave = () => {
         // if (checked.value != null) {
         //     console.log(typeof checked.value);
         // }
-        console.log(nameOrPhoneNumber.value);
+        if (a.value === "guest") {
+            console.log("Đã chọn khách lẻ");
+        } else {
+            selectedUser.value = data.value.find((user) => user.id === a.value);
+            if (selectedUser.value) {
+                console.log("Đã chọn user: ", selectedUser.value.name);
+            } else {
+                console.log(a.value);
+            }
+        }
     } catch (e) {
         console.log("Lỗi: " + e);
     }
@@ -109,7 +122,11 @@ const filter = computed(() => {
             return nameOrPhoneNumber.value
                 .toLowerCase()
                 .split(" ")
-                .every((v) => user.name.toLowerCase().includes(v)||user.phoneNumer.toLowerCase().includes(v));
+                .every(
+                    (v) =>
+                        user.name.toLowerCase().includes(v) ||
+                        user.phoneNumer.toLowerCase().includes(v)
+                );
         });
     } else {
         return data.value;
@@ -117,7 +134,7 @@ const filter = computed(() => {
 });
 
 const isFiltering = computed(() => {
-  return !!nameOrPhoneNumber.value.trim();
+    return !!nameOrPhoneNumber.value.trim();
 });
 </script>
 
