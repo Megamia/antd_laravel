@@ -6,26 +6,35 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search v-model:value="value" placeholder="Nhập tên và số điện thoại" search />
+                <a-input-search
+                    v-model:value="nameOrPhoneNumber"
+                    placeholder="Nhập tên và số điện thoại"
+                />
             </div>
-            <div class="userInfor">
-                <a-button type="text" @click="addNewUser">
-                    <CaAddAlt />Thêm mới khách hàng
-                </a-button>
-                <div class="userItems">
-                    <a-radio v-model="checked" @change="click">
-                        <div class="userInforRadio">
-                            <span class="nameUser">Khách lẻ</span>
-                        </div>
-                    </a-radio>
-                </div>
-                <div class="userItems" v-for="user in data" :key="user.id">
-                    <a-radio v-model="checked" @change="click(user.id)" />
-                    <div class="userInforRadio">
-                        <span class="nameUser">{{ user.name }}</span>
-                        <span class="phoneNumberUser">{{ user.phoneNumer }}</span>
+            <div class="userInfor" >
+                <a-radio-group v-model:value="a" @change="click">
+                    <a-button type="text" @click="addNewUser">
+                        <CaAddAlt />Thêm mới khách hàng
+                    </a-button>
+                    <div class="userItems">
+                        <a-radio value="guest">
+                            <div class="userInforRadio">
+                                <span class="nameUser">Khách lẻ</span>
+                            </div>
+                        </a-radio>
                     </div>
-                </div>
+                    <div class="userItems" v-for="user in data" :key="user.id">
+                        <a-radio :value="user.id">
+                            <div class="userInforRadio">
+                                <span class="nameUser">{{ user.name }}</span>
+                                <span class="phoneNumberUser">{{
+                                    user.phoneNumer
+                                }}</span>
+                            </div>
+                        </a-radio>
+                    </div>
+                </a-radio-group>
+                <div style="height: 1000px" />
             </div>
         </div>
         <div class="saveDive">
@@ -37,24 +46,32 @@
 <script setup>
 import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-const checked = ref(false);
-const value = ref("");
+const a = ref(null);
+const selectedUser = ref("");
+const nameOrPhoneNumber = ref("");
 const router = useRouter();
 
-const click = (b) => {
-    const a = data.value.find(user => user.id === b);
-    console.log(a.id)
-}
+const click = () => {
+    if (a.value === "guest") {
+        console.log("Đã chọn khách lẻ");
+    } else {
+        selectedUser.value = data.value.find((user) => user.id === a.value);
+        if (selectedUser.value) {
+            console.log("Đã chọn user", selectedUser.value.id);
+        } else {
+            console.log(a.value);
+        }
+    }
+};
 
 const data = ref([
     { id: 1, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
     { id: 2, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
     { id: 3, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
     { id: 4, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
-
-])
+]);
 
 const back = () => {
     router.back();
@@ -78,13 +95,15 @@ const buttonSave = () => {
         // } else {
         //     console.log("Chưa chọn user nào");
         // }
-        if (checked.value != null) {
-            console.log(typeof (checked.value))
-        }
+        // if (checked.value != null) {
+        //     console.log(typeof checked.value);
+        // }
+        console.log(nameOrPhoneNumber.value);
     } catch (e) {
         console.log("Lỗi: " + e);
     }
 };
+
 </script>
 
 <style scoped>
