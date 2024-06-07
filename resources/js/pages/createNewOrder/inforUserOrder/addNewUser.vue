@@ -16,14 +16,14 @@
                     <a-button type="text" @click="addNewUser">
                         <CaAddAlt />Thêm mới khách hàng
                     </a-button>
-                    <div class="userItems">
+                    <div class="userItems" v-if="!isFiltering">
                         <a-radio value="guest">
                             <div class="userInforRadio">
                                 <span class="nameUser">Khách lẻ</span>
                             </div>
                         </a-radio>
                     </div>
-                    <div class="userItems" v-for="user in data" :key="user.id">
+                    <div class="userItems" v-for="user in filter" :key="user.id">
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
@@ -59,7 +59,7 @@ const click = () => {
     } else {
         selectedUser.value = data.value.find((user) => user.id === a.value);
         if (selectedUser.value) {
-            console.log("Đã chọn user", selectedUser.value.id);
+            console.log("Đã chọn user: ", selectedUser.value.name);
         } else {
             console.log(a.value);
         }
@@ -67,10 +67,10 @@ const click = () => {
 };
 
 const data = ref([
-    { id: 1, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
-    { id: 2, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
-    { id: 3, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
-    { id: 4, name: "Đỗ Phúc Lộc", phoneNumer: "0388911562" },
+    { id: 1, name: "Đỗ Phúc Lộc", phoneNumer: "123" },
+    { id: 2, name: "abc", phoneNumer: "764" },
+    { id: 3, name: "123", phoneNumer: "999" },
+    { id: 4, name: "gfd", phoneNumer: "000" },
 ]);
 
 const back = () => {
@@ -103,7 +103,22 @@ const buttonSave = () => {
         console.log("Lỗi: " + e);
     }
 };
+const filter = computed(() => {
+    if (nameOrPhoneNumber.value) {
+        return data.value.filter((user) => {
+            return nameOrPhoneNumber.value
+                .toLowerCase()
+                .split(" ")
+                .every((v) => user.name.toLowerCase().includes(v)||user.phoneNumer.toLowerCase().includes(v));
+        });
+    } else {
+        return data.value;
+    }
+});
 
+const isFiltering = computed(() => {
+  return !!nameOrPhoneNumber.value.trim();
+});
 </script>
 
 <style scoped>
