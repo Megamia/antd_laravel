@@ -6,10 +6,7 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search
-                    v-model:value="nameOrPhoneNumber"
-                    placeholder="Nhập tên và số điện thoại"
-                />
+                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên và số điện thoại" />
             </div>
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
@@ -23,17 +20,13 @@
                             </div>
                         </a-radio>
                     </div>
-                    <div
-                        class="userItems"
-                        v-for="user in filter"
-                        :key="user.id"
-                    >
+                    <div class="userItems" v-for="user in filter" :key="user.id">
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
                                 <span class="phoneNumberUser">{{
                                     user.phoneNumer
-                                }}</span>
+                                    }}</span>
                             </div>
                         </a-radio>
                     </div>
@@ -87,31 +80,18 @@ const addNewUser = () => {
 
 const buttonSave = () => {
     try {
-        // if (checkedUser.value === "guest") {
-        //     console.log("Đã chọn Khách lẻ");
-        // } else if (checkedUser.value != null) {
-        //     const selectedUser = data.value.find(user => user.id === checkedUser.value.users);
-        //     if (selectedUser) {
-        //         console.log("Đã chọn user có id: " + selectedUser.id);
-        //     } else {
-        //         console.log("User không tồn tại");
-        //     }
-        // } else {
-        //     console.log("Chưa chọn user nào");
-        // }
-        // if (checked.value != null) {
-        //     console.log(typeof checked.value);
-        // }
         if (a.value === "guest") {
             console.log("Đã chọn khách lẻ");
         } else {
             selectedUser.value = data.value.find((user) => user.id === a.value);
-            if (selectedUser.value) {
-                console.log("Đã chọn user: ", selectedUser.value.name);
-            } else {
-                console.log(a.value);
-            }
+            console.log("Đã chọn user: ", selectedUser.value.name);
         }
+        if (a.value || selectedUser.value) {
+            console.log("Có chọn được user");
+        } else {
+            console.log("Không chọn được user");
+        }
+        router.back();
     } catch (e) {
         console.log("Lỗi: " + e);
     }
