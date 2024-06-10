@@ -14,9 +14,13 @@
                 <a-button class="buttonAdd" @click="nothing">
                     <CaAddAlt />Thêm sản phẩm</a-button
                 >
-                <a-button class="buttonScan" @click="nothing">
+                <a-button class="buttonScan" @click="openModalScanQRCode">
                     <BxScan />Quét mã</a-button
                 >
+                <modalScanQRCode
+                    v-if="isModalScanQRCode"
+                    @closeModalScanQrCode="closeModalScanQrCode"
+                />
             </div>
         </div>
         <div class="content" v-if="showOrder">
@@ -120,13 +124,27 @@
     </div>
 </template>
 <script setup>
-import { AkChevronDownSmall, AkChevronUpSmall } from "@kalimahapps/vue-icons";
-import { CaAddAlt } from "@kalimahapps/vue-icons";
-import { BxScan } from "@kalimahapps/vue-icons";
-import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
+import modalScanQRCode from "./modalScanQrCode.vue";
+import {
+    AkChevronDownSmall,
+    AkChevronUpSmall,
+    CaAddAlt,
+    BxScan,
+    AnOutlinedEdit,
+} from "@kalimahapps/vue-icons";
+
 import { ref, defineEmits } from "vue";
 
 const showOrder = ref(true);
+
+const isModalScanQRCode = ref(false);
+const openModalScanQRCode = () => {
+    isModalScanQRCode.value = true;
+};
+
+const closeModalScanQrCode = () => {
+    isModalScanQRCode.value = false;
+};
 
 const clickShowModal = () => {
     emit("showModal");
@@ -167,7 +185,6 @@ const nothing = () => {
             flex: 1;
             padding: 0px 10px 10px;
             padding-block: 10px;
-            
 
             .inforText {
                 font-size: 16px;

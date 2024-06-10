@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('text');
             $table->integer('number');
-            $table->date('date');
+            $table->timestamp('date')->useCurrent();
             $table->string('dropDown');
             $table->string('checkBox');
             $table->string('address');

@@ -45,6 +45,7 @@
             <a-button type="primary" @click="buttonSave">Lưu</a-button>
         </div>
     </div>
+   
 </template>
 
 <script setup>
@@ -93,7 +94,7 @@ const buttonSave = () => {
             selectedUser.value = data.value.find((user) => user.id === a.value);
             console.log("Đã chọn user: ", selectedUser.value.name);
         }
-        
+
         // router.back();
     } catch (e) {
         console.log("Lỗi: " + e);
