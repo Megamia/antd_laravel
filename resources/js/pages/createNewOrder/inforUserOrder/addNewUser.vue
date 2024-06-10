@@ -6,7 +6,10 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên và số điện thoại" />
+                <a-input-search
+                    v-model:value="nameOrPhoneNumber"
+                    placeholder="Nhập tên và số điện thoại"
+                />
             </div>
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
@@ -20,13 +23,17 @@
                             </div>
                         </a-radio>
                     </div>
-                    <div class="userItems" v-for="user in filter" :key="user.id">
+                    <div
+                        class="userItems"
+                        v-for="user in filter"
+                        :key="user.id"
+                    >
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
                                 <span class="phoneNumberUser">{{
                                     user.phoneNumer
-                                    }}</span>
+                                }}</span>
                             </div>
                         </a-radio>
                     </div>
@@ -82,16 +89,12 @@ const buttonSave = () => {
     try {
         if (a.value === "guest") {
             console.log("Đã chọn khách lẻ");
-        } else {
+        } else if (a.value && a.value != "guest") {
             selectedUser.value = data.value.find((user) => user.id === a.value);
             console.log("Đã chọn user: ", selectedUser.value.name);
         }
-        if (a.value || selectedUser.value) {
-            console.log("Có chọn được user");
-        } else {
-            console.log("Không chọn được user");
-        }
-        router.back();
+        
+        // router.back();
     } catch (e) {
         console.log("Lỗi: " + e);
     }
