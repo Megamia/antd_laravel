@@ -12,7 +12,7 @@ import costOrder from "./pages/createNewOrder/costOrder/costOrder.vue";
 import modalCostOrder from "./pages/createNewOrder/inforOrder/modalCostOrder.vue";
 import createOrderSuccess from "./pages/createNewOrder/createOrderSuccess.vue";
 import addNewUser from "./pages/createNewOrder/inforUserOrder/addNewUser.vue";
-import inforNewUser from "./pages/createNewOrder/inforUserOrder/inforNewUser.vue";
+import chooseUser from "./pages/createNewOrder/inforUserOrder/chooseUser.vue";
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -84,9 +84,9 @@ const router = createRouter({
             name: "addNewUser",
         },
         {
-            path: "/inforNewUser",
-            component: inforNewUser,
-            name: "inforNewUser",
+            path: "/chooseUser",
+            component: chooseUser,
+            name: "chooseUser",
         },
         {
             path: "/test",

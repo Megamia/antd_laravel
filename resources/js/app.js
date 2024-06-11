@@ -2,6 +2,9 @@ import "./bootstrap";
 import App from "./App.vue";
 import { createApp } from "vue";
 import router from "./router";
+import VueAxios from "vue-axios";
+import VueCookies from "vue-cookies";
+import axios from "axios";
 import "ant-design-vue/dist/reset.css";
 import {
     Alert,
@@ -25,8 +28,12 @@ import {
     Image,
     Switch,
     Select,
-    Radio
+    Radio,
 } from "ant-design-vue";
+
+axios.defaults.headers.common["X-CSRF-TOKEN"] = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute("content");
 
 const app = createApp(App);
 
@@ -53,4 +60,6 @@ app.use(router)
     .use(Switch)
     .use(Select)
     .use(Radio)
+    .use(VueAxios, axios)
+    .use(VueCookies)
     .mount("#app");

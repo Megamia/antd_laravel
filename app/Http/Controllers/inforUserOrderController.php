@@ -11,18 +11,33 @@ class InforUserOrderController extends Controller
     {
         $users = InforUserOrder::all();
         if ($users->isNotEmpty()) {
-            return $users;
+            return response()->json(['status' => 1, 'dataUser' => $users]);
         } else {
             return response()->json(['message' => 'No data'], 404);
+        }
+    }
+
+    public function dataUserOrder(Request $request)
+    {
+        $data = $request->only('id');
+        if($data['id']==='guest'){
+            return response()->json(['status' => 1, 'dataUserOrder' => 'Khách lẻ']);
+        }else{
+            $dataUser = InforUserOrder::where('id', $data['id'])->first();
+            if ($dataUser) {
+                return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
+            } else {
+                return response()->json(['status' => 0, 'messsage' => 'no data user']);
+            }
         }
     }
 
     public function addUserOder(Request $request)
     {
         $data = $request->only([
-            'name',
+            'username',
             'phoneNumber',
-            'email',
+            'email'
             // 'text',
             // 'number',
             // 'date',
@@ -33,17 +48,17 @@ class InforUserOrderController extends Controller
         ]);
         $existingUser = InforUserOrder::where('email', $data['email'])->first();
         if ($existingUser) {
-            return response()->json(['message' => 'User already exists'], 201);
+            return response()->json(['status' => 0, 'message' => 'User already exists']);
         }
         $users = InforUserOrder::create([
-            'name' => $data['name'],
+            'name' => $data['username'],
             'phoneNumber' => $data['phoneNumber'],
             'email' => $data['email'],
-            'permission' => $data['permission']
         ]);
 
         return response()->json([
-            'message' => 'User has been add to DashBoard', 'data' => $users
-        ], 200);
+            'status' => 1,
+            'message' => 'User has been add to inforUserOrder', 'data' => $users
+        ]);
     }
 }

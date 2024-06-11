@@ -17,29 +17,25 @@ class inforUserOrder extends Model
         'name',
         'phoneNumber',
         'email',
-        'text',
-        'number',
-        'date',
-        'dropDown',
-        'checkBox',
-        'address',
-        'email2',
+        // 'text',
+        // 'number',
+        // 'date',
+        // 'dropDown',
+        // 'checkBox',
+        // 'address',
+        // 'email2'
     ];
-    protected $table = 'inforuserorder';
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
-
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [];
-    }
+    public $timestamps = false;
+    protected $table = 'inforuserorder';
+    protected $hidden = [];
 }

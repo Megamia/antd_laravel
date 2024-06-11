@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('phoneNumber');
-            $table->string('email')->unique();
-            $table->string('text');
-            $table->integer('number');
+            $table->string('email')->nullable()->default('example@gmail');
+            $table->string('text')->nullable();
+            $table->integer('number')->nullable();
             $table->timestamp('date')->useCurrent();
-            $table->string('dropDown');
-            $table->string('checkBox');
-            $table->string('address');
-            $table->string('email2')->unique();
+            $table->string('dropDown')->nullable();
+            $table->string('checkBox')->nullable();
+            $table->string('address')->nullable();
+            $table->string('email2')->nullable()->default('example2@gmail');
         });
     }
 

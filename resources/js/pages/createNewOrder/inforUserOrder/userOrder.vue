@@ -41,7 +41,7 @@ const nothing = () => {
 };
 
 const addNewUser = () => {
-    router.push("/addNewUser");
+    router.push("/chooseUser");
 };
 </script>
 
