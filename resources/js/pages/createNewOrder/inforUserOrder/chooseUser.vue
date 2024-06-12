@@ -123,7 +123,7 @@ const buttonSave = async () => {
             // }
             router.back();
         } else {
-            console.log("Faile");
+            // console.log("Faile");
         }
     } catch (e) {
         console.log("Lỗi: " + e);

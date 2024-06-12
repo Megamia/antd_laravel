@@ -50,9 +50,9 @@ const Refuse = async () => {
             `${import.meta.env.VITE_APP_URL_API}/deleteSession`
         );
         if (response.data.status === 1) {
-            console.log("Success");
+            // console.log("Success");
         } else {
-            console.log("Faile");
+            // console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -70,7 +70,7 @@ const fetchData = async () => {
             console.log(dataUserOrder.value);
         } else {
             showChoose.value = true;
-            console.log("Faile");
+            // console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);

@@ -6,7 +6,7 @@
         </div>
         <div class="detailInforUser">
             <div class="nameUser">
-                <span> Lan Anh | 0388911165</span>
+                <span> {{dataUserOrder}} | 0388911165</span>
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="nameUser">
-                <span> Lan Anh | 0388911165</span>
+                <span> {{dataUserOrder}} | 0388911165</span>
             </div>
             <div class="detailAddress">
                 85 vũ Trọng Phụng, phường Thanh Xuân Trung, quận Thanh Xuân, Hà
@@ -46,14 +46,31 @@
     </div>
 </template>
 <script setup>
-import { defineEmits } from "vue";
+import { ref, onMounted, defineEmits } from "vue";
 
 const emit = defineEmits(["refuse"]);
-
+const dataUserOrder = ref("");
 const Refuse = () => {
     emit("refuse");
     return;
 };
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        );
+        if (response.data.status === 1) {
+            dataUserOrder.value = response.data.dataUserOrder.name;
+        } else {
+            // console.log("Faile");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
+onMounted(() => fetchData());
 </script>
 
 <style scoped>
