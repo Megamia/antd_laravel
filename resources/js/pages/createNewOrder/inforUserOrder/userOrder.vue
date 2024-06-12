@@ -3,7 +3,7 @@
         <div class="title">
             <span> Thông tin khách hàng</span>
         </div>
-        <div class="function">
+        <div class="function" v-if="showChoose">
             <div class="button">
                 <a-button class="buttonChild buttonAdd" @click="nothing">
                     <BxTimer />
@@ -25,6 +25,9 @@
                 </a-button>
             </div>
         </div>
+        <div v-else>
+            <detailInforUserOrder @refuse="Refuse" />
+        </div>
     </div>
 </template>
 <script setup>
@@ -33,7 +36,48 @@ import {
     AnOutlinedUserAdd,
     PhMagnifyingGlass,
 } from "@kalimahapps/vue-icons";
+import detailInforUserOrder from "./detailInforUserOrder.vue";
+import { ref, onMounted, watch } from "vue";
+import axios from "axios";
 import { useRouter } from "vue-router";
+
+const showChoose = ref(true);
+const dataUserOrder = ref("");
+
+const Refuse = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/deleteSession`
+        );
+        if (response.data.status === 1) {
+            console.log("Success");
+        } else {
+            console.log("Faile");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+    fetchData();
+};
+const fetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        );
+        if (response.data.status === 1) {
+            dataUserOrder.value = response.data.dataUserOrder.name;
+            showChoose.value = false;
+            console.log(dataUserOrder.value);
+        } else {
+            showChoose.value = true;
+            console.log("Faile");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
+onMounted(() => fetchData());
 
 const router = useRouter();
 const nothing = () => {

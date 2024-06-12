@@ -2,7 +2,7 @@
     <div class="mainDetailInforUserOrder">
         <div class="title">
             <span class="inforText"> Thông tin khách hàng </span>
-            <span class="uncheckedText"> Bỏ chọn</span>
+            <span class="uncheckedText" @click="Refuse"> Bỏ chọn</span>
         </div>
         <div class="detailInforUser">
             <div class="nameUser">
@@ -45,6 +45,17 @@
         </div>
     </div>
 </template>
+<script setup>
+import { defineEmits } from "vue";
+
+const emit = defineEmits(["refuse"]);
+
+const Refuse = () => {
+    emit("refuse");
+    return;
+};
+</script>
+
 <style scoped>
 .mainDetailInforUserOrder {
     display: flex;

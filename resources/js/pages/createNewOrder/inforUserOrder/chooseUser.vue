@@ -110,21 +110,21 @@ const buttonSave = async () => {
         // router.back();
 
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`,
+            `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
             {
                 id: a.value,
             }
         );
         if (response.data.status === 1) {
-            if (a.value === "guest") {
-                console.log("Đã chọn: ", response.data.dataUserOrder);
-            } else {
-                console.log("Đã chọn: ", response.data.dataUserOrder.name);
-            }
+            // if (a.value === "guest") {
+            //     console.log("Đã chọn: ", response.data.dataUserOrder);
+            // } else {
+            //     console.log("Đã chọn: ", response.data.dataUserOrder.name);
+            // }
+            router.back();
         } else {
             console.log("Faile");
         }
-        // console.log(a.value);
     } catch (e) {
         console.log("Lỗi: " + e);
     }

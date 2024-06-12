@@ -14,7 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        // Add global middleware here
+        \App\Http\Middleware\CheckSessionExpiration::class,
     ];
 
     /**
