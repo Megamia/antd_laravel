@@ -1,12 +1,11 @@
 <template>
-    <div class="mainDetailInforUserOrder">
-        <div class="title">
-            <span class="inforText"> Thông tin khách hàng </span>
-            <span class="uncheckedText" @click="Refuse"> Bỏ chọn</span>
-        </div>
+    <div class="mainDetailInforUserOrder" v-if="isUser">
         <div class="detailInforUser">
             <div class="nameUser">
-                <span> {{dataUserOrder}} | 0388911165</span>
+                <span>
+                    {{ dataUserOrder.name }} |
+                    {{ dataUserOrder.phoneNumber }}</span
+                >
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
@@ -23,8 +22,14 @@
                 </div>
             </div>
             <div class="seeMoreDiv">
-                <span class="seeMoreText"> Xem thêm </span>
+                <span class="seeMoreText" @click="showModalInforUser">
+                    Xem thêm
+                </span>
             </div>
+            <modalInforUserOrder
+                v-if="isShowModalInforUser"
+                @closeModal="closeModal"
+            />
         </div>
         <div class="addressUserDiv">
             <div class="inforAddress">
@@ -36,23 +41,44 @@
                 </div>
             </div>
             <div class="nameUser">
-                <span> {{dataUserOrder}} | 0388911165</span>
+                <span>
+                    {{ dataUserOrder.name }} |
+                    {{ dataUserOrder.phoneNumber }}</span
+                >
             </div>
             <div class="detailAddress">
-                85 vũ Trọng Phụng, phường Thanh Xuân Trung, quận Thanh Xuân, Hà
-                Nội
+                {{ dataUserOrder.address ? "" : "Chưa có thông tin" }}
             </div>
         </div>
     </div>
+    <div class="guest" v-if="isGuest">
+        <span> Khách lẻ </span>
+    </div>
 </template>
 <script setup>
-import { ref, onMounted, defineEmits } from "vue";
+import { ref, onMounted } from "vue";
+import modalInforUserOrder from "./modalInforUserOrder.vue";
+const dataUserOrder = ref({
+    name: "",
+    phoneNumber: "",
+    email: "",
+    text: "",
+    number: "",
+    date: "",
+    dropDown: "",
+    checkBox: "",
+    address: "",
+    email2: "",
+});
+const isUser = ref(null);
+const isGuest = ref(null);
+const isShowModalInforUser = ref(false);
+const showModalInforUser = () => {
+    isShowModalInforUser.value = true;
+};
 
-const emit = defineEmits(["refuse"]);
-const dataUserOrder = ref("");
-const Refuse = () => {
-    emit("refuse");
-    return;
+const closeModal = () => {
+    isShowModalInforUser.value = false;
 };
 
 const fetchData = async () => {
@@ -61,9 +87,18 @@ const fetchData = async () => {
             `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
         );
         if (response.data.status === 1) {
-            dataUserOrder.value = response.data.dataUserOrder.name;
+            if (response.data.dataUserOrder != "guest") {
+                dataUserOrder.value = response.data.dataUserOrder;
+                isGuest.value = false;
+                isUser.value = true;
+                // console.log(dataUserOrder.value);
+            } else {
+                dataUserOrder.value = response.data.dataUserOrder;
+                isGuest.value = true;
+                isUser.value = false;
+                // console.log(dataUserOrder.value);
+            }
         } else {
-            // console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -74,12 +109,14 @@ onMounted(() => fetchData());
 </script>
 
 <style scoped>
-.mainDetailInforUserOrder {
+.mainDetailInforUserOrder,
+.guest {
     display: flex;
     flex-direction: column;
     flex: 1;
     background-color: white !important;
     padding-block: 10px;
+    border-top: 1px solid #d9d9d9;
     .title {
         display: flex;
         flex: 1;
@@ -175,6 +212,13 @@ onMounted(() => fetchData());
             font-weight: 400;
             color: black;
         }
+    }
+}
+.guest {
+    span {
+        padding-inline: 10px;
+        font-size: 14px;
+        color: #000000d9;
     }
 }
 </style>

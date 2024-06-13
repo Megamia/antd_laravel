@@ -42,7 +42,7 @@ class InforUserOrderController extends Controller
 
         if ($user_id && $user_id_expires_at && now()->lessThanOrEqualTo($user_id_expires_at)) {
             if ($user_id === 'guest') {
-                return response()->json(['status' => 1, 'dataUserOrder' => 'Khách lẻ']);
+                return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
                 $dataUser = InforUserOrder::where('id', $user_id)->first();
                 return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);

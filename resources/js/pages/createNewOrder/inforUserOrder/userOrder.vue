@@ -2,6 +2,9 @@
     <div class="mainUserOrder">
         <div class="title">
             <span> Thông tin khách hàng</span>
+            <span class="refuse" @click="Esc" v-if="!showChoose">
+                Bỏ chọn</span
+            >
         </div>
         <div class="function" v-if="showChoose">
             <div class="button">
@@ -26,7 +29,7 @@
             </div>
         </div>
         <div v-else>
-            <detailInforUserOrder @refuse="Refuse" />
+            <detailInforUserOrder  />
         </div>
     </div>
 </template>
@@ -37,22 +40,20 @@ import {
     PhMagnifyingGlass,
 } from "@kalimahapps/vue-icons";
 import detailInforUserOrder from "./detailInforUserOrder.vue";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
 const showChoose = ref(true);
 const dataUserOrder = ref("");
 
-const Refuse = async () => {
+const Esc = async () => {
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/deleteSession`
         );
         if (response.data.status === 1) {
-            // console.log("Success");
         } else {
-            // console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -65,12 +66,17 @@ const fetchData = async () => {
             `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
         );
         if (response.data.status === 1) {
-            dataUserOrder.value = response.data.dataUserOrder.name;
-            showChoose.value = false;
-            console.log(dataUserOrder.value);
+            if (response.data.dataUserOrder != "guest") {
+                dataUserOrder.value = response.data.dataUserOrder.name;
+                showChoose.value = false;
+                // console.log(dataUserOrder.value);
+            } else {
+                dataUserOrder.value = response.data.dataUserOrder;
+                showChoose.value = false;
+                // console.log(dataUserOrder.value);
+            }
         } else {
             showChoose.value = true;
-            // console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -95,15 +101,22 @@ const addNewUser = () => {
     flex: 1;
     flex-direction: column;
     background-color: white;
-    padding: 12px;
-    gap: 8px;
     .title {
+        padding: 12px;
+
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
         font-weight: bold;
+        .refuse {
+            color: #ff4d4f;
+            font-size: 14px;
+        }
     }
     .function {
         display: flex;
         flex-direction: row;
-        padding-inline: 10px;
+        padding: 0 10px 10px 10px;
 
         .button {
             display: flex;
