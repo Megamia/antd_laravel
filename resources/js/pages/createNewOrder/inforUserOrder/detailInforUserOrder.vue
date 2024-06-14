@@ -2,10 +2,7 @@
     <div class="mainDetailInforUserOrder" v-if="isUser">
         <div class="detailInforUser">
             <div class="nameUser">
-                <span>
-                    {{ dataUserOrder.name }} |
-                    {{ dataUserOrder.phoneNumber }}</span
-                >
+                <span> {{ dataUserOrder.name }} | {{ dataUserOrder.phoneNumber }}</span>
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
@@ -22,14 +19,9 @@
                 </div>
             </div>
             <div class="seeMoreDiv">
-                <span class="seeMoreText" @click="showModalInforUser">
-                    Xem thêm
-                </span>
+                <span class="seeMoreText" @click="showModalInforUser"> Xem thêm </span>
             </div>
-            <modalInforUserOrder
-                v-if="isShowModalInforUser"
-                @closeModal="closeModal"
-            />
+            <modalInforUserOrder v-if="isShowModalInforUser" @closeModal="closeModal" />
         </div>
         <div class="addressUserDiv">
             <div class="inforAddress">
@@ -41,10 +33,7 @@
                 </div>
             </div>
             <div class="nameUser">
-                <span>
-                    {{ dataUserOrder.name }} |
-                    {{ dataUserOrder.phoneNumber }}</span
-                >
+                <span> {{ dataUserOrder.name }} | {{ dataUserOrder.phoneNumber }}</span>
             </div>
             <div class="detailAddress">
                 {{ dataUserOrder.address ? "" : "Chưa có thông tin" }}
@@ -59,32 +48,24 @@
 import { ref, onMounted, defineEmits } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
 
-const emit = defineEmits(["fetchData1"]);
+const emit = defineEmits(["fet"]);
 
-const dataUserOrder = ref({
-    name: "",
-    phoneNumber: "",
-    email: "",
-    text: "",
-    number: "",
-    date: "",
-    dropDown: "",
-    checkBox: "",
-    address: "",
-    email2: "",
-});
+const dataUserOrder = ref("");
 const isUser = ref(null);
 const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
 const checkShow = ref(false);
-const showModalInforUser = () => {
-    fetchData();
-    if (checkShow.value === true) {
+
+const showModalInforUser = async () => {
+    await fetchData();
+    if (checkShow.value) {
         isShowModalInforUser.value = true;
     } else {
-        console.log("Vui lòng chọn lại user");
-        emit("fetchData1");
+        isShowModalInforUser.value = false;
+        alert("Vui lòng chọn lại user");
+        emit("fet");
     }
+    return;
 };
 
 const closeModal = () => {
@@ -93,9 +74,7 @@ const closeModal = () => {
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
-        );
+        const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/dataUserOrder`);
         if (response.data.status === 1) {
             if (response.data.dataUserOrder != "guest") {
                 dataUserOrder.value = response.data.dataUserOrder;
@@ -109,9 +88,10 @@ const fetchData = async () => {
                 // console.log(dataUserOrder.value);
             }
             checkShow.value = true;
-        } else {
+        } else if (response.data.status === 0) {
             checkShow.value = false;
         }
+        return;
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -129,16 +109,19 @@ onMounted(() => fetchData());
     background-color: white !important;
     padding-block: 10px;
     border-top: 1px solid #d9d9d9;
+
     .title {
         display: flex;
         flex: 1;
         padding: 0px 10px 10px;
         border-bottom: 2px solid #f0f0f0;
+
         .inforText {
             font-size: 16px;
             font-weight: bold;
             justify-content: start;
         }
+
         .uncheckedText {
             display: flex;
             flex: 1;
@@ -147,21 +130,25 @@ onMounted(() => fetchData());
             color: red;
         }
     }
+
     .detailInforUser {
         border-bottom: 2px solid #f0f0f0;
         display: flex;
         flex-direction: column;
         margin-inline: 10px;
+
         .nameUser {
             padding-block: 10px;
             font-size: 14px;
             font-weight: 600;
         }
+
         .totalInforOrderUser {
             display: flex;
             flex-direction: row;
             flex: 1;
             justify-content: space-between;
+
             .order {
                 padding-inline: 10px;
 
@@ -173,36 +160,45 @@ onMounted(() => fetchData());
                 .upText {
                     color: #8c8c8c;
                 }
+
                 .downText {
                     color: black;
                     font-weight: 600;
                 }
+
                 .canceledRate {
                     color: red;
                 }
             }
+
             .ordered {
                 padding-inline: 0;
             }
+
             .cancelOrder {
                 border-inline: 2px solid #f0f0f0;
             }
         }
+
         .seeMoreDiv {
             padding-block: 10px;
+
             .seeMoreText {
                 color: #1890ff;
             }
         }
     }
+
     .addressUserDiv {
         padding-inline: 10px;
         color: #8c8c8c;
+
         .inforAddress {
             display: flex;
             flex: 1;
             flex-direction: row;
             padding-block: 10px;
+
             .inforAddressText {
                 span {
                     font-size: 12px;
@@ -210,6 +206,7 @@ onMounted(() => fetchData());
                     color: black;
                 }
             }
+
             .swapAddress {
                 display: flex;
                 flex: 1;
@@ -218,6 +215,7 @@ onMounted(() => fetchData());
                 font-size: 12px;
             }
         }
+
         .nameUser {
             padding-block: 10px;
             font-size: 14px;
@@ -226,6 +224,7 @@ onMounted(() => fetchData());
         }
     }
 }
+
 .guest {
     span {
         padding-inline: 10px;

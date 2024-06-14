@@ -36,6 +36,6 @@ class inforUserOrder extends Model
      * @return array<string, string>
      */
     public $timestamps = false;
-    protected $table = 'inforuserorder';
+    protected $table = 'inforUserOrder';
     protected $hidden = [];
 }

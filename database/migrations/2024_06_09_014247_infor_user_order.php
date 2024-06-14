@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\InforUserOrder;
 
 return new class extends Migration
 {
@@ -24,6 +25,19 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('email2')->nullable()->default('example2@gmail');
         });
+
+        // Tạo bản ghi mặc định
+        $inforUserOrder = new InforUserOrder();
+        $inforUserOrder->name = 'John Doe';
+        $inforUserOrder->phoneNumber = 1234567890;
+        $inforUserOrder->email = 'example@gmail.com';
+        $inforUserOrder->text = 'Default text';
+        $inforUserOrder->number = 100;
+        $inforUserOrder->dropDown = 'Default dropdown';
+        $inforUserOrder->checkBox = 'Default checkbox';
+        $inforUserOrder->address = '123 Main St, Anytown USA';
+        $inforUserOrder->email2 = 'example2@gmail.com';
+        $inforUserOrder->save();
     }
 
     /**

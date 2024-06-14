@@ -6,10 +6,7 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search
-                    v-model:value="nameOrPhoneNumber"
-                    placeholder="Nhập tên và số điện thoại"
-                />
+                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên và số điện thoại" />
             </div>
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
@@ -23,11 +20,7 @@
                             </div>
                         </a-radio>
                     </div>
-                    <div
-                        class="userItems"
-                        v-for="user in filter"
-                        :key="user.id"
-                    >
+                    <div class="userItems" v-for="user in filter" :key="user.id">
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
@@ -54,7 +47,7 @@ import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 
 const a = ref(null);
-const selectedUser = ref("");
+// const selectedUser = ref("");
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
 
@@ -72,8 +65,7 @@ const router = useRouter();
 // };
 
 const data = ref({
-    name: "",
-    phoneNumber: "",
+
 });
 
 const fetchData = async () => {
@@ -81,9 +73,14 @@ const fetchData = async () => {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/dataUser`
         );
-        data.value = response.data.dataUser;
-        data.value.name = response.data.dataUser.name;
-        data.value.phoneNumber = response.data.dataUser.phoneNumber;
+        if (response.data.status === 1) {
+            data.value = response.data.dataUser;
+
+        } else if (response.data.status === 0){
+            console.log(response.data)
+        } else {
+            console.log("Faile")
+        }
     } catch (e) {
         console.log("Error: ", e);
     }
