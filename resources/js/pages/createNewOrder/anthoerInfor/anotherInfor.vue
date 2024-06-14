@@ -222,11 +222,11 @@
                         </a-input>
                     </a-form-item>
 
-                    <a-form-item>
+                    <!-- <a-form-item>
                         <a-button type="primary" html-type="submit"
                             >Submit</a-button
                         >
-                    </a-form-item>
+                    </a-form-item> -->
                 </a-form>
             </div>
         </div>

@@ -56,8 +56,11 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineEmits } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
+
+const emit = defineEmits(["fetchData1"]);
+
 const dataUserOrder = ref({
     name: "",
     phoneNumber: "",
@@ -73,8 +76,15 @@ const dataUserOrder = ref({
 const isUser = ref(null);
 const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
+const checkShow = ref(false);
 const showModalInforUser = () => {
-    isShowModalInforUser.value = true;
+    fetchData();
+    if (checkShow.value === true) {
+        isShowModalInforUser.value = true;
+    } else {
+        console.log("Vui lòng chọn lại user");
+        emit("fetchData1");
+    }
 };
 
 const closeModal = () => {
@@ -98,7 +108,9 @@ const fetchData = async () => {
                 isUser.value = false;
                 // console.log(dataUserOrder.value);
             }
+            checkShow.value = true;
         } else {
+            checkShow.value = false;
         }
     } catch (e) {
         console.log("Error: ", e);

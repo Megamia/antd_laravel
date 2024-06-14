@@ -2,9 +2,7 @@
     <div class="mainUserOrder">
         <div class="title">
             <span> Thông tin khách hàng</span>
-            <span class="refuse" @click="Esc" v-if="!showChoose">
-                Bỏ chọn</span
-            >
+            <span class="refuse" @click="Esc" v-if="!showChoose"> Bỏ chọn</span>
         </div>
         <div class="function" v-if="showChoose">
             <div class="button">
@@ -29,7 +27,7 @@
             </div>
         </div>
         <div v-else>
-            <detailInforUserOrder  />
+            <detailInforUserOrder @fetchData1="fetchData1" />
         </div>
     </div>
 </template>
@@ -60,6 +58,19 @@ const Esc = async () => {
     }
     fetchData();
 };
+const fetchData1 = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        );
+        if (response.data.status === 0) {
+            showChoose.value = true;
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
 const fetchData = async () => {
     try {
         const response = await axios.get(

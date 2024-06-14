@@ -7,7 +7,7 @@
             <userOrder />
         </div>
         <div class="inforUserOrderDiv" v-else>
-            <detailInforUserOrder />
+            <detailInforUserOrder @fetchData1="fetchData1" />
         </div>
         <div class="productOrderDiv">
             <inforOrder @show="showOrHidden" @showModal="ClickShowModal" />
@@ -30,8 +30,8 @@
         </div>
         <div class="costOrder">
             <costOrder />
+            <div style="height: 1000px; width: 100%" />
         </div>
-        <div style="height: 1000px" />
     </div>
 </template>
 
@@ -47,8 +47,8 @@ import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
 import modalCostOrder from "./inforOrder/modalCostOrder.vue";
 
-import { ref } from "vue";
-
+import { ref, onMounted } from "vue";
+import axios from "axios";
 const isOpen = ref(true);
 const showModal = ref(false);
 const selected = ref(true);
@@ -58,6 +58,22 @@ const showOrHidden = () => {
 };
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
+};
+
+const fetchData1 = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_APP}/dataUserOrder`
+        );
+        if (response.data.status === 1) {
+            selected.value = false;
+        } else {
+            alert("Vui lòng chọn lại");
+            selected.value = true;
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
 };
 </script>
 
