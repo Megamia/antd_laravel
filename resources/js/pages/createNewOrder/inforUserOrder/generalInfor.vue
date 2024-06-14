@@ -62,10 +62,8 @@ const fetchData = async () => {
         );
         if (response.data.status === 1) {
             dataUserOrder.value = response.data.dataUserOrder;
-            // console.log(dataUserOrder.value);
-            // console.log("Tiếp tục")
         } else {
-            // console.log("Dừng");
+            
         }
     } catch (e) {
         console.log("Error: ", e);
