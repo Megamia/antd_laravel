@@ -17,13 +17,13 @@ class inforUserOrder extends Model
         'name',
         'phoneNumber',
         'email',
-        // 'text',
-        // 'number',
-        // 'date',
-        // 'dropDown',
-        // 'checkBox',
-        // 'address',
-        // 'email2'
+        'text',
+        'number',
+        'date',
+        'dropDown',
+        'checkBox',
+        'address',
+        'email2'
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -36,6 +36,6 @@ class inforUserOrder extends Model
      * @return array<string, string>
      */
     public $timestamps = false;
-    protected $table = 'inforUserOrder';
+    protected $table = 'inforuserorder';
     protected $hidden = [];
 }

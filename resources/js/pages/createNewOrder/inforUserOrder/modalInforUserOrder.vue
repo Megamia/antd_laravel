@@ -4,22 +4,14 @@
             <div class="modal-wrapper">
                 <div class="modal-container">
                     <div class="title">
-                        <span class="titleText" @click="a"
-                            >Chi tiết khách hàng</span
-                        >
+                        <span class="titleText" @click="a">Chi tiết khách hàng</span>
                     </div>
                     <div class="content">
                         <div class="router">
-                            <span
-                                @click="handlePageChange('a')"
-                                :class="{ act: currentPage === 'a' }"
-                            >
+                            <span @click="handlePageChange('a')" :class="{ act: currentPage === 'a' }">
                                 Thông tin chung
                             </span>
-                            <span
-                                @click="handlePageChange('b')"
-                                :class="{ act: currentPage === 'b' }"
-                            >
+                            <span @click="handlePageChange('b')" :class="{ act: currentPage === 'b' }">
                                 Thông tin boom hàng
                             </span>
                         </div>
@@ -94,6 +86,7 @@ const handlePageChange = (page) => {
         display: flex;
         flex: 1;
         padding-block: 20px;
+
         .titleText {
             display: flex;
             flex: 1;
@@ -102,10 +95,13 @@ const handlePageChange = (page) => {
             font-weight: 600;
         }
     }
+
     .content {
         display: flex;
         flex: 1;
         flex-direction: column;
+        border-bottom: 1px solid #d9d9d9;
+
         .router {
             display: flex;
             flex: 1;
@@ -116,26 +112,32 @@ const handlePageChange = (page) => {
                 font-size: 14px;
                 color: black;
                 font-weight: 500;
+                padding-block: 15px;
+
                 a-active {
                     color: red;
                 }
+
                 a-focus {
                     color: red;
                 }
             }
         }
     }
+
     .generalInfor {
         display: flex;
         flex: 1;
         padding-block: 20px;
     }
+
     .anotherInfor {
         z-index: 200;
         position: relative;
         transition: all 0.3s ease;
         overflow-y: auto;
     }
+
     .buttonChange {
         position: fixed;
         width: 100%;
@@ -146,6 +148,7 @@ const handlePageChange = (page) => {
         padding: 10px;
         border-width: 0;
         background-color: white;
+
         button {
             background-color: white;
             width: 100%;
@@ -158,6 +161,7 @@ const handlePageChange = (page) => {
         }
     }
 }
+
 .act {
     border-bottom: 3px solid #0d99ff !important;
     fill: #0d99ff !important;
@@ -183,6 +187,7 @@ const handlePageChange = (page) => {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+
 .active {
     border-color: #1890ff;
     color: #1890ff;

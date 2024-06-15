@@ -13,6 +13,7 @@ import modalCostOrder from "./pages/createNewOrder/inforOrder/modalCostOrder.vue
 import createOrderSuccess from "./pages/createNewOrder/createOrderSuccess.vue";
 import addNewUser from "./pages/createNewOrder/inforUserOrder/addNewUser.vue";
 import chooseUser from "./pages/createNewOrder/inforUserOrder/chooseUser.vue";
+import swapAddress from "./pages/createNewOrder/inforUserOrder/swapAddress.vue";
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -88,6 +89,12 @@ const router = createRouter({
             component: chooseUser,
             name: "chooseUser",
         },
+        {
+            path: "/swapAddress",
+            component: swapAddress,
+            name: "swapAddress",
+        },
+
         {
             path: "/test",
             component: exPage,
