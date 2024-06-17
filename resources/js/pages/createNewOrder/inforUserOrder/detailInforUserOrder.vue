@@ -2,11 +2,14 @@
     <div class="mainDetailInforUserOrder" v-if="isUser">
         <div class="detailInforUser">
             <div class="nameUser">
-                <span> {{ dataUserOrder.name }} | {{ dataUserOrder.phoneNumber }}</span>
+                <span>
+                    {{ dataUserOrder.name }} |
+                    {{ dataUserOrder.phoneNumber }}</span
+                >
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
-                    <span class="upText">Đơn mua</span>
+                    <span class="upText" @click="show">Đơn mua</span>
                     <span class="downText">100</span>
                 </div>
                 <div class="order cancelOrder">
@@ -19,9 +22,14 @@
                 </div>
             </div>
             <div class="seeMoreDiv">
-                <span class="seeMoreText" @click="showModalInforUser"> Xem thêm </span>
+                <span class="seeMoreText" @click="showModalInforUser">
+                    Xem thêm
+                </span>
             </div>
-            <modalInforUserOrder v-if="isShowModalInforUser" @closeModal="closeModal" />
+            <modalInforUserOrder
+                v-if="isShowModalInforUser"
+                @closeModal="closeModal"
+            />
         </div>
         <div class="addressUserDiv">
             <div class="inforAddress">
@@ -33,10 +41,17 @@
                 </div>
             </div>
             <div class="nameUser">
-                <span> {{ dataUserOrder.name }} | {{ dataUserOrder.phoneNumber }}</span>
+                <span>
+                    {{ dataUserOrder.name }} |
+                    {{ dataUserOrder.phoneNumber }}</span
+                >
             </div>
             <div class="detailAddress">
-                {{ dataUserOrder.address ? dataUserOrder.address : "Chưa có thông tin" }}
+                {{
+                    dataUserOrder.address
+                        ? dataUserOrder.address
+                        : "Chưa có thông tin"
+                }}
             </div>
         </div>
     </div>
@@ -48,6 +63,8 @@
 import { ref, onMounted, defineEmits } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
 import { useRouter } from "vue-router";
+import eventBus from "../../../eventBus";
+
 const emit = defineEmits(["fet"]);
 
 const dataUserOrder = ref("");
@@ -56,10 +73,12 @@ const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
 const checkShow = ref(false);
 const router = useRouter();
+const idAddress=ref(null);
+const newAddress=ref("");
 
 const swapAddress = () => {
     router.push("/swapAddress");
-}
+};
 
 const showModalInforUser = async () => {
     await fetchData();
@@ -77,10 +96,20 @@ const closeModal = () => {
     isShowModalInforUser.value = false;
 };
 
+const show = async () => {
+    if (eventBus.id) {
+        idAddress.value = eventBus.id;
+        console.log(`ID in show function: ${idAddress.value}`);
+    } else {
+        console.error('No ID received');
+    }
+};
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/dataUserOrder`);
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        );
         if (response.data.status === 1) {
             if (response.data.dataUserOrder != "guest") {
                 dataUserOrder.value = response.data.dataUserOrder;

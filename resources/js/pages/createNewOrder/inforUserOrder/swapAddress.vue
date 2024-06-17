@@ -5,19 +5,22 @@
             <span> Đổi địa chỉ </span>
         </div>
         <div class="content">
-
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
                     <a-button type="text" @click="addNewUser">
                         <CaAddAlt />Thêm mới khách hàng
                     </a-button>
-                    <div class="userItems" v-for="user in address" :key="user.id">
+                    <div
+                        class="userItems"
+                        v-for="user in address"
+                        :key="user.id"
+                    >
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
                                 <span class="nameUser">{{ user.name }}</span>
                                 <span class="phoneNumberUser">{{
                                     user.phoneNumber
-                                    }}</span>
+                                }}</span>
                             </div>
                         </a-radio>
                     </div>
@@ -34,8 +37,9 @@
 <script setup>
 import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
+import eventBus from "../../../eventBus";
 
 const a = ref(null);
 const router = useRouter();
@@ -52,7 +56,7 @@ const fetchData = async () => {
         } else if (response.data.status === 0) {
             address.value = response.data.message;
         } else {
-            console.log("Faile")
+            console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -69,26 +73,18 @@ const addNewUser = () => {
 };
 
 const buttonSave = async () => {
-    const id = a.value
     try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/swapAnotherAddress`,
-            {
-                id
-            }
-        );
-        if (response.data.status === 1) {
+        if (a.value) {
+            eventBus.id = a.value;
+            console.log(eventBus.id);
             router.back();
-            console.log("Success ");
-            // console.log(response.data.data);
         } else {
-            console.log("Faile");
+            console.log("No evb");
         }
     } catch (e) {
         console.log("Lỗi: " + e);
     }
 };
-
 </script>
 
 <style scoped>
