@@ -3,13 +3,13 @@
         <div class="detailInforUser">
             <div class="nameUser">
                 <span>
-                    {{ dataUserOrder.name }} |
-                    {{ dataUserOrder.phoneNumber }}</span
+                    {{ dataUserOrder.data.name }} |
+                    {{ dataUserOrder.data.phoneNumber }}</span
                 >
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
-                    <span class="upText" @click="show">Đơn mua</span>
+                    <span class="upText" >Đơn mua</span>
                     <span class="downText">100</span>
                 </div>
                 <div class="order cancelOrder">
@@ -42,14 +42,13 @@
             </div>
             <div class="nameUser">
                 <span>
-                    {{ dataUserOrder.name }} |
-                    {{ dataUserOrder.phoneNumber }}</span
-                >
+                    {{ displayData.name }} | {{ displayData.phoneNumber }}
+                </span>
             </div>
             <div class="detailAddress">
                 {{
-                    dataUserOrder.address
-                        ? dataUserOrder.address
+                    displayData.address
+                        ? displayData.address
                         : "Chưa có thông tin"
                 }}
             </div>
@@ -60,7 +59,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, defineEmits } from "vue";
+import { ref, onMounted, defineEmits,computed } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
@@ -73,9 +72,11 @@ const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
 const checkShow = ref(false);
 const router = useRouter();
-const idAddress=ref(null);
-const newAddress=ref("");
+const idAddress = ref(null);
 
+const displayData = computed(() => {
+    return eventBus.id ? dataUserOrder.value.address : dataUserOrder.value;
+});
 const swapAddress = () => {
     router.push("/swapAddress");
 };
@@ -96,35 +97,52 @@ const closeModal = () => {
     isShowModalInforUser.value = false;
 };
 
-const show = async () => {
-    if (eventBus.id) {
-        idAddress.value = eventBus.id;
-        console.log(`ID in show function: ${idAddress.value}`);
-    } else {
-        console.error('No ID received');
-    }
-};
+
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
-        );
-        if (response.data.status === 1) {
-            if (response.data.dataUserOrder != "guest") {
-                dataUserOrder.value = response.data.dataUserOrder;
-                isGuest.value = false;
-                isUser.value = true;
-            } else {
-                dataUserOrder.value = response.data.dataUserOrder;
-                isGuest.value = true;
-                isUser.value = false;
+        if (eventBus.id) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
+                {
+                    id: eventBus.id,
+                }
+            );
+            if (response.data.status === 1) {
+                if (response.data.dataUserOrder != "guest") {
+                    dataUserOrder.value = response.data.dataUserOrder;
+                    isGuest.value = false;
+                    isUser.value = true;
+                } else {
+                    dataUserOrder.value = response.data.dataUserOrder;
+                    isGuest.value = true;
+                    isUser.value = false;
+                }
+                checkShow.value = true;
+                // console.log(response.data.dataUserOrder);
+            } else if (response.data.status === 0) {
+                checkShow.value = false;
             }
-            checkShow.value = true;
-        } else if (response.data.status === 0) {
-            checkShow.value = false;
+        } else {
+            const response = await axios.get(
+                `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+            );
+            if (response.data.status === 1) {
+                if (response.data.dataUserOrder != "guest") {
+                    dataUserOrder.value = response.data.dataUserOrder;
+                    isGuest.value = false;
+                    isUser.value = true;
+                } else {
+                    dataUserOrder.value = response.data.dataUserOrder;
+                    isGuest.value = true;
+                    isUser.value = false;
+                }
+                checkShow.value = true;
+            } else if (response.data.status === 0) {
+                checkShow.value = false;
+            }
+            return;
         }
-        return;
     } catch (e) {
         console.log("Error: ", e);
     }

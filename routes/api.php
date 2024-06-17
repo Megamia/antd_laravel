@@ -9,6 +9,8 @@ Route::post('chooseUserOrder', [inforUserOrderController::class, 'chooseUserOrde
 Route::get('dataUserOrder',[inforUserOrderController::class,'dataUserOrder']);
 Route::get('deleteSession',[inforUserOrderController::class,'deleteSession']);
 Route::post('addUserOrder', [inforUserOrderController::class, 'addUserOder']);
+Route::post('newDataUserOrderAfterSwap',[addressController::class,'newDataUserOrderAfterSwap']);
+
 Route::get('inforAddress',[addressController::class,'inforAddress']);
 Route::post('swapAnotherAddress',[addressController::class,'swapAnotherAddress']);
 

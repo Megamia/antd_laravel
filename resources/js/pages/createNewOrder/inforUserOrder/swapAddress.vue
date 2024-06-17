@@ -76,7 +76,7 @@ const buttonSave = async () => {
     try {
         if (a.value) {
             eventBus.id = a.value;
-            console.log(eventBus.id);
+            // console.log(eventBus.id);
             router.back();
         } else {
             console.log("No evb");

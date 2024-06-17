@@ -1,8 +1,11 @@
 // eventBus.js
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
 const eventBus = reactive({
-  id: null
+    id: null,
+    clear() {
+        this.id = null;
+    },
 });
 
 export default eventBus;

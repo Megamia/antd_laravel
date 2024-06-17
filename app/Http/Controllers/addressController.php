@@ -17,41 +17,28 @@ class addressController extends Controller
             return response()->json(['status' => 0, 'message' => 'No data address']);
         }
     }
-    public function swapAnotherAddress(Request $request)
+
+    public function newDataUserOrderAfterSwap(Request $request)
     {
-        $data = $request->only('idUser', 'id');
-        $address = address::where('id', $data['id'])->first();
-        $user = inforUserOrder::where('id', $data['idUser'])->first();
-        if ($address && $user) {
-            return response()->json([
-                'status' => 1,
-                'data' => [
-                    'address' => $address,
-                    'user' => $user
-                ]
-            ]);
+        $newAddress = $request->only([
+            'id'
+        ]);
+
+        $user_id = $request->session()->get('user_id');
+        $user_id_expires_at = $request->session()->get('user_id_expires_at');
+
+        if ($user_id && $user_id_expires_at && $newAddress['id'] && now()->lessThanOrEqualTo($user_id_expires_at)) {
+            if ($user_id === 'guest') {
+                return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
+            } else {
+                $dataUser = inforUserOrder::where('id', $user_id)->first();
+                $newDataAddress = address::where('id', $newAddress['id'])->first();
+                return response()->json(['status' => 1, 'dataUserOrder' => ['data' => $dataUser, 'address' => $newDataAddress]]);
+            }
         } else {
-            return response()->json(['status' => 0, 'data' => 'No data']);
+            $request->session()->forget('user_id');
+            $request->session()->forget('user_id_expires_at');
+            return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
         }
     }
-    public function dataAfterSwap(Request $request)
-{
-    $swapData = $this->swapAnotherAddress($request);
-
-    if ($swapData['status'] == 1) {
-        return response()->json([
-            'status' => 1,
-            'message' => 'Swap address successful',
-            'data' => [
-                'address' => $swapData['data']['address'],
-                'user' => $swapData['data']['user']
-            ]
-        ]);
-    } else {
-        return response()->json([
-            'status' => 0,
-            'message' => 'Failed to swap address'
-        ]);
-    }
-}
 }
