@@ -1,0 +1,187 @@
+<template>
+    <div class="mainSwapAddress">
+        <div class="title">
+            <AnOutlinedArrowLeft @click="back" />
+            <span> Đổi địa chỉ </span>
+        </div>
+        <div class="content">
+
+            <div class="userInfor">
+                <a-radio-group v-model:value="a">
+                    <a-button type="text" @click="addNewUser">
+                        <CaAddAlt />Thêm mới khách hàng
+                    </a-button>
+                    <div class="userItems" v-for="user in address" :key="user.id">
+                        <a-radio :value="user.id">
+                            <div class="userInforRadio">
+                                <span class="nameUser">{{ user.name }}</span>
+                                <span class="phoneNumberUser">{{
+                                    user.phoneNumber
+                                    }}</span>
+                            </div>
+                        </a-radio>
+                    </div>
+                </a-radio-group>
+                <div style="height: 1000px" />
+            </div>
+        </div>
+        <div class="saveDive">
+            <a-button type="primary" @click="buttonSave">Lưu</a-button>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
+import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+
+const a = ref(null);
+const router = useRouter();
+
+const address = ref("");
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/inforAddress`
+        );
+        if (response.data.status === 1) {
+            address.value = response.data.inforAddress;
+        } else if (response.data.status === 0) {
+            address.value = response.data.message;
+        } else {
+            console.log("Faile")
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+onMounted(() => fetchData());
+
+const back = () => {
+    router.back();
+};
+
+const addNewUser = () => {
+    router.push("/addNewUser");
+};
+
+const buttonSave = async () => {
+    const id = a.value
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/swapAnotherAddress`,
+            {
+                id
+            }
+        );
+        if (response.data.status === 1) {
+            router.back();
+            console.log("Success ");
+            // console.log(response.data.data);
+        } else {
+            console.log("Faile");
+        }
+    } catch (e) {
+        console.log("Lỗi: " + e);
+    }
+};
+
+</script>
+
+<style scoped>
+.mainSwapAddress {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #f0f2f5;
+    gap: 20px;
+
+    .title {
+        background-color: white;
+        display: flex;
+        padding: 16px 36px 16px 12px;
+        align-items: center;
+
+        svg {
+            position: relative;
+            font-size: 25px;
+        }
+
+        span {
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: bold;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+
+        .search {
+            padding: 10px 12px 10px 12px;
+            border-bottom: 1px solid #d9d9dd;
+        }
+
+        .userInfor {
+            display: flex;
+            flex-direction: column;
+
+            button {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                padding: 10px;
+                border-radius: 0;
+                color: #1890ff;
+                gap: 10px;
+            }
+
+            .userItems {
+                display: flex;
+                flex-direction: row;
+                align-items: start;
+                border-top: 1px solid #d9d9dd;
+                margin-inline: 10px;
+                padding-block: 10px;
+
+                .userInforRadio {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .nameUser {
+                    font-size: 14px;
+                }
+
+                .phoneNumberUser {
+                    font-size: 14px;
+                    color: #00000073;
+                }
+            }
+        }
+    }
+
+    .saveDive {
+        position: absolute;
+        display: flex;
+        background-color: white;
+        bottom: 0;
+        width: 100%;
+        padding: 10px;
+
+        button {
+            position: relative;
+            width: 100%;
+            border-radius: 0;
+        }
+    }
+}
+</style>

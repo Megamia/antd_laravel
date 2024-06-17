@@ -3,7 +3,9 @@
         <span>test</span>
     </div>
 </template>
-<script setup></script>
+<script setup>
+
+</script>
 
 <style scoped>
 .main.abc {

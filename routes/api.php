@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\addressController;
 use App\Http\Controllers\inforUserOrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,3 +9,8 @@ Route::post('chooseUserOrder', [inforUserOrderController::class, 'chooseUserOrde
 Route::get('dataUserOrder',[inforUserOrderController::class,'dataUserOrder']);
 Route::get('deleteSession',[inforUserOrderController::class,'deleteSession']);
 Route::post('addUserOrder', [inforUserOrderController::class, 'addUserOder']);
+Route::get('inforAddress',[addressController::class,'inforAddress']);
+Route::post('swapAnotherAddress',[addressController::class,'swapAnotherAddress']);
+
+Route::get('dataAfterSwap',[addressController::class,'dataAfterSwap']);
+

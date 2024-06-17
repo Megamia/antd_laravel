@@ -29,14 +29,14 @@
                     <span>Thông tin giao hàng</span>
                 </div>
                 <div class="swapAddress">
-                    <span> Đổi địa chỉ</span>
+                    <span @click="swapAddress"> Đổi địa chỉ</span>
                 </div>
             </div>
             <div class="nameUser">
                 <span> {{ dataUserOrder.name }} | {{ dataUserOrder.phoneNumber }}</span>
             </div>
             <div class="detailAddress">
-                {{ dataUserOrder.address ? "" : "Chưa có thông tin" }}
+                {{ dataUserOrder.address ? dataUserOrder.address : "Chưa có thông tin" }}
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
 <script setup>
 import { ref, onMounted, defineEmits } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
-
+import { useRouter } from "vue-router";
 const emit = defineEmits(["fet"]);
 
 const dataUserOrder = ref("");
@@ -55,6 +55,11 @@ const isUser = ref(null);
 const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
 const checkShow = ref(false);
+const router = useRouter();
+
+const swapAddress = () => {
+    router.push("/swapAddress");
+}
 
 const showModalInforUser = async () => {
     await fetchData();
@@ -72,6 +77,7 @@ const closeModal = () => {
     isShowModalInforUser.value = false;
 };
 
+
 const fetchData = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/dataUserOrder`);
@@ -80,12 +86,10 @@ const fetchData = async () => {
                 dataUserOrder.value = response.data.dataUserOrder;
                 isGuest.value = false;
                 isUser.value = true;
-                // console.log(dataUserOrder.value);
             } else {
                 dataUserOrder.value = response.data.dataUserOrder;
                 isGuest.value = true;
                 isUser.value = false;
-                // console.log(dataUserOrder.value);
             }
             checkShow.value = true;
         } else if (response.data.status === 0) {
