@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class address extends Model
+class product extends Model
 {
     use HasFactory;
     protected $fillable = [
         'name',
-        'phoneNumber',
-        'city',
-        'district',
-        'ward',
-        'address'
+        'tag',
+        'quantity',
+        'price',
+        'img'
     ];
     public $timestamps = false;
-    protected $table = 'address';
+    protected $table = 'product';
     protected $hidden = [];
 }

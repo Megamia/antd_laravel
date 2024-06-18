@@ -3,13 +3,22 @@
         <div class="detailInforUser">
             <div class="nameUser">
                 <span>
-                    {{ dataUserOrder.data.name }} |
-                    {{ dataUserOrder.data.phoneNumber }}</span
+                    {{
+                        dataUserOrder.name
+                            ? dataUserOrder.name
+                            : dataUserOrder.data.name
+                    }}
+                    |
+                    {{
+                        dataUserOrder.phoneNumber
+                            ? dataUserOrder.phoneNumber
+                            : dataUserOrder.data.phoneNumber
+                    }}</span
                 >
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
-                    <span class="upText" >Đơn mua</span>
+                    <span class="upText">Đơn mua</span>
                     <span class="downText">100</span>
                 </div>
                 <div class="order cancelOrder">
@@ -48,7 +57,7 @@
             <div class="detailAddress">
                 {{
                     displayData.address
-                        ? displayData.address
+                        ? `${displayData.address},${displayData.ward},${displayData.district},${displayData.city}`
                         : "Chưa có thông tin"
                 }}
             </div>
@@ -59,7 +68,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, defineEmits,computed } from "vue";
+import { ref, onMounted, defineEmits, computed } from "vue";
 import modalInforUserOrder from "./modalInforUserOrder.vue";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
@@ -72,7 +81,6 @@ const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
 const checkShow = ref(false);
 const router = useRouter();
-const idAddress = ref(null);
 
 const displayData = computed(() => {
     return eventBus.id ? dataUserOrder.value.address : dataUserOrder.value;
@@ -96,8 +104,6 @@ const showModalInforUser = async () => {
 const closeModal = () => {
     isShowModalInforUser.value = false;
 };
-
-
 
 const fetchData = async () => {
     try {

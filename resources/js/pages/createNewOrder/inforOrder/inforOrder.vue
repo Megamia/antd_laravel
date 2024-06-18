@@ -11,7 +11,7 @@
                 </span>
             </div>
             <div class="button" v-if="showOrder">
-                <a-button class="buttonAdd" @click="nothing">
+                <a-button class="buttonAdd" @click="addNewProduct">
                     <CaAddAlt />Thêm sản phẩm</a-button
                 >
                 <a-button class="buttonScan" @click="openModalScanQRCode">
@@ -25,7 +25,7 @@
         </div>
         <div class="content" v-if="showOrder">
             <div class="totalProduct">
-                <div class="product" @click="clickShowModal">
+                <div class="product">
                     <div class="imgDiv">
                         <a-image
                             :width="80"
@@ -40,7 +40,8 @@
                             >
                             <span class="typeProduct"> Phân loại sản phẩm</span>
                             <span class="costProduct">
-                                200.000đ <AnOutlinedEdit @click="nothing"
+                                200.000đ
+                                <AnOutlinedEdit @click="clickShowModal"
                             /></span>
                         </div>
                         <div class="changeQuantityOrder">
@@ -85,7 +86,8 @@
                             >
                             <span class="typeProduct"> Phân loại sản phẩm</span>
                             <span class="costProduct">
-                                1.900.000đ <AnOutlinedEdit @click="nothing"
+                                1.900.000đ
+                                <AnOutlinedEdit @click="clickShowModal"
                             /></span>
                         </div>
                         <div class="changeQuantityOrder">
@@ -132,12 +134,18 @@ import {
     BxScan,
     AnOutlinedEdit,
 } from "@kalimahapps/vue-icons";
-
+import { useRouter } from "vue-router";
 import { ref, defineEmits } from "vue";
 
+const router = useRouter();
 const showOrder = ref(true);
 
 const isModalScanQRCode = ref(false);
+
+const addNewProduct = () => {
+    router.push("/addNewProduct");
+};
+
 const openModalScanQRCode = () => {
     isModalScanQRCode.value = true;
 };
@@ -187,14 +195,14 @@ const nothing = () => {
             padding-block: 10px;
 
             .inforText {
+                display: flex;
+                flex: 1;
                 font-size: 16px;
                 font-weight: bold;
                 justify-content: start;
             }
 
             .showMore {
-                display: flex;
-                flex: 1;
                 justify-content: end;
                 font-size: 14px;
                 color: black;

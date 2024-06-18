@@ -22,13 +22,13 @@ class inforUserOrderController extends Controller
         $data = $request->only('id');
         if ($data['id'] === 'guest') {
             $request->session()->put('user_id', 'guest');
-            $request->session()->put('user_id_expires_at', now()->addMinutes(3)); //addSeconds, addMinutes
+            $request->session()->put('user_id_expires_at', now()->addHours(1)); //addSeconds, addMinutes
             return response()->json(['status' => 1, 'dataUserOrder' => 'Khách lẻ']);
         } else {
             $dataUser = inforUserOrder::where('id', $data['id'])->first();
             if ($dataUser) {
                 $request->session()->put('user_id', $data['id']);
-                $request->session()->put('user_id_expires_at', now()->addMinutes(3));
+                $request->session()->put('user_id_expires_at', now()->addHours(1));
                 return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
             } else {
                 return response()->json(['status' => 0, 'message' => 'no data user']);

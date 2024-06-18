@@ -14,6 +14,8 @@ import createOrderSuccess from "./pages/createNewOrder/createOrderSuccess.vue";
 import addNewUser from "./pages/createNewOrder/inforUserOrder/addNewUser.vue";
 import chooseUser from "./pages/createNewOrder/inforUserOrder/chooseUser.vue";
 import swapAddress from "./pages/createNewOrder/inforUserOrder/swapAddress.vue";
+import addNewAddress from "./pages/createNewOrder/inforUserOrder/addNewAddress.vue";
+import addNewProduct from "./pages/createNewOrder/inforOrder/addNewProduct.vue";
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -94,7 +96,16 @@ const router = createRouter({
             component: swapAddress,
             name: "swapAddress",
         },
-
+        {
+            path: "/addNewAddress",
+            component: addNewAddress,
+            name: "addNewAddress",
+        },
+        {
+            path: "/addNewProduct",
+            component: addNewProduct,
+            name: "addNewProduct",
+        },
         {
             path: "/test",
             component: exPage,

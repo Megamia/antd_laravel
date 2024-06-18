@@ -7,22 +7,48 @@
         <div class="content">
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
-                    <a-button type="text" @click="addNewUser">
-                        <CaAddAlt />Thêm mới khách hàng
+                    <a-button type="text" @click="addNewAddress">
+                        <CaAddAlt />Thêm địa chỉ mới
                     </a-button>
-                    <div
-                        class="userItems"
-                        v-for="user in address"
-                        :key="user.id"
-                    >
-                        <a-radio :value="user.id">
-                            <div class="userInforRadio">
-                                <span class="nameUser">{{ user.name }}</span>
-                                <span class="phoneNumberUser">{{
-                                    user.phoneNumber
-                                }}</span>
+                    <div v-if="address">
+                        <div
+                            class="userItems"
+                            v-for="items in address"
+                            :key="items.id"
+                        >
+                            <a-radio :value="items.id">
+                                <div class="spanUserItems">
+                                    <div class="userInforRadio">
+                                        <div class="nameAndPhone">
+                                            <span class="nameUser">
+                                                {{ items.name }}
+                                            </span>
+                                            <span>|</span>
+                                            <span class="phoneUser">
+                                                {{ items.phoneNumber }}
+                                            </span>
+                                        </div>
+                                        <div class="address">
+                                            <span class="addressUser">
+                                                {{ items.address }},
+                                                {{ items.ward }},
+                                                {{ items.district }},
+                                                {{ items.city }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a-radio>
+                            <div class="iconTrashDiv">
+                                <BxTrashAlt
+                                    class="iconTrash"
+                                    @click="deleteAddress(items.id)"
+                                />
                             </div>
-                        </a-radio>
+                        </div>
+                    </div>
+                    <div v-else style="padding: 10px;">
+                        <span style="font-size: 20px;">No Data Address</span>
                     </div>
                 </a-radio-group>
                 <div style="height: 1000px" />
@@ -35,7 +61,11 @@
 </template>
 
 <script setup>
-import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
+import {
+    AnOutlinedArrowLeft,
+    CaAddAlt,
+    BxTrashAlt,
+} from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -46,6 +76,22 @@ const router = useRouter();
 
 const address = ref("");
 
+const deleteAddress = async (id) => {
+    try {
+        const response = await axios.delete(
+            `${import.meta.env.VITE_APP_URL_API}/deleteAddress/${id}`
+        );
+        if (response.data.status === 1) {
+            console.log("Delete address success");
+            await fetchData();
+        } else {
+            console.log("Faile to delete address");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
 const fetchData = async () => {
     try {
         const response = await axios.get(
@@ -53,10 +99,8 @@ const fetchData = async () => {
         );
         if (response.data.status === 1) {
             address.value = response.data.inforAddress;
-        } else if (response.data.status === 0) {
-            address.value = response.data.message;
         } else {
-            console.log("Faile");
+            return (address.value = null);
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -68,15 +112,15 @@ const back = () => {
     router.back();
 };
 
-const addNewUser = () => {
-    router.push("/addNewUser");
+const addNewAddress = () => {
+    // router.push("/addNewAddress");
+    console.log(address.value);
 };
 
 const buttonSave = async () => {
     try {
         if (a.value) {
             eventBus.id = a.value;
-            // console.log(eventBus.id);
             router.back();
         } else {
             console.log("No evb");
@@ -142,24 +186,51 @@ const buttonSave = async () => {
 
             .userItems {
                 display: flex;
+                flex: 1;
                 flex-direction: row;
-                align-items: start;
+                align-items: center;
                 border-top: 1px solid #d9d9dd;
                 margin-inline: 10px;
                 padding-block: 10px;
+
+                label {
+                    display: flex;
+                    flex-direction: row;
+                }
 
                 .userInforRadio {
                     display: flex;
                     flex-direction: column;
                 }
-
-                .nameUser {
+                .spanUserItems {
+                    display: flex;
+                    flex: 1;
+                    flex-direction: row;
+                }
+                .nameAndPhone {
+                    display: flex;
+                    flex-direction: row;
                     font-size: 14px;
+                    gap: 10px;
+                    .nameUser {
+                    }
+                    .phoneUser {
+                        color: #00000073;
+                    }
                 }
 
-                .phoneNumberUser {
+                .address {
                     font-size: 14px;
-                    color: #00000073;
+                    .addressUser {
+                        color: #00000073;
+                    }
+                }
+                .iconTrashDiv {
+                    display: flex;
+                    flex: 1;
+                    svg {
+                        font-size: 16px;
+                    }
                 }
             }
         }

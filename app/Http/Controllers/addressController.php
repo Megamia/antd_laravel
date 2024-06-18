@@ -41,4 +41,11 @@ class addressController extends Controller
             return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
         }
     }
+    public function deleteAddress(Request $request, $id)
+    {
+        $address = Address::findOrFail($id);
+
+        $address->delete();
+        return response()->json(['status' => 1, 'message' => "Delete address success"]);
+    }
 }

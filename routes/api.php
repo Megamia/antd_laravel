@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\addressController;
 use App\Http\Controllers\inforUserOrderController;
+use App\Http\Controllers\productController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('dataUser', [inforUserOrderController::class, 'data']);
@@ -13,6 +14,9 @@ Route::post('newDataUserOrderAfterSwap',[addressController::class,'newDataUserOr
 
 Route::get('inforAddress',[addressController::class,'inforAddress']);
 Route::post('swapAnotherAddress',[addressController::class,'swapAnotherAddress']);
-
+Route::delete('deleteAddress/{id}',[addressController::class,'deleteAddress']);
 Route::get('dataAfterSwap',[addressController::class,'dataAfterSwap']);
+
+Route::get('inforProduct',[productController::class,'inforProduct']);
+
 
