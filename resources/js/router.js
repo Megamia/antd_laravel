@@ -16,6 +16,8 @@ import chooseUser from "./pages/createNewOrder/inforUserOrder/chooseUser.vue";
 import swapAddress from "./pages/createNewOrder/inforUserOrder/swapAddress.vue";
 import addNewAddress from "./pages/createNewOrder/inforUserOrder/addNewAddress.vue";
 import addNewProduct from "./pages/createNewOrder/inforOrder/addNewProduct.vue";
+import addProduct from "./pages/createNewOrder/inforOrder/addProduct.vue";
+
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -105,6 +107,11 @@ const router = createRouter({
             path: "/addNewProduct",
             component: addNewProduct,
             name: "addNewProduct",
+        },
+        {
+            path: "/addProduct",
+            component: addProduct,
+            name: "addProduct",
         },
         {
             path: "/test",

@@ -29,6 +29,7 @@ import {
     Switch,
     Select,
     Radio,
+    Upload,
 } from "ant-design-vue";
 
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document
@@ -60,6 +61,7 @@ app.use(router)
     .use(Switch)
     .use(Select)
     .use(Radio)
+    .use(Upload)
     .use(VueAxios, axios)
     .use(VueCookies)
     .mount("#app");
