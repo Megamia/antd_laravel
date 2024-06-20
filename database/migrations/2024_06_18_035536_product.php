@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('tag');
             $table->integer('quantity');
             $table->float('price');
-            $table->string('img');
+            $table->string('img',10000);
         });
 
 
@@ -28,7 +28,7 @@ return new class extends Migration
                 'tag' => '123',
                 'quantity' => '123',
                 'price' => '123',
-                'img' => '123'
+                'img' => 'http://127.0.0.1:8000/img/product/b01a8548b32136d8258ebb5131b4b5b4.jpg'
             ],
             [
                 'name' => '456',

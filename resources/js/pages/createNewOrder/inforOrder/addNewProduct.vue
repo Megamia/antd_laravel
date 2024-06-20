@@ -6,20 +6,32 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên sản phẩm/combo" />
+                <a-input-search
+                    v-model:value="nameOrPhoneNumber"
+                    placeholder="Nhập tên sản phẩm/combo"
+                />
             </div>
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
                     <a-button type="text" @click="addNewUser">
                         <CaAddAlt />Thêm mới khách hàng
                     </a-button>
-                   
-                    <div class="userItems" v-for="user in filter" :key="user.id">
+
+                    <div
+                        class="userItems"
+                        v-for="user in filter"
+                        :key="user.id"
+                    >
                         <a-radio :value="user.id">
                             <div class="userInforRadio">
+                                <img style="width: 80px;height: 80px;" :src="user.img" />
                                 <span class="nameUser">{{ user.name }}</span>
                                 <span class="phoneNumberUser">{{
-                                    user.phoneNumber
+                                    user.tag
+                                }}</span>
+                                <span class="nameUser">{{ user.price }}</span>
+                                <span class="nameUser">{{
+                                    user.quantity
                                 }}</span>
                             </div>
                         </a-radio>
@@ -58,9 +70,7 @@ const router = useRouter();
 //     }
 // };
 
-const data = ref({
-
-});
+const data = ref({});
 
 const fetchData = async () => {
     try {
@@ -69,11 +79,8 @@ const fetchData = async () => {
         );
         if (response.data.status === 1) {
             data.value = response.data.inforProduct;
-
-        } else if (response.data.status === 0){
-            console.log(response.data)
         } else {
-            console.log("Faile")
+            console.log("Faile");
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -89,36 +96,39 @@ const addNewUser = () => {
     router.push("/addNewUser");
 };
 
-const buttonSave = async () => {
-    try {
-        // if (a.value === "guest") {
-        //     console.log("Đã chọn khách lẻ");
-        // } else if (a.value && a.value != "guest") {
-        //     selectedUser.value = data.value.find((user) => user.id === a.value);
-        //     console.log("Đã chọn user: ", selectedUser.value);
-        // }
+// const buttonSave = async () => {
+//     try {
+//         // if (a.value === "guest") {
+//         //     console.log("Đã chọn khách lẻ");
+//         // } else if (a.value && a.value != "guest") {
+//         //     selectedUser.value = data.value.find((user) => user.id === a.value);
+//         //     console.log("Đã chọn user: ", selectedUser.value);
+//         // }
 
-        // router.back();
+//         // router.back();
 
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
-            {
-                id: a.value,
-            }
-        );
-        if (response.data.status === 1) {
-            // if (a.value === "guest") {
-            //     console.log("Đã chọn: ", response.data.dataUserOrder);
-            // } else {
-            //     console.log("Đã chọn: ", response.data.dataUserOrder.name);
-            // }
-            router.back();
-        } else {
-            // console.log("Faile");
-        }
-    } catch (e) {
-        console.log("Lỗi: " + e);
-    }
+//         const response = await axios.post(
+//             `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
+//             {
+//                 id: a.value,
+//             }
+//         );
+//         if (response.data.status === 1) {
+//             // if (a.value === "guest") {
+//             //     console.log("Đã chọn: ", response.data.dataUserOrder);
+//             // } else {
+//             //     console.log("Đã chọn: ", response.data.dataUserOrder.name);
+//             // }
+//             router.back();
+//         } else {
+//             // console.log("Faile");
+//         }
+//     } catch (e) {
+//         console.log("Lỗi: " + e);
+//     }
+// };
+const buttonSave = () => {
+    alert("Chưa xử lý");
 };
 const filter = computed(() => {
     if (nameOrPhoneNumber.value) {
@@ -126,18 +136,12 @@ const filter = computed(() => {
             return nameOrPhoneNumber.value
                 .toLowerCase()
                 .split(" ")
-                .every(
-                    (v) =>
-                        user.name.toLowerCase().includes(v) ||
-                        user.phoneNumer.toLowerCase().includes(v)
-                );
+                .every((v) => user.name.toLowerCase().includes(v));
         });
     } else {
         return data.value;
     }
 });
-
-
 </script>
 
 <style scoped>

@@ -143,7 +143,7 @@ const showOrder = ref(true);
 const isModalScanQRCode = ref(false);
 
 const addNewProduct = () => {
-    router.push("/addProduct");
+    router.push("/addNewProduct");
 };
 
 const openModalScanQRCode = () => {

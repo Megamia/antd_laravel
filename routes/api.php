@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('dataUser', [inforUserOrderController::class, 'data']);
 Route::post('chooseUserOrder', [inforUserOrderController::class, 'chooseUserOrder']);
-Route::get('dataUserOrder',[inforUserOrderController::class,'dataUserOrder']);
-Route::get('deleteSession',[inforUserOrderController::class,'deleteSession']);
+Route::get('dataUserOrder', [inforUserOrderController::class, 'dataUserOrder']);
+Route::get('deleteSession', [inforUserOrderController::class, 'deleteSession']);
 Route::post('addUserOrder', [inforUserOrderController::class, 'addUserOder']);
-Route::post('newDataUserOrderAfterSwap',[addressController::class,'newDataUserOrderAfterSwap']);
+Route::post('newDataUserOrderAfterSwap', [addressController::class, 'newDataUserOrderAfterSwap']);
 
-Route::get('inforAddress',[addressController::class,'inforAddress']);
-Route::post('swapAnotherAddress',[addressController::class,'swapAnotherAddress']);
-Route::delete('deleteAddress/{id}',[addressController::class,'deleteAddress']);
-Route::get('dataAfterSwap',[addressController::class,'dataAfterSwap']);
+Route::get('inforAddress', [addressController::class, 'inforAddress']);
+Route::post('swapAnotherAddress', [addressController::class, 'swapAnotherAddress']);
+Route::delete('deleteAddress/{id}', [addressController::class, 'deleteAddress']);
+Route::get('dataAfterSwap', [addressController::class, 'dataAfterSwap']);
 
-Route::get('inforProduct',[productController::class,'inforProduct']);
+Route::get('inforProduct', [productController::class, 'inforProduct']);
 
-
+Route::post('uploads',[productController::class,'upload']);
+// Route::post('uploads', [productController::class, 'uploadPublic']);
