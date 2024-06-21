@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\product;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\File;
 
 class productController extends Controller
 {
@@ -19,54 +19,42 @@ class productController extends Controller
     }
     public function upload(Request $request)
     {
-        try {
-            $request->validate([
-                'files.*' => 'required|file|mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
-            ]);
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
 
-            $filePaths = [];
-            $fileInfos = [];
+        if ($request->file()) {
+            $fileName = time() . '_' . $request->file->getClientOriginalName();
+            $filePath = public_path('uploads');
 
-            if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $file) {
-                    $path = $file->store('uploads');
-                    $filePaths[] = $path;
-
-                    $fileInfo = [
-                        'name' => $file->getClientOriginalName(),
-                        'extension' => $file->getClientOriginalExtension(),
-                        'size' => $file->getSize(),
-                        'path' => $path
-                    ];
-
-                    $fileInfos[] = $fileInfo;
-                }
+            if (!file_exists($filePath)) {
+                mkdir($filePath, 0755, true);
             }
 
-            return response()->json([
-                'status' => 1,
-                'filePaths' => $filePaths,
-                'fileInfos' => $fileInfos
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => $e->getMessage(),
-            ], 422);
+            $request->file('file')->move($filePath, $fileName);
+
+            return response()->json(['success' => 'File uploaded successfully.', 'file_path' => '/uploads/' . $fileName]);
         }
+
+        return response()->json(['error' => 'File upload failed.']);
     }
 
-    public function uploadPublic(Request $request)
+    public function showImg(Request $request)
     {
-        $image = $request->file('files');
-        if ($image) {
+        $files = File::files(public_path('uploads'));
 
-            $input['imgname'] = time() . '.' . $image->getClientOriginalExtension();
-            $desPath = public_path('/upload');
-            $image->move($desPath, $input['imgname']);
-            return response()->json(['status' => 1, 'data' => $image]);
+        $images = [];
+        foreach ($files as $file) {
+            $images[] = [
+                'url' => asset('uploads/' . $file->getFilename()),
+                'name' => $file->getFilename()
+            ];
+        }
+
+        if (!empty($images)) {
+            return response()->json(['status' => 1, 'images' => $images]);
         } else {
-            return response()->json(['status' => 0, 'data' => 'no data']);
+            return response()->json(['status' => 0, 'images' => 'No images']);
         }
     }
 }

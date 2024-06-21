@@ -19,5 +19,8 @@ Route::get('dataAfterSwap', [addressController::class, 'dataAfterSwap']);
 
 Route::get('inforProduct', [productController::class, 'inforProduct']);
 
-Route::post('uploads',[productController::class,'upload']);
+Route::post('uploads', [productController::class, 'upload']);
+Route::get('showImg', [productController::class, 'showImg']);
+
+
 // Route::post('uploads', [productController::class, 'uploadPublic']);
