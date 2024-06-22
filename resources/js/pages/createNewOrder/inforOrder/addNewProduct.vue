@@ -14,7 +14,7 @@
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
                     <a-button type="text" @click="addNewUser">
-                        <CaAddAlt />Thêm mới khách hàng
+                        <CaAddAlt />Thêm mới sản phẩm
                     </a-button>
 
                     <div
@@ -93,7 +93,7 @@ const back = () => {
 };
 
 const addNewUser = () => {
-    router.push("/addNewUser");
+    router.push("/addProduct");
 };
 
 // const buttonSave = async () => {

@@ -19,11 +19,12 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input
+                <a-cascader
                     v-model:value="formState.tag"
-                    placeholder="Phân loại sản phẩm"
-                >
-                </a-input>
+                    :options="options"
+                    expand-trigger="hover"
+                    placeholder="Tag"
+                />
             </a-form-item>
             <a-form-item>
                 <a-input
@@ -44,19 +45,18 @@
                 <a-button
                     type="primary"
                     html-type="submit"
-                    :disabled="
-                        formState.user === '' || formState.password === ''
-                    "
+                    :disabled="!formState"
                 >
                     Log in
                 </a-button>
             </a-form-item>
-            <!-- :action="" -->
             <a-upload
+                :action="uploadUrl"
                 list-type="picture"
                 class="upload-list-inline"
                 :headers="headers"
-                :data="uploadData"
+                :data="formState.img"
+                :beforeUpload="handleUploadChange"
             >
                 <a-button>
                     <upload-outlined />
@@ -73,7 +73,7 @@
                 style="display: inline-block; margin: 10px"
             >
                 <a-image :src="image.url" style="width: 200px; height: auto" />
-                <p @click="del(image,index)">{{ image.name }}</p>
+                <p @click="del(image, index)">{{ image.name }}</p>
             </div>
         </div>
     </div>
@@ -88,10 +88,71 @@ const formState = ref({
     tag: "",
     quantity: "",
     price: "",
-    img: "",
+    img: ref({
+        name: "",
+        type: "",
+        size: "",
+        path: "",
+    }),
 });
+
+const handleUploadChange = (file) => {
+    formState.value.img.name = file.name;
+    console.log(file.name);
+};
+
+const options = ref([
+    {
+        value: "tag1",
+        label: "tag1",
+        children: [
+            {
+                value: "tag11",
+                label: "tag11",
+                children: [
+                    {
+                        value: "tag111",
+                        label: "tag111",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        value: "tag2",
+        label: "tag2",
+        children: [
+            {
+                value: "tag22",
+                label: "tag22",
+                children: [
+                    {
+                        value: "tag222",
+                        label: "tag222",
+                    },
+                ],
+            },
+        ],
+    },
+]);
+
 const handleFinish = () => {
-    console.log(formState.value);
+    // const stringTag = formState.value.tag.toString();
+    // const stringImg = formState.value.img.toString();
+    // if (
+    //     formState.value.name ||
+    //     formState.value.quantity ||
+    //     formState.value.price ||
+    //     stringImg ||
+    //     stringTag
+    // ) {
+    //     console.log(formState.value);
+    // } else {
+    //     console.log("No data");
+    // }
+
+    // console.log("formState.value.tag:", formState.value.tag);
+    // console.log("stringTag: ", stringTag);
 };
 const handleFinishFailed = (errors) => {
     console.log(errors);
@@ -103,19 +164,20 @@ const headers = {
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content"),
 };
-const uploadData = {
-    name: "file",
-};
-const del = (image,index) => {
+// const uploadData = {
+//     name: "file",
+// };
+
+const del = (image, index) => {
     if (confirm("Chắc chắn muốn xóa?")) {
         data.value.splice(index, 1);
     } else {
         console.log(index + 1);
-        formState.value.img = image.name;
-        console.log("FormState.img: ", formState.value.img);
+        formState.value.img.path = image.url;
+        console.log("FormState.img: ", formState.value.img.path);
     }
 };
-// const url = ref({});
+const url = ref({});
 const data = ref([]);
 const imgUrl = ref([]);
 const show = async () => {
@@ -124,9 +186,9 @@ const show = async () => {
     );
     if (response.data.status === 1) {
         data.value = response.data.images;
-        imgUrl.value = data.value.map((image) => image.url);
-        console.log("Data: ", data.value);
-        console.log("Url: ", imgUrl);
+        // imgUrl.value = data.value.map((image) => image.url);
+        // console.log("Data: ", data.value);
+        // console.log("Url: ", imgUrl);
     } else {
         console.log(response.data.images);
     }
