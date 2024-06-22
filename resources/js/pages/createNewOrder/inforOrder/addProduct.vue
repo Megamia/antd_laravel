@@ -21,10 +21,12 @@
             <a-form-item>
                 <a-cascader
                     v-model:value="formState.tag"
+                    style="width: 100%"
+                    multiple
+                    max-tag-count="responsive"
                     :options="options"
-                    expand-trigger="hover"
-                    placeholder="Tag"
-                />
+                    placeholder="Please select"
+                ></a-cascader>
             </a-form-item>
             <a-form-item>
                 <a-input
@@ -88,47 +90,41 @@ const formState = ref({
     tag: "",
     quantity: "",
     price: "",
-    img: ref({
-        name: "",
-        type: "",
-        size: "",
-        path: "",
-    }),
+    img: {},
 });
 
 const handleUploadChange = (file) => {
-    formState.value.img.name = file.name;
+    formState.value.img = file.name;
     console.log(file.name);
 };
 
 const options = ref([
     {
-        value: "tag1",
-        label: "tag1",
-        children: [
-            {
-                value: "tag11",
-                label: "tag11",
-                children: [
-                    {
-                        value: "tag111",
-                        label: "tag111",
-                    },
-                ],
-            },
-        ],
+        label: "Light",
+        value: "light",
+        children: new Array(20)
+            .fill(null)
+            .map((_, index) => ({ label: `Number ${index}`, value: index })),
     },
     {
-        value: "tag2",
-        label: "tag2",
+        label: "Bamboo",
+        value: "bamboo",
         children: [
             {
-                value: "tag22",
-                label: "tag22",
+                label: "Little",
+                value: "little",
                 children: [
                     {
-                        value: "tag222",
-                        label: "tag222",
+                        label: "Toy Fish",
+                        value: "fish",
+                    },
+                    {
+                        label: "Toy Cards",
+                        value: "cards",
+                    },
+                    {
+                        label: "Toy Bird",
+                        value: "bird",
                     },
                 ],
             },
@@ -150,9 +146,9 @@ const handleFinish = () => {
     // } else {
     //     console.log("No data");
     // }
-
     // console.log("formState.value.tag:", formState.value.tag);
     // console.log("stringTag: ", stringTag);
+    // console.log(formState.value);
 };
 const handleFinishFailed = (errors) => {
     console.log(errors);
