@@ -212,8 +212,8 @@ const buttonSave = async () => {
                     flex-direction: row;
                     font-size: 14px;
                     gap: 10px;
-                    .nameUser {
-                    }
+                    /* .nameUser {
+                    } */
                     .phoneUser {
                         color: #00000073;
                     }

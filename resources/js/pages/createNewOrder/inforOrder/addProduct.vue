@@ -13,14 +13,14 @@
         >
             <a-form-item>
                 <a-input
-                    v-model:value="formState.name"
+                    v-model:value="formState.value.name"
                     placeholder="Tên sản phẩm"
                 >
                 </a-input>
             </a-form-item>
             <a-form-item>
                 <a-cascader
-                    v-model:value="formState.tag"
+                    v-model:value="formState.value.tag"
                     style="width: 100%"
                     multiple
                     max-tag-count="responsive"
@@ -30,41 +30,38 @@
             </a-form-item>
             <a-form-item>
                 <a-input
-                    v-model:value="formState.price"
+                    v-model:value="formState.value.price"
                     placeholder="Giá sản phẩm"
                 >
                 </a-input>
             </a-form-item>
             <a-form-item>
                 <a-input
-                    v-model:value="formState.quantity"
+                    v-model:value="formState.value.quantity"
                     placeholder="Số lượng tồn kho"
                 >
                 </a-input>
-            </a-form-item>
-
-            <a-form-item>
-                <a-button
-                    type="primary"
-                    html-type="submit"
-                    :disabled="!formState"
-                >
-                    Log in
-                </a-button>
             </a-form-item>
             <a-upload
                 :action="uploadUrl"
                 list-type="picture"
                 class="upload-list-inline"
                 :headers="headers"
-                :data="formState.img"
                 :beforeUpload="handleUploadChange"
+                @remove="removee"
+                :disabled="!login"
             >
-                <a-button>
+                <!-- :data="formState.img" -->
+                <a-button :disabled="!checkImg">
                     <upload-outlined />
                     Upload
                 </a-button>
             </a-upload>
+            <a-form-item>
+                <a-button type="primary" html-type="submit" :disabled="a">
+                    Log in
+                </a-button>
+            </a-form-item>
         </a-form>
         <!-- v-model:file-list="fileList1" -->
 
@@ -78,24 +75,52 @@
                 <p @click="del(image, index)">{{ image.name }}</p>
             </div>
         </div>
+        <button @click="showProduct">inforProduct</button>
+        <div v-if="inforProduct">
+            <div v-for="inforProduct in inforProduct" :key="inforProduct.id">
+                <span>id: {{ inforProduct.id }}</span>
+                <span>name: {{ inforProduct.name }}</span>
+                <span>tag: {{ inforProduct.tag }}</span>
+                <span>quantity: {{ inforProduct.quantity }}</span>
+                <span>price: {{ inforProduct.price }}</span>
+                <span>img: {{ inforProduct.img }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, reactive } from "vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 
-const formState = ref({
-    name: "",
-    tag: "",
-    quantity: "",
-    price: "",
-    img: {},
+const a = computed(() => {
+    const { name, quantity, price, img, tag } = formState.value;
+    return !(name || quantity || price || img || tag);
 });
 
+const checkImg = computed(() => {
+    return !formState.value.img;
+});
+const formState = reactive({
+    value: {
+        img: "",
+        name: "",
+        price: "",
+        quantity: "",
+        tag: "",
+    },
+});
+const removee = () => {
+    return (formState.value.img = "");
+};
+const inforProduct = ref("");
 const handleUploadChange = (file) => {
-    formState.value.img = file.name;
-    console.log(file.name);
+    if (confirm("Chắc chắn tải ảnh lên?")) {
+        formState.value.img = file.name;
+        return true;
+    } else {
+        return false;
+    }
 };
 
 const options = ref([
@@ -132,24 +157,40 @@ const options = ref([
     },
 ]);
 
-const handleFinish = () => {
-    // const stringTag = formState.value.tag.toString();
-    // const stringImg = formState.value.img.toString();
-    // if (
-    //     formState.value.name ||
-    //     formState.value.quantity ||
-    //     formState.value.price ||
-    //     stringImg ||
-    //     stringTag
-    // ) {
-    //     console.log(formState.value);
-    // } else {
-    //     console.log("No data");
-    // }
-    // console.log("formState.value.tag:", formState.value.tag);
-    // console.log("stringTag: ", stringTag);
-    // console.log(formState.value);
+const showProduct = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}inforProduct`
+        );
+        if (response.data.status === 1) {
+            inforProduct.value = response.data.inforProduct;
+            console.log("Data: ", inforProduct.value);
+        } else {
+            console.log("No data");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
 };
+
+const handleFinish = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/addNewProduct`,
+            {
+                formState: formState.value,
+            }
+        );
+        if (response.data.status === 1) {
+            console.log("Add product success: ", response.data);
+        } else {
+            console.log("Add product faile");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+const login = ref(false);
 const handleFinishFailed = (errors) => {
     console.log(errors);
 };

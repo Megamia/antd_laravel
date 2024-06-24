@@ -57,4 +57,12 @@ class productController extends Controller
             return response()->json(['status' => 0, 'images' => 'No images']);
         }
     }
+    public function addNewProduct(Request $request){
+        $data=$request->only('formState');
+        $users = product::create([
+            'name' => $data['formState.name'],
+            'tag' => $data['formState.tag'],
+            'price' => $data['formState.price'],
+        ]);
+    }
 }
