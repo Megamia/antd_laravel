@@ -21,6 +21,7 @@ Route::get('inforProduct', [productController::class, 'inforProduct']);
 
 Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
+Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 
 
 // Route::post('uploads', [productController::class, 'uploadPublic']);

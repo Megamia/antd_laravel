@@ -1,65 +1,43 @@
 <template>
-    <div style="display: flex; flex-direction: column">
-        <h1 style="justify-content: center; display: flex; margin-top: 50px">
-            Thêm sản phẩm
-        </h1>
+    <div class="mainAddProduct">
+        <div class="title">
+            <AnOutlinedArrowLeft @click="back" />
+            <span> Thêm sản phẩm </span>
+        </div>
 
-        <a-form
-            style="display: flex; flex-direction: column; gap: 30px"
-            layout="inline"
-            :model="formState"
-            @finish="handleFinish"
-            @finishFailed="handleFinishFailed"
-        >
+        <a-form style="display: flex; flex-direction: column; gap: 30px" layout="inline" :model="formState"
+            @finish="handleFinish" @finishFailed="handleFinishFailed">
             <a-form-item>
-                <a-input
-                    v-model:value="formState.value.name"
-                    placeholder="Tên sản phẩm"
-                >
+                <a-input v-model:value="formState.value.name" placeholder="Tên sản phẩm">
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-cascader
-                    v-model:value="formState.value.tag"
-                    style="width: 100%"
-                    multiple
-                    max-tag-count="responsive"
-                    :options="options"
-                    placeholder="Please select"
-                ></a-cascader>
+                <a-cascader v-model:value="formState.value.tag" style="width: 100%" multiple max-tag-count="responsive"
+                    :options="options" placeholder="Please select"></a-cascader>
             </a-form-item>
             <a-form-item>
-                <a-input
-                    v-model:value="formState.value.price"
-                    placeholder="Giá sản phẩm"
-                >
+                <a-input v-model:value="formState.value.price" placeholder="Giá sản phẩm">
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input
-                    v-model:value="formState.value.quantity"
-                    placeholder="Số lượng tồn kho"
-                >
+                <a-input v-model:value="formState.value.quantity" placeholder="Số lượng tồn kho">
                 </a-input>
             </a-form-item>
-            <a-upload
-                :action="uploadUrl"
-                list-type="picture"
-                class="upload-list-inline"
-                :headers="headers"
-                :beforeUpload="handleUploadChange"
-                @remove="removee"
-                :disabled="!login"
-            >
-                <!-- :data="formState.img" -->
-                <a-button :disabled="!checkImg">
-                    <upload-outlined />
-                    Upload
-                </a-button>
-            </a-upload>
+            <a-form-item>
+
+                <a-upload :action="uploadUrl" list-type="picture" class="upload-list-inline" :headers="headers"
+                    :beforeUpload="handleUploadChange" @remove="removee">
+                    <!-- :data="formState.img" -->
+                    <a-button :disabled="!checkImg">
+                        <upload-outlined />
+                        Upload
+                    </a-button>
+                </a-upload>
+            </a-form-item>
+
             <a-form-item>
                 <a-button type="primary" html-type="submit" :disabled="a">
-                    Log in
+                    Thêm sản phẩm
                 </a-button>
             </a-form-item>
         </a-form>
@@ -67,17 +45,15 @@
 
         <button @click="show">Show</button>
         <div v-if="data">
-            <div
-                v-for="(image, index) in data"
-                style="display: inline-block; margin: 10px"
-            >
+            <div v-for="(image, index) in data" style="display: inline-block; margin: 10px">
                 <a-image :src="image.url" style="width: 200px; height: auto" />
                 <p @click="del(image, index)">{{ image.name }}</p>
             </div>
         </div>
         <button @click="showProduct">inforProduct</button>
-        <div v-if="inforProduct">
-            <div v-for="inforProduct in inforProduct" :key="inforProduct.id">
+        <div v-if="inforProduct" style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column;" v-for="inforProduct in inforProduct"
+                :key="inforProduct.id">
                 <span>id: {{ inforProduct.id }}</span>
                 <span>name: {{ inforProduct.name }}</span>
                 <span>tag: {{ inforProduct.tag }}</span>
@@ -86,12 +62,22 @@
                 <span>img: {{ inforProduct.img }}</span>
             </div>
         </div>
+        <button @click="test">test</button>
     </div>
 </template>
 
 <script setup>
 import { ref, computed, reactive } from "vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
+import { AnOutlinedArrowLeft } from "@kalimahapps/vue-icons";
+import { useRouter } from "vue-router";
+import axios from "axios";
+
+const router = useRouter();
+
+const back = () => {
+    router.back();
+}
 
 const a = computed(() => {
     const { name, quantity, price, img, tag } = formState.value;
@@ -122,6 +108,14 @@ const handleUploadChange = (file) => {
         return false;
     }
 };
+
+const test = () => {
+    console.log("Typeof: ", typeof formState.value.name);
+    console.log("Value: ", formState.value.tag);
+    console.log("Value String: ", formState.value.tag.toString());
+    console.log("FormState.value: ", formState.value);
+
+}
 
 const options = ref([
     {
@@ -158,9 +152,11 @@ const options = ref([
 ]);
 
 const showProduct = async () => {
+
+
     try {
         const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}inforProduct`
+            `${import.meta.env.VITE_APP_URL_API}/inforProduct`
         );
         if (response.data.status === 1) {
             inforProduct.value = response.data.inforProduct;
@@ -174,23 +170,36 @@ const showProduct = async () => {
 };
 
 const handleFinish = async () => {
+    for (let fieldName in formState.value) {
+        if (!formState.value[fieldName]) {
+            alert("Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+    }
     try {
+        formState.value.tag = formState.value.tag.toString();
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/addNewProduct`,
+            `${import.meta.env.VITE_APP_URL_API}/addNewProduct`
+            ,
             {
-                formState: formState.value,
+                name: formState.value.name,
+                tag: formState.value.tag,
+                price: formState.value.price,
+                quantity: formState.value.quantity,
+                img: formState.value.img,
+                headers: headers["X-CSRF-TOKEN"]
             }
         );
         if (response.data.status === 1) {
-            console.log("Add product success: ", response.data);
+            console.log("Add product success: ", response.data.inforProduct);
         } else {
-            console.log("Add product faile");
+            console.log("Add product faile: ", response.data.inforProduct);
         }
     } catch (e) {
         console.log("Error: ", e);
     }
+    // console.log(formState)
 };
-const login = ref(false);
 const handleFinishFailed = (errors) => {
     console.log(errors);
 };
@@ -236,11 +245,41 @@ const remove = () => {
 </script>
 
 <style scoped>
+.mainAddProduct {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #f0f2f5;
+    gap: 20px;
+
+    .title {
+        background-color: white;
+        display: flex;
+        padding: 16px 36px 16px 12px;
+        align-items: center;
+
+        svg {
+            position: relative;
+            font-size: 25px;
+        }
+
+        span {
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: bold;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+    }
+}
+
 .upload-list-inline :deep(.ant-upload-list-item) {
     float: left;
     width: 200px;
     margin-right: 8px;
 }
+
 .upload-list-inline [class*="-upload-list-rtl"] :deep(.ant-upload-list-item) {
     float: right;
 }
