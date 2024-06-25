@@ -11,34 +11,34 @@
                     placeholder="Nhập tên sản phẩm/combo"
                 />
             </div>
-            <div class="userInfor">
-                <a-radio-group v-model:value="a">
+            <div class="productInfor">
+                <a-checkbox-group v-model:value="a" style="width: 100%">
+                    <div
+                        class="productItems"
+                        v-for="product in filter"
+                        :key="product.id"
+                    >
+                        <a-checkbox :value="product.id" />
+                        <div class="productInforRadio">
+                            <img
+                                style="width: 80px; height: 80px"
+                                :src="product.img"
+                            />
+                            <span class="nameProduct">{{ product.name }}</span>
+                            <span class="phoneNumberProduct">{{ product.tag }}</span>
+                            <span class="nameProduct">{{ product.price }}đ</span>
+                            <span class="nameProduct">{{ product.quantity }}</span>
+                        </div>
+                    </div>
+                </a-checkbox-group>
+                <!-- <a-radio-group v-model:value="a">
                     <a-button type="text" @click="addNewUser">
                         <CaAddAlt />Thêm mới sản phẩm
                     </a-button>
 
-                    <div
-                        class="userItems"
-                        v-for="user in filter"
-                        :key="user.id"
-                    >
-                        <a-radio :value="user.id">
-                            <div class="userInforRadio">
-                                <img style="width: 80px;height: 80px;" :src="user.img" />
-                                <span class="nameUser">{{ user.name }}</span>
-                                <span class="phoneNumberUser">{{
-                                    user.tag
-                                }}</span>
-                                <span class="nameUser">{{ user.price }}</span>
-                                <span class="nameUser">{{
-                                    user.quantity
-                                }}</span>
-                            </div>
-                        </a-radio>
-                    </div>
-                </a-radio-group>
-                <div style="height: 1000px" />
+                </a-radio-group> -->
             </div>
+            <!-- <div style="height: 1000px" /> -->
         </div>
         <div class="saveDive">
             <a-button type="primary" @click="buttonSave">Lưu</a-button>
@@ -52,7 +52,7 @@ import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 
-const a = ref(null);
+const a = ref([]);
 // const selectedUser = ref("");
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
@@ -128,15 +128,24 @@ const addNewUser = () => {
 //     }
 // };
 const buttonSave = () => {
-    alert("Chưa xử lý");
+    // alert("Chưa xử lý");
+    console.log(a.value.sort().toString());
 };
+// const test = (user) => {
+//     const index = a.value.indexOf(user);
+//     if (index > -1) {
+//         a.value.splice(index, 1);
+//     } else {
+//         a.value.push(user);
+//     }
+// };
 const filter = computed(() => {
     if (nameOrPhoneNumber.value) {
-        return data.value.filter((user) => {
+        return data.value.filter((product) => {
             return nameOrPhoneNumber.value
                 .toLowerCase()
                 .split(" ")
-                .every((v) => user.name.toLowerCase().includes(v));
+                .every((v) => product.name.toLowerCase().includes(v) || product.price.toLowerCase().includes(v));
         });
     } else {
         return data.value;
@@ -157,6 +166,9 @@ const filter = computed(() => {
         display: flex;
         padding: 16px 36px 16px 12px;
         align-items: center;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
+        text-align: center;
 
         svg {
             position: relative;
@@ -183,10 +195,10 @@ const filter = computed(() => {
             border-bottom: 1px solid #d9d9dd;
         }
 
-        .userInfor {
+        .productInfor {
             display: flex;
             flex-direction: column;
-
+            margin-bottom: 50px;
             button {
                 display: flex;
                 flex: 1;
@@ -197,7 +209,7 @@ const filter = computed(() => {
                 gap: 10px;
             }
 
-            .userItems {
+            .productItems {
                 display: flex;
                 flex-direction: row;
                 align-items: start;
@@ -205,16 +217,16 @@ const filter = computed(() => {
                 margin-inline: 10px;
                 padding-block: 10px;
 
-                .userInforRadio {
+                .productInforRadio {
                     display: flex;
                     flex-direction: column;
                 }
 
-                .nameUser {
+                .nameProduct {
                     font-size: 14px;
                 }
 
-                .phoneNumberUser {
+                .phoneNumberProduct {
                     font-size: 14px;
                     color: #00000073;
                 }
@@ -223,8 +235,7 @@ const filter = computed(() => {
     }
 
     .saveDive {
-        position: absolute;
-        display: flex;
+        position: fixed;
         background-color: white;
         bottom: 0;
         width: 100%;

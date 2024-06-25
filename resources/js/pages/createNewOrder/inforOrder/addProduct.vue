@@ -5,28 +5,55 @@
             <span> Thêm sản phẩm </span>
         </div>
 
-        <a-form style="display: flex; flex-direction: column; gap: 30px" layout="inline" :model="formState"
-            @finish="handleFinish" @finishFailed="handleFinishFailed">
+        <a-form
+            style="display: flex; flex-direction: column; gap: 30px"
+            layout="inline"
+            :model="formState"
+            @finish="handleFinish"
+            @finishFailed="handleFinishFailed"
+        >
             <a-form-item>
-                <a-input v-model:value="formState.value.name" placeholder="Tên sản phẩm">
+                <a-input
+                    v-model:value="formState.value.name"
+                    placeholder="Tên sản phẩm"
+                >
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-cascader v-model:value="formState.value.tag" style="width: 100%" multiple max-tag-count="responsive"
-                    :options="options" placeholder="Please select"></a-cascader>
+                <a-cascader
+                    v-model:value="formState.value.tag"
+                    style="width: 100%"
+                    multiple
+                    max-tag-count="responsive"
+                    :options="options"
+                    placeholder="Please select"
+                ></a-cascader>
             </a-form-item>
             <a-form-item>
-                <a-input v-model:value="formState.value.price" placeholder="Giá sản phẩm">
+                <a-input
+                    v-model:value="formState.value.price"
+                    placeholder="Giá sản phẩm"
+                    type="number"
+                >
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model:value="formState.value.quantity" placeholder="Số lượng tồn kho">
+                <a-input
+                    v-model:value="formState.value.quantity"
+                    placeholder="Số lượng tồn kho"
+                    type="number"
+                >
                 </a-input>
             </a-form-item>
             <a-form-item>
-
-                <a-upload :action="uploadUrl" list-type="picture" class="upload-list-inline" :headers="headers"
-                    :beforeUpload="handleUploadChange" @remove="removee">
+                <a-upload
+                    :action="uploadUrl"
+                    list-type="picture"
+                    class="upload-list-inline"
+                    :headers="headers"
+                    :beforeUpload="handleUploadChange"
+                    @remove="removee"
+                >
                     <!-- :data="formState.img" -->
                     <a-button :disabled="!checkImg">
                         <upload-outlined />
@@ -45,21 +72,38 @@
 
         <button @click="show">Show</button>
         <div v-if="data">
-            <div v-for="(image, index) in data" style="display: inline-block; margin: 10px">
+            <div
+                v-for="(image, index) in data"
+                style="display: inline-block; margin: 10px"
+            >
                 <a-image :src="image.url" style="width: 200px; height: auto" />
                 <p @click="del(image, index)">{{ image.name }}</p>
             </div>
         </div>
         <button @click="showProduct">inforProduct</button>
-        <div v-if="inforProduct" style="display: flex; flex-direction: row;">
-            <div style="display: flex; flex-direction: column;" v-for="inforProduct in inforProduct"
-                :key="inforProduct.id">
+        <div v-if="inforProduct" style="display: flex; flex-direction: row">
+            <div
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    width: 25%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                "
+                v-for="inforProduct in inforProduct"
+                :key="inforProduct.id"
+            >
                 <span>id: {{ inforProduct.id }}</span>
                 <span>name: {{ inforProduct.name }}</span>
                 <span>tag: {{ inforProduct.tag }}</span>
                 <span>quantity: {{ inforProduct.quantity }}</span>
                 <span>price: {{ inforProduct.price }}</span>
                 <span>img: {{ inforProduct.img }}</span>
+                <img
+                    style="width: 100%; height: 50px"
+                    :src="inforProduct.img"
+                />
             </div>
         </div>
         <button @click="test">test</button>
@@ -77,7 +121,7 @@ const router = useRouter();
 
 const back = () => {
     router.back();
-}
+};
 
 const a = computed(() => {
     const { name, quantity, price, img, tag } = formState.value;
@@ -102,7 +146,10 @@ const removee = () => {
 const inforProduct = ref("");
 const handleUploadChange = (file) => {
     if (confirm("Chắc chắn tải ảnh lên?")) {
-        formState.value.img = file.name;
+        formState.value.img = `${import.meta.env.VITE_APP_URL}/uploads/${
+            file.name
+        }`;
+        // console.log(formState.value.img);
         return true;
     } else {
         return false;
@@ -114,8 +161,7 @@ const test = () => {
     console.log("Value: ", formState.value.tag);
     console.log("Value String: ", formState.value.tag.toString());
     console.log("FormState.value: ", formState.value);
-
-}
+};
 
 const options = ref([
     {
@@ -152,15 +198,13 @@ const options = ref([
 ]);
 
 const showProduct = async () => {
-
-
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/inforProduct`
         );
         if (response.data.status === 1) {
             inforProduct.value = response.data.inforProduct;
-            console.log("Data: ", inforProduct.value);
+            // console.log("Data: ", inforProduct.value);
         } else {
             console.log("No data");
         }
@@ -179,21 +223,24 @@ const handleFinish = async () => {
     try {
         formState.value.tag = formState.value.tag.toString();
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/addNewProduct`
-            ,
+            `${import.meta.env.VITE_APP_URL_API}/addNewProduct`,
             {
                 name: formState.value.name,
                 tag: formState.value.tag,
                 price: formState.value.price,
                 quantity: formState.value.quantity,
                 img: formState.value.img,
-                headers: headers["X-CSRF-TOKEN"]
+                headers: headers["X-CSRF-TOKEN"],
             }
         );
         if (response.data.status === 1) {
-            console.log("Add product success: ", response.data.inforProduct);
+            // console.log("Add product success: ", response.data.inforProduct);
+            alert(
+                `Thêm sản phẩm ${response.data.inforProduct.name} thành công`
+            );
         } else {
-            console.log("Add product faile: ", response.data.inforProduct);
+            // console.log("Add product faile: ", response.data.inforProduct);
+            alert(`Thêm sản phẩm ${response.data.inforProduct.name} thất bại`);
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -219,8 +266,9 @@ const del = (image, index) => {
         data.value.splice(index, 1);
     } else {
         console.log(index + 1);
-        formState.value.img.path = image.url;
-        console.log("FormState.img: ", formState.value.img.path);
+        const path = image.url;
+        // formState.value.img.path = image.url;
+        console.log("FormState.img: ", path);
     }
 };
 const url = ref({});
