@@ -17,6 +17,7 @@ import swapAddress from "./pages/createNewOrder/inforUserOrder/swapAddress.vue";
 import addNewAddress from "./pages/createNewOrder/inforUserOrder/addNewAddress.vue";
 import addNewProduct from "./pages/createNewOrder/inforOrder/addNewProduct.vue";
 import addProduct from "./pages/createNewOrder/inforOrder/addProduct.vue";
+import item1Modal from "./pages/createNewOrder/inforOrder/itemModalFilterWithSelection/itemModal1.vue";
 
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
@@ -112,6 +113,11 @@ const router = createRouter({
             path: "/addProduct",
             component: addProduct,
             name: "addProduct",
+        },
+        {
+            path: "/item1Modal",
+            component: item1Modal,
+            name: "item1Modal",
         },
         {
             path: "/test",
