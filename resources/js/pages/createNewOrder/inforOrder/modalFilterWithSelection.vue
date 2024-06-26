@@ -4,7 +4,7 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="content">
-                        <div v-if="currentSelection === 'All'">
+                        <div v-if="currentSelection === 'Parent'">
                             <div class="title">
                                 <span class="titleText">Lọc sản phẩm</span>
                             </div>
@@ -12,22 +12,31 @@
                                 <span>Tất cả sản phẩm</span>
                             </div>
                             <div class="contentSelection">
-                                <span @click="handleCurrentSelectionChange('a')"
+                                <span
+                                    @click="
+                                        handleCurrentSelectionChange('Child')
+                                    "
                                     >Thương hiệu <AkChevronRightSmall
                                 /></span>
                             </div>
                             <div class="contentSelection">
-                                <span @click="handleCurrentSelectionChange('b')"
+                                <span
+                                    @click="
+                                        handleCurrentSelectionChange('Child')
+                                    "
                                     >Danh mục <AkChevronRightSmall
                                 /></span>
                             </div>
                             <div class="contentSelection contentSelectionLast">
-                                <span @click="handleCurrentSelectionChange('c')"
+                                <span
+                                    @click="
+                                        handleCurrentSelectionChange('Child')
+                                    "
                                     >Tags <AkChevronRightSmall
                                 /></span>
                             </div>
                         </div>
-                        <div
+                        <!-- <div
                             v-if="currentSelection === 'a'"
                             class="testSelection"
                         >
@@ -53,6 +62,30 @@
                             <div class="contentSelection">
                                 <span> b</span>
                             </div>
+                        </div> -->
+                        <div v-else>
+                            <div class="title">
+                                <AnOutlinedArrowLeft @click="back" />
+                                <span class="titleText">Thương hiệu</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span>Danh mục cấp 2</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span @click="handleCurrentSelectionChange('a')"
+                                    >Danh mục cấp 2 <AkChevronRightSmall
+                                /></span>
+                            </div>
+                            <div class="contentSelection">
+                                <span @click="handleCurrentSelectionChange('b')"
+                                    >Danh mục <AkChevronRightSmall
+                                /></span>
+                            </div>
+                            <div class="contentSelection contentSelectionLast">
+                                <span @click="handleCurrentSelectionChange('c')"
+                                    >Tags <AkChevronRightSmall
+                                /></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,10 +104,10 @@ import { ref, defineEmits } from "vue";
 
 const router = useRouter();
 
-const currentSelection = ref("All");
+const currentSelection = ref("Parent");
 
 const back = () => {
-    currentSelection.value = "All";
+    currentSelection.value = "Parent";
 };
 const handleCurrentSelectionChange = (item) => {
     currentSelection.value = item;
