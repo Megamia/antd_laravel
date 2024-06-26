@@ -3,24 +3,58 @@
         <div class="modal-mask">
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
-                    <div class="title">
-                        <span class="titleText">Lọc sản phẩm</span>
-                    </div>
                     <div class="content">
-                        <div>
-                            <span>Tất cả sản phẩm</span>
+                        <div v-if="currentSelection === 'All'">
+                            <div class="title">
+                                <span class="titleText">Lọc sản phẩm</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span>Tất cả sản phẩm</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span @click="handleCurrentSelectionChange('a')"
+                                    >Thương hiệu <AkChevronRightSmall
+                                /></span>
+                            </div>
+                            <div class="contentSelection">
+                                <span @click="handleCurrentSelectionChange('b')"
+                                    >Danh mục <AkChevronRightSmall
+                                /></span>
+                            </div>
+                            <div class="contentSelection contentSelectionLast">
+                                <span @click="handleCurrentSelectionChange('c')"
+                                    >Tags <AkChevronRightSmall
+                                /></span>
+                            </div>
                         </div>
-                        <div>
-                            <span>Tất cả sản phẩm</span>
+                        <div
+                            v-if="currentSelection === 'a'"
+                            class="testSelection"
+                        >
+                            <div class="title">
+                                <span class="icon">
+                                    <AnOutlinedArrowLeft @click="back" />
+                                </span>
+                                <span class="titleText"> Thương hiệu</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span @click="handleCurrentSelectionChange('a')"
+                                    >Danh mục cấp 2 <AkChevronRightSmall
+                                /></span>
+                            </div>
                         </div>
-                        <div>
-                            <span>Tất cả sản phẩm</span>
-                        </div>
-                        <div>
-                            <span>Tất cả sản phẩm</span>
+                        <div
+                            v-if="currentSelection === 'b'"
+                            class="testSelection"
+                        >
+                            <div class="title">
+                                <span class="titleText">Danh mục</span>
+                            </div>
+                            <div class="contentSelection">
+                                <span> b</span>
+                            </div>
                         </div>
                     </div>
-                    <!-- <item1Modal/> -->
                 </div>
             </div>
         </div>
@@ -28,53 +62,28 @@
 </template>
 
 <script setup>
-import { AkPercentage } from "@kalimahapps/vue-icons";
-// import item1Modal from "./"
+import {
+    AkChevronRightSmall,
+    AnOutlinedArrowLeft,
+} from "@kalimahapps/vue-icons";
+import { useRouter } from "vue-router";
 import { ref, defineEmits } from "vue";
 
-const upNumberPercent = ref("");
-const downNumberPercent = ref("");
-const selectOptions = ref(1);
+const router = useRouter();
 
-const cost = ref("249.000");
-const newCost = ref("");
-const currentChange = ref("direct");
+const currentSelection = ref("All");
 
-const refresh = () => {};
+const back = () => {
+    currentSelection.value = "All";
+};
+const handleCurrentSelectionChange = (item) => {
+    currentSelection.value = item;
+};
+
 const emit = defineEmits(["showModal"]);
 
 const Cancel = () => {
     emit("showModal");
-};
-const Apply = () => {
-    if (selectOptions.value === 1 && upNumberPercent.value) {
-        newCost.value =
-            parseFloat(cost.value) *
-            (1 + parseFloat(upNumberPercent.value) / 100);
-        alert(
-            `Tăng lên ${upNumberPercent.value}% thành ${parseFloat(
-                newCost.value
-            ).toFixed(4)} thành công`
-        );
-        upNumberPercent.value = null;
-    } else if (selectOptions.value === 2 && downNumberPercent.value) {
-        newCost.value =
-            parseFloat(cost.value) *
-            (1 - parseFloat(downNumberPercent.value) / 100);
-        alert(
-            `Giảm xuống ${downNumberPercent.value}% thành ${parseFloat(
-                newCost.value
-            ).toFixed(4)} thành công`
-        );
-        downNumberPercent.value = null;
-    }
-    currentChange.value = "direct";
-    cost.value = parseFloat(newCost.value).toFixed(4);
-    console.log("Cost: " + cost.value + "\n Type: " + typeof cost.value);
-    if (parseFloat(cost.value) === 0) {
-        cost.value = parseFloat(cost.value).toFixed(2);
-        console.log(cost.value);
-    }
 };
 </script>
 <style scoped>
@@ -103,92 +112,60 @@ const Apply = () => {
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
     border-radius: 10px;
-    .title {
-        display: flex;
-        flex: 1;
-        border-bottom: 1px solid #d9d9d9;
-        padding-block: 20px;
-        .titleText {
-            display: flex;
-            flex: 1;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        .refreshText {
-            position: absolute;
-            right: 60px;
-            color: #1890ff;
-            font-size: 14px;
-        }
-    }
+
     .content {
         display: flex;
         flex: 1;
         flex-direction: column;
-        padding: 20px;
-        gap: 20px;
-        .typeChange {
+        padding-inline: 20px;
+        .title {
             display: flex;
             flex: 1;
-            gap: 20px;
+            justify-content: space-between;
+            border-bottom: 1px solid #d9d9d9;
+            padding-block: 20px;
 
-            button {
+            .titleText {
                 display: flex;
                 flex: 1;
                 justify-content: center;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .icon {
+                position: absolute;
             }
         }
-        .cost {
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .percent {
-            display: flex;
-            flex: 1;
-            flex-direction: column;
+        .contentSelection {
+            border-bottom: 1px solid #d9d9d9;
+            padding-block: 12px;
+            font-size: 14px;
+            line-height: 22px;
+            color: black;
+
             span {
                 display: flex;
-                flex-direction: row-reverse;
-            }
-            .changPercent {
-                display: flex;
                 flex: 1;
-                flex-direction: column;
-                gap: 10px;
-                .inputChangePercent {
-                    margin-left: 30px;
-                    padding-bottom: 15px;
-                    border-bottom: 1px solid #d9d9d9;
-                }
-                .inputUpChangePercent {
-                    border: 0;
-                }
-            }
-            .ant-radio-group {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
+                justify-content: space-between;
+                align-items: center;
+                text-decoration: none;
+                color: black;
             }
         }
-    }
-    .buttonChange {
-        display: flex;
-        flex: 1;
-        button {
+        .contentSelectionLast {
+            border: 0;
+        }
+        .testSelection {
             display: flex;
             flex: 1;
-            justify-content: center;
-            border-radius: 0;
-            border: 1px solid #d9d9d9;
-            color: black;
-            font-size: 16px;
-            padding: 10px;
-        }
-        .buttonApply {
-            color: #1890ff;
+            flex-direction: column;
+
+            .contentSelection {
+                display: flex;
+                flex: 1;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
     }
 }
