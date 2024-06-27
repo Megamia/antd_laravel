@@ -30,6 +30,7 @@
                         <a-checkbox
                             :value="product.id"
                             style="margin-left: 12px; margin-top: 12px"
+                            :disabled="product.quantity <= 0"
                         />
                         <div class="productInforRadio">
                             <img

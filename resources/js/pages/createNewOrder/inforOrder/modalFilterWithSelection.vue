@@ -4,39 +4,71 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="content">
-                        <div v-if="currentSelection === 'Parent'">
+                        <div
+                            v-if="currentSelection === 'Parent'"
+                            v-for="(dataParent, index) in dataParentDefault"
+                            :key="index"
+                        >
                             <div class="title">
-                                <span class="titleText">Lọc sản phẩm</span>
+                                <AnOutlinedArrowLeft
+                                    v-if="dataParent.iconBack"
+                                />
+                                <span class="titleText">{{
+                                    dataParent.title
+                                }}</span>
                             </div>
-                            <div class="contentSelection">
-                                <span>Tất cả sản phẩm</span>
-                            </div>
-                            <div class="contentSelection">
+
+                            <div
+                                class="contentSelection"
+                                v-for="(dataChil, index) in dataParent.items"
+                                :key="index"
+                            >
                                 <span
                                     @click="
-                                        handleCurrentSelectionChange('Child')
+                                        handleCurrentSelectionChange(
+                                            dataChil.id
+                                        )
                                     "
-                                    >Thương hiệu <AkChevronRightSmall
-                                /></span>
-                            </div>
-                            <div class="contentSelection">
-                                <span
-                                    @click="
-                                        handleCurrentSelectionChange('Child')
-                                    "
-                                    >Danh mục <AkChevronRightSmall
-                                /></span>
-                            </div>
-                            <div class="contentSelection contentSelectionLast">
-                                <span
-                                    @click="
-                                        handleCurrentSelectionChange('Child')
-                                    "
-                                    >Tags <AkChevronRightSmall
-                                /></span>
+                                    >{{ dataChil.title }}
+                                    <AkChevronRightSmall
+                                        v-if="dataChil.iconNext"
+                                    />
+                                </span>
                             </div>
                         </div>
-                        <!-- <div
+                        <div>
+                            <div v-for="item in flattenedData" :key="item.id">
+                                <div v-if="currentSelection === item.id">
+                                    <div class="title">
+                                        <AnOutlinedArrowLeft @click="back" />
+                                        <span class="titleText">{{
+                                            item.title
+                                        }}</span>
+                                    </div>
+
+                                    <div
+                                        class="contentSelection"
+                                        v-for="childItem in item.itemsChil"
+                                        :key="childItem.id"
+                                    >
+                                        <span
+                                            @click="
+                                                handleCurrentSelectionChange(
+                                                    childItem.id
+                                                )
+                                            "
+                                        >
+                                            {{ childItem.name }}
+                                            <AkChevronRightSmall
+                                                v-if="childItem.iconNext"
+                                            />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div
                             v-if="currentSelection === 'a'"
                             class="testSelection"
                         >
@@ -63,31 +95,6 @@
                                 <span> b</span>
                             </div>
                         </div> -->
-                        <div v-else>
-                            <div class="title">
-                                <AnOutlinedArrowLeft @click="back" />
-                                <span class="titleText">Thương hiệu</span>
-                            </div>
-                            <div class="contentSelection">
-                                <span>Danh mục cấp 2</span>
-                            </div>
-                            <div class="contentSelection">
-                                <span @click="handleCurrentSelectionChange('a')"
-                                    >Danh mục cấp 2 <AkChevronRightSmall
-                                /></span>
-                            </div>
-                            <div class="contentSelection">
-                                <span @click="handleCurrentSelectionChange('b')"
-                                    >Danh mục <AkChevronRightSmall
-                                /></span>
-                            </div>
-                            <div class="contentSelection contentSelectionLast">
-                                <span @click="handleCurrentSelectionChange('c')"
-                                    >Tags <AkChevronRightSmall
-                                /></span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -100,8 +107,11 @@ import {
     AnOutlinedArrowLeft,
 } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, computed } from "vue";
 
+// const show = () => {
+//     console.log("flattenedData: ",flattenedData.value);
+// };
 const router = useRouter();
 
 const currentSelection = ref("Parent");
@@ -110,8 +120,92 @@ const back = () => {
     currentSelection.value = "Parent";
 };
 const handleCurrentSelectionChange = (item) => {
-    currentSelection.value = item;
+    if (item === 0) {
+        return;
+    } else {
+        currentSelection.value = item;
+        console.log(currentSelection.value);
+    }
 };
+const flattenedData = computed(() => {
+    const flatten = (dataChildDefault) => {
+        return dataChildDefault.reduce((acc, item) => {
+            acc.push(item);
+            if (item.itemsChil) {
+                acc = acc.concat(flatten(item.itemsChil));
+            }
+            return acc;
+        }, []);
+    };
+    return (
+        console.log(flatten(dataChildDefault.value)[0].items),
+        flatten(dataChildDefault.value)[0].items
+    );
+});
+const dataParentDefault = ref([
+    {
+        title: "Lọc sản phẩm",
+        iconBack: false,
+        items: [
+            { id: 0, title: "Tất cả sản phẩm", iconNext: false },
+            { id: 1, title: "Thương hiệu", iconNext: true },
+            { id: 2, title: "Danh mục", iconNext: true },
+            { id: 3, title: "Tags", iconNext: true },
+        ],
+    },
+]);
+const dataChildDefault = ref([
+  {
+    items: [
+      {
+        id: 1,
+        title: "Thương hiệu",
+        iconBack: true,
+        iconNext: false,
+        itemsChil: [
+          { id: 1, name: "Danh mục cấp 2", iconNext: false },
+          {
+            id: 2,
+            name: "Danh mục cấp 2",
+            iconNext: true,
+            title: "Thương hiệu",
+            itemsChil: [
+              { id: 1, name: "Danh mục cấp 3", iconNext: false },
+              { id: 2, name: "Danh mục cấp 3", iconNext: true },
+              { id: 3, name: "Danh mục cấp 3", iconNext: true },
+            ],
+          },
+          { id: 3, name: "Danh mục cấp 2", iconNext: true },
+          { id: 4, name: "Danh mục cấp 2", iconNext: true },
+        ],
+      },
+      {
+        id: 2,
+        title: "Danh mục",
+        iconBack: true,
+        iconNext: false,
+        itemsChil: [
+          { id: 1, name: "Danh mục cấp 2", iconNext: false },
+          { id: 2, name: "Danh mục cấp 2", iconNext: true },
+          { id: 3, name: "Danh mục cấp 2", iconNext: true },
+          { id: 4, name: "Danh mục cấp 2", iconNext: true },
+        ],
+      },
+      {
+        id: 3,
+        title: "Tags",
+        iconBack: true,
+        iconNext: false,
+        itemsChil: [
+          { id: 1, name: "Danh mục cấp 2", iconNext: false },
+          { id: 2, name: "Danh mục cấp 2", iconNext: true },
+          { id: 3, name: "Danh mục cấp 2", iconNext: true },
+          { id: 4, name: "Danh mục cấp 2", iconNext: true },
+        ],
+      },
+    ],
+  },
+]);
 
 const emit = defineEmits(["showModal"]);
 
