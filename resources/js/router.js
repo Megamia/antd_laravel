@@ -18,7 +18,7 @@ import addNewAddress from "./pages/createNewOrder/inforUserOrder/addNewAddress.v
 import addNewProduct from "./pages/createNewOrder/inforOrder/addNewProduct.vue";
 import addProduct from "./pages/createNewOrder/inforOrder/addProduct.vue";
 import item1Modal from "./pages/createNewOrder/inforOrder/itemModalFilterWithSelection/itemModal1.vue";
-
+import detailVoucher from "./pages/createNewOrder/voucher&tax/details/detailVoucher.vue";
 import exPage from "./pages/client/exPage.vue";
 const router = createRouter({
     history: createWebHistory(),
@@ -118,6 +118,11 @@ const router = createRouter({
             path: "/item1Modal",
             component: item1Modal,
             name: "item1Modal",
+        },
+        {
+            path: "/detailVoucher",
+            component: detailVoucher,
+            name: "detailVoucher",
         },
         {
             path: "/test",

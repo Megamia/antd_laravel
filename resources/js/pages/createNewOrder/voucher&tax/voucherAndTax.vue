@@ -1,9 +1,11 @@
 <template>
     <div class="mainVoucherAndTax">
-        <div class="voucher" @click="nothing">
-            <span class="name">Giảm giá</span>
-            <span class="cost"> -30.000đ <AkChevronRight /></span>
-        </div>
+        <!-- <div class="voucher" @click="nothing"> -->
+            <RouterLink to="/detailVoucher" class="voucher">
+                <span class="name">Giảm giá</span>
+                <span class="cost"> -30.000đ <AkChevronRight /></span>
+            </RouterLink>
+        <!-- </div> -->
         <div class="ship" @click="nothing">
             <span class="name">Phí ship</span>
             <span class="cost"> 20.000đ <AkChevronRight /></span>
@@ -38,6 +40,8 @@ const nothing = () => {
         flex-direction: row;
         text-align: center;
         border-bottom: 1px solid #0000000f;
+        color:black;
+        text-decoration: none;
         span {
             display: flex;
             align-items: center;
