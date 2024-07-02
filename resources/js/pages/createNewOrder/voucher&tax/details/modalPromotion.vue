@@ -4,15 +4,27 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="title">
-                        <span> Mã ưu đãi/ Coupon </span>
+                        <span> Khuyến mãi </span>
                     </div>
                     <div class="content">
-                        <span>Nhập mã</span>
-                        <input
-                            type="text"
-                            placeholder="Nhập lý do"
-                            v-model="inputCodeText"
-                        />
+                        <div>
+                            <a-button>Default Button</a-button>
+                            <a-button>Default Button</a-button>
+                        </div>
+                        <div>
+                            <a-checkbox-group
+                                v-model:value="selectedItemList"
+                                style="width: 100%"
+                            >
+                                <div
+                                    v-for="listItem in listPromotion"
+                                    :key="listItem.id"
+                                >
+                                    <a-checkbox :value="listItem.id" />
+                                    <span>{{ listItem.text }}</span>
+                                </div>
+                            </a-checkbox-group>
+                        </div>
                     </div>
                     <div class="buttonDiv">
                         <button class="button buttonCancel" @click="Cancel">
@@ -31,15 +43,41 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 
-const emit = defineEmits(["closeModalCode"]);
+const emit = defineEmits(["closeModalPromotion"]);
 
-const inputCodeText = ref("");
-
+const selectedItemList = ref("");
+const listPromotion = ref([
+    {
+        id: 1,
+        state: null,
+        text: "Chiến dịch Trung thu đầy trăng",
+    },
+    {
+        id: 2,
+        state: null,
+        text: "Sale 11/11 Black Friday",
+    },
+    {
+        id: 3,
+        state: null,
+        text: "Giảm 40k cho đơn trên 1.000.000đ",
+    },
+    {
+        id: 4,
+        state: null,
+        text: "Tết sum vầy",
+    },
+    {
+        id: 5,
+        state: null,
+        text: "Đồng giá combo",
+    },
+]);
 const Cancel = () => {
-    emit("closeModalCode");
+    emit("closeModalPromotion");
 };
 const apply = () => {
-    console.log("Input: ", inputCodeText.value);
+    console.log("selectedItemList: ", selectedItemList.value);
 };
 </script>
 <style scoped>

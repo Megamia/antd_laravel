@@ -5,7 +5,7 @@
             <span> Giảm giá </span>
         </div>
         <div class="content">
-            <div class="inputCode itemContent">
+            <div class="inputCode itemContent" @click="showModalCode">
                 <div class="left">
                     <img
                         src="../../../../../../public/img/c6d6ecaa5187c8e181b28cfcb4ddbf3b.png"
@@ -17,7 +17,11 @@
                     <span>Nhập mã <AkChevronRightSmall /></span>
                 </div>
             </div>
-            <div class="inputDiscount itemContent">
+            <modalCode
+                v-if="isShowModalCode"
+                @close-modal-code="showModalCode"
+            />
+            <div class="inputDiscount itemContent" @click="showModalDiscount">
                 <div class="left">
                     <span>Chiết khấu</span>
                 </div>
@@ -25,7 +29,11 @@
                     <span>Nhập chiết khấu <AkChevronRightSmall /></span>
                 </div>
             </div>
-            <div class="inputPromotion itemContent">
+            <modalDiscount
+                v-if="isShowModalDiscount"
+                @close-modal-discount="showModalDiscount"
+            />
+            <div class="inputPromotion itemContent" @click="showModalPromotion">
                 <div class="left">
                     <span>Khuyến mãi</span>
                 </div>
@@ -33,6 +41,10 @@
                     <span>Chọn mã <AkChevronRightSmall /></span>
                 </div>
             </div>
+            <modalPromotion
+                v-if="isShowModalPromotion"
+                @close-modal-promotion="showModalPromotion"
+            />
         </div>
     </div>
 </template>
@@ -42,11 +54,33 @@ import {
     AnOutlinedArrowLeft,
     AkChevronRightSmall,
 } from "@kalimahapps/vue-icons";
+import modalCode from "./modalCode.vue";
+import modalDiscount from "./modalDiscount.vue";
+import modalPromotion from "./modalPromotion.vue";
+import { ref } from "vue";
 
 const router = useRouter();
 
 const back = () => {
     router.back();
+};
+
+const isShowModalCode = ref(false);
+
+const showModalCode = () => {
+    isShowModalCode.value = !isShowModalCode.value;
+};
+
+const isShowModalDiscount = ref(false);
+
+const showModalDiscount = () => {
+    isShowModalDiscount.value = !isShowModalDiscount.value;
+};
+
+const isShowModalPromotion = ref(false);
+
+const showModalPromotion = () => {
+    isShowModalPromotion.value = !isShowModalPromotion.value;
 };
 </script>
 
