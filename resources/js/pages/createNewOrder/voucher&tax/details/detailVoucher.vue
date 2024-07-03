@@ -44,6 +44,7 @@
             <modalPromotion
                 v-if="isShowModalPromotion"
                 @close-modal-promotion="showModalPromotion"
+                @value-in-modal-promotion="valueInModalPromotion"
             />
         </div>
     </div>
@@ -60,7 +61,6 @@ import modalPromotion from "./modalPromotion.vue";
 import { ref } from "vue";
 
 const router = useRouter();
-
 const back = () => {
     router.back();
 };
@@ -77,11 +77,20 @@ const showModalDiscount = () => {
     isShowModalDiscount.value = !isShowModalDiscount.value;
 };
 
-const isShowModalPromotion = ref(false);
+//ModalPromotion
 
+const isShowModalPromotion = ref(false);
+const dataModalPromotion = ref("");
 const showModalPromotion = () => {
     isShowModalPromotion.value = !isShowModalPromotion.value;
 };
+const valueInModalPromotion = (data) => {
+    isShowModalPromotion.value = !isShowModalPromotion.value;
+    console.log(data, isShowModalPromotion.value);
+    
+};
+
+//ModalPromotion
 </script>
 
 <style scoped>

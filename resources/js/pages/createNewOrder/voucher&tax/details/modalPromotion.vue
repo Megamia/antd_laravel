@@ -7,16 +7,38 @@
                         <span> Khuyến mãi </span>
                     </div>
                     <div class="content">
-                        <div>
-                            <a-button>Default Button</a-button>
-                            <a-button>Default Button</a-button>
-                        </div>
-                        <div>
-                            <a-checkbox-group
-                                v-model:value="selectedItemList"
-                                style="width: 100%"
+                        <div class="buttonSelection">
+                            <a-button
+                                @click="handleButtonChange('order')"
+                                :class="{ act: currentSelection === 'order' }"
+                                >Theo đơn hàng</a-button
                             >
+                            <a-button
+                                @click="handleButtonChange('product')"
+                                :class="{ act: currentSelection === 'product' }"
+                                >Theo sản phẩm</a-button
+                            >
+                        </div>
+
+                        <div
+                            class="itemOrder"
+                            v-if="currentSelection === 'order'"
+                        >
+                            <a-checkbox-group
+                                v-model:value="slt"
+                                style="
+                                    width: 100%;
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                "
+                            >
+                                <span class="titleItem">
+                                    Danh sách khuyến mãi</span
+                                >
+
                                 <div
+                                    class="detailItem"
                                     v-for="listItem in listPromotion"
                                     :key="listItem.id"
                                 >
@@ -43,41 +65,48 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 
-const emit = defineEmits(["closeModalPromotion"]);
+const emit = defineEmits(["closeModalPromotion", "valueInModalPromotion"]);
+const currentSelection = ref("order");
 
-const selectedItemList = ref("");
+const handleButtonChange = (value) => {
+    currentSelection.value = value;
+};
+const slt = ref([1]);
 const listPromotion = ref([
     {
         id: 1,
-        state: null,
         text: "Chiến dịch Trung thu đầy trăng",
+        value: "100.000",
     },
     {
         id: 2,
-        state: null,
         text: "Sale 11/11 Black Friday",
+        value: "200.000",
     },
     {
         id: 3,
-        state: null,
         text: "Giảm 40k cho đơn trên 1.000.000đ",
+        value: "300.000",
     },
     {
         id: 4,
-        state: null,
         text: "Tết sum vầy",
+        value: "400.000",
     },
     {
         id: 5,
-        state: null,
         text: "Đồng giá combo",
+        value: "500.000",
     },
 ]);
 const Cancel = () => {
     emit("closeModalPromotion");
 };
 const apply = () => {
-    console.log("selectedItemList: ", selectedItemList.value);
+    const data = listPromotion.value.filter((a) => slt.value.includes(a.id));
+
+    console.log("selectedItemList: ", data);
+    emit("valueInModalPromotion", data);
 };
 </script>
 <style scoped>
@@ -127,10 +156,41 @@ const apply = () => {
         flex: 1;
         flex-direction: column;
         padding: 16px 12px;
-        gap: 10px;
         input {
             padding: 10px;
             border: 1px solid #d9d9dd;
+        }
+        .buttonSelection {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            button {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                justify-content: center;
+                border-radius: 1px;
+                padding: 4px 15px;
+            }
+
+            .act {
+                color: #4096ff;
+                border-color: #4096ff;
+            }
+        }
+        .itemOrder {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding-top: 10px;
+            .titleItem {
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .detailItem {
+                display: flex;
+                gap: 10px;
+            }
         }
     }
     .buttonDiv {
