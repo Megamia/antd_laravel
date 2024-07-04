@@ -47,6 +47,13 @@
                 @value-in-modal-promotion="valueInModalPromotion"
             />
         </div>
+        <div class="saveDive">
+            <div class="totalDiv">
+                <span> Tổng cộng giảm giá</span>
+                <span class="totalValue">{{ total }}</span>
+            </div>
+            <a-button type="primary" @click="buttonSave">Lưu</a-button>
+        </div>
     </div>
 </template>
 <script setup>
@@ -67,6 +74,10 @@ const back = () => {
 
 const isShowModalCode = ref(false);
 
+const codeValue = ref("");
+const discountValue = ref("");
+const promotionValue = ref("");
+
 const showModalCode = () => {
     isShowModalCode.value = !isShowModalCode.value;
 };
@@ -84,13 +95,42 @@ const dataModalPromotion = ref("");
 const showModalPromotion = () => {
     isShowModalPromotion.value = !isShowModalPromotion.value;
 };
-const valueInModalPromotion = (data) => {
+let totalPro = 0;
+const valueInModalPromotion = (data, slt) => {
+    // const array=[];
     isShowModalPromotion.value = !isShowModalPromotion.value;
-    console.log(data, isShowModalPromotion.value);
-    
+    // console.log("data: ", data);
+    // for (let i = 0; i < Object.keys(data).length; i++) {
+    //     console.log("data: ", data[i]["id"]);
+    //     array.push(data[i]["id"]);
+
+    //     totalPro += array[i];
+    // }
+    console.log("modal: ", data, slt);
 };
 
 //ModalPromotion
+let total = 0;
+const buttonSave = () => {
+    console.log(
+        "Mã ưu đãi: ",
+        codeValue.value ? codeValue.value : "0",
+        "\n",
+        "Chiết khấu: ",
+        discountValue.value ? discountValue.value : "0",
+        "\n",
+        "Khuyến mãi: ",
+        promotionValue.value ? promotionValue.value : "0",
+        "\n",
+        "Total: ",
+        total
+    );
+    total =
+        parseFloat(codeValue.value) +
+        parseFloat(discountValue.value) +
+        parseFloat(promotionValue.value);
+    return;
+};
 </script>
 
 <style scoped>
@@ -155,6 +195,32 @@ const valueInModalPromotion = (data) => {
                     display: flex;
                     align-items: center;
                 }
+            }
+        }
+    }
+    .saveDive {
+        /* position: fixed; */
+        background-color: white;
+        bottom: 0;
+        width: 100%;
+        padding: 10px;
+        border: 0 0 10px 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0.15rem 0.15rem rgba(0, 0, 0, 0.15);
+
+        button {
+            position: relative;
+            width: 100%;
+            border-radius: 0;
+            margin-top: 10px;
+        }
+        .totalDiv {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            .totalValue {
+                font-size: 14px;
+                color: #1890ff;
             }
         }
     }

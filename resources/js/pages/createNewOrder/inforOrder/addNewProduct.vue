@@ -342,6 +342,7 @@ const filter = computed(() => {
             position: relative;
             width: 100%;
             border-radius: 0;
+            margin-top: 10px;
         }
     }
 }

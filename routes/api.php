@@ -3,6 +3,7 @@
 use App\Http\Controllers\addressController;
 use App\Http\Controllers\inforUserOrderController;
 use App\Http\Controllers\productController;
+use App\Http\Controllers\voucherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('dataUser', [inforUserOrderController::class, 'data']);
@@ -23,5 +24,7 @@ Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 
+Route::get('dataValueVoucher', [voucherController::class, 'dataValueVoucher']);
+Route::post('chooseVoucher', [voucherController::class, 'chooseVoucher']);
 
 // Route::post('uploads', [productController::class, 'uploadPublic']);

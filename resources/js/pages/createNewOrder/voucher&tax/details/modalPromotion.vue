@@ -63,50 +63,61 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
+import axios from "axios";
 
 const emit = defineEmits(["closeModalPromotion", "valueInModalPromotion"]);
 const currentSelection = ref("order");
+const fetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/dataValueVoucher`
+        );
+        listPromotion.value = response.data.dataValueVoucher;
+        if (response.data.status === 1) {
+            console.log("listPromotion: ", listPromotion.value);
+        } else if (response.data.status === 0) {
+            console.log("listPromotion: ", listPromotion.value);
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+onMounted(() => fetchData());
 
 const handleButtonChange = (value) => {
     currentSelection.value = value;
 };
 const slt = ref([1]);
-const listPromotion = ref([
-    {
-        id: 1,
-        text: "Chiến dịch Trung thu đầy trăng",
-        value: "100.000",
-    },
-    {
-        id: 2,
-        text: "Sale 11/11 Black Friday",
-        value: "200.000",
-    },
-    {
-        id: 3,
-        text: "Giảm 40k cho đơn trên 1.000.000đ",
-        value: "300.000",
-    },
-    {
-        id: 4,
-        text: "Tết sum vầy",
-        value: "400.000",
-    },
-    {
-        id: 5,
-        text: "Đồng giá combo",
-        value: "500.000",
-    },
-]);
+const listPromotion = ref([]);
 const Cancel = () => {
     emit("closeModalPromotion");
 };
-const apply = () => {
-    const data = listPromotion.value.filter((a) => slt.value.includes(a.id));
+const apply = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/chooseVoucher`,
+            {
+                id: slt.value,
+            }
+        );
 
-    console.log("selectedItemList: ", data);
-    emit("valueInModalPromotion", data);
+        if (response.data.status === 1) {
+            // console.log("dataVouchers: ", response.data.dataVouchers);
+        } else {
+            // console.log("dataVouchers: ", response.data.dataVouchers);
+        }
+        let total = 0;
+        for (let i = 0; i < response.data.dataVouchers.length; i++) {
+            total += response.data.dataVouchers[i].value;
+        }
+        console.log("total: " + total);
+        emit("valueInModalPromotion",slt);
+        // console.log(response.data.dataVouchers);
+        // emit("closeModalPromotion");
+    } catch (e) {
+        console.log("Error: ", e);
+    }
 };
 </script>
 <style scoped>
