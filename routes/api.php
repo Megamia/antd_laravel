@@ -24,7 +24,8 @@ Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 
-Route::get('dataValueVoucher', [voucherController::class, 'dataValueVoucher']);
+Route::get('dataValueVoucherPromotion', [voucherController::class, 'dataValueVoucherPromotion']);
 Route::post('chooseVoucher', [voucherController::class, 'chooseVoucher']);
+// Route::get('choosedVoucher', [voucherController::class, 'choosedVoucher']);
 
 // Route::post('uploads', [productController::class, 'uploadPublic']);

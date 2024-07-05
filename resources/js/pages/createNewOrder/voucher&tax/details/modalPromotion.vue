@@ -63,28 +63,54 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, onMounted } from "vue";
+import { ref, defineEmits, onMounted, defineProps } from "vue";
 import axios from "axios";
 
 const emit = defineEmits(["closeModalPromotion", "valueInModalPromotion"]);
 const currentSelection = ref("order");
+
+const props = defineProps({
+    sltedId: Object,
+});
 const fetchData = async () => {
     try {
         const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataValueVoucher`
+            `${import.meta.env.VITE_APP_URL_API}/dataValueVoucherPromotion`
         );
-        listPromotion.value = response.data.dataValueVoucher;
+        listPromotion.value = response.data.dataValueVoucherPromotion;
+        if (props.sltedId && Object.keys(props.sltedId).length > 0) {
+            slt.value = props.sltedId;
+            // console.log("slt.value: ", slt.value);
+            // console.log("props.sltedId: ", props.sltedId);
+        } else {
+            // console.log("no props");
+        }
+        // console.log(Object.keys(props.sltedId).length);
+        // const a = ref([]);
+        // for (
+        //     let i = 0;
+        //     i < Object.keys(response.data.dataValueVoucherPromotion).length;
+        //     i++
+        // ) {
+        //     a.value.push(response.data.dataValueVoucherPromotion[i].id);
+        //     console.log("listPromotion:", response.data.dataValueVoucherPromotion[i].id);
+        // }
+        // console.log("a: ", a.value.toString());
+        // slt.value = a.value;
+
         if (response.data.status === 1) {
-            console.log("listPromotion: ", listPromotion.value);
+            // console.log("listPromotion: ", listPromotion.value);
         } else if (response.data.status === 0) {
-            console.log("listPromotion: ", listPromotion.value);
+            // console.log("listPromotion: ", listPromotion.value);
         }
     } catch (e) {
         console.log("Error: ", e);
     }
 };
+
 onMounted(() => fetchData());
 
+const aVl = ref([]);
 const handleButtonChange = (value) => {
     currentSelection.value = value;
 };
@@ -111,8 +137,14 @@ const apply = async () => {
         for (let i = 0; i < response.data.dataVouchers.length; i++) {
             total += response.data.dataVouchers[i].value;
         }
-        console.log("total: " + total);
-        emit("valueInModalPromotion",slt);
+        // console.log(
+        //     "total: " + total,
+        //     "\n",
+        //     "id các item đã chọn: ",
+        //     slt.value
+        // );
+
+        emit("valueInModalPromotion", total, slt.value);
         // console.log(response.data.dataVouchers);
         // emit("closeModalPromotion");
     } catch (e) {
