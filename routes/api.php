@@ -24,8 +24,11 @@ Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 
+//VoucherPromotion
 Route::get('dataValueVoucherPromotion', [voucherController::class, 'dataValueVoucherPromotion']);
-Route::post('chooseVoucher', [voucherController::class, 'chooseVoucher']);
-// Route::get('choosedVoucher', [voucherController::class, 'choosedVoucher']);
+Route::post('chooseVoucherPromotion', [voucherController::class, 'chooseVoucherPromotion']);
+//VoucherPromotion
 
-// Route::post('uploads', [productController::class, 'uploadPublic']);
+//VoucherCode
+Route::get('dataValueVoucherCode', [voucherController::class, 'dataValueVoucherCode']);
+//VoucherCode

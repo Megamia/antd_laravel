@@ -7,6 +7,30 @@ use Illuminate\Http\Request;
 
 class voucherController extends Controller
 {
+    //VoucherCode
+    public function dataValueVoucherCode(Request $request)
+    {
+        $dataValueVoucherCode = value_voucher_promotion::all();
+        if ($dataValueVoucherCode->count() > 0) {
+            return response()->json(['status' => 1, 'dataValueVoucherCode' => $dataValueVoucherCode]);
+        } else {
+            return response()->json(['status' => 0, 'dataValueVoucherCode' => 'No dataValueVoucherCode']);
+        }
+    }
+    public function chooseVoucherCode(Request $request)
+    {
+        $data = $request->only('code');
+        $dataVouchers = value_voucher_promotion::whereIn('code', $data['code'])->get();
+
+        if ($dataVouchers->isNotEmpty()) {
+            return response()->json(['status' => 1, 'dataVouchers' => $dataVouchers]);
+        } else {
+            return response()->json(['status' => 0, 'dataVouchers' => 'no dataVouchers']);
+        }
+    }
+    //VoucherCode
+
+    //VoucherPromotion
     public function dataValueVoucherPromotion(Request $request)
     {
         $dataValueVoucherPromotion = value_voucher_promotion::all();
@@ -16,15 +40,20 @@ class voucherController extends Controller
             return response()->json(['status' => 0, 'dataValueVoucherPromotion' => 'No dataValueVoucherPromotion']);
         }
     }
-    public function chooseVoucher(Request $request)
+
+    public function chooseVoucherPromotion(Request $request)
     {
         $data = $request->only('id');
-        $dataVouchers = value_voucher_promotion::whereIn('id', $data['id'])->get();
+        $dataVouchersPromotion = value_voucher_promotion::whereIn('id', $data['id'])->get();
 
-        if ($dataVouchers->isNotEmpty()) {
-            return response()->json(['status' => 1, 'dataVouchers' => $dataVouchers]);
+        if ($dataVouchersPromotion->isNotEmpty()) {
+            return response()->json(['status' => 1, 'dataVouchersPromotion' => $dataVouchersPromotion]);
         } else {
-            return response()->json(['status' => 0, 'dataVouchers' => 'no dataVouchers']);
+            return response()->json(['status' => 0, 'dataVouchersPromotion' => 'no dataVouchersPromotion']);
         }
     }
+    //VoucherPromotion
+
+
+
 }

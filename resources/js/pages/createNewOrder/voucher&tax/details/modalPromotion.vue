@@ -122,20 +122,20 @@ const Cancel = () => {
 const apply = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/chooseVoucher`,
+            `${import.meta.env.VITE_APP_URL_API}/chooseVoucherPromotion`,
             {
                 id: slt.value,
             }
         );
 
         if (response.data.status === 1) {
-            // console.log("dataVouchers: ", response.data.dataVouchers);
+            // console.log("dataVouchersPromotion: ", response.data.dataVouchersPromotion);
         } else {
-            // console.log("dataVouchers: ", response.data.dataVouchers);
+            // console.log("dataVouchersPromotion: ", response.data.dataVouchersPromotion);
         }
         let total = 0;
-        for (let i = 0; i < response.data.dataVouchers.length; i++) {
-            total += response.data.dataVouchers[i].value;
+        for (let i = 0; i < response.data.dataVouchersPromotion.length; i++) {
+            total += response.data.dataVouchersPromotion[i].value;
         }
         // console.log(
         //     "total: " + total,
@@ -145,7 +145,7 @@ const apply = async () => {
         // );
 
         emit("valueInModalPromotion", total, slt.value);
-        // console.log(response.data.dataVouchers);
+        // console.log(response.data.dataVouchersPromotion);
         // emit("closeModalPromotion");
     } catch (e) {
         console.log("Error: ", e);
