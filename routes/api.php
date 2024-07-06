@@ -31,4 +31,6 @@ Route::post('chooseVoucherPromotion', [voucherController::class, 'chooseVoucherP
 
 //VoucherCode
 Route::get('dataValueVoucherCode', [voucherController::class, 'dataValueVoucherCode']);
+Route::post('chooseVoucherCode', [voucherController::class, 'chooseVoucherCode']);
+
 //VoucherCode

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('value_voucher_promotion', function (Blueprint $table) {
             $table->id();
             $table->string('text');
-            $table->float('value');
+            $table->string('value');
             $table->unsignedBigInteger('voucher_id');
             $table->foreign('voucher_id')->references('id')->on('vouchers');
             $table->timestamps();

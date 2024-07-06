@@ -134,8 +134,8 @@ const apply = async () => {
             // console.log("dataVouchersPromotion: ", response.data.dataVouchersPromotion);
         }
         let total = 0;
-        for (let i = 0; i < response.data.dataVouchersPromotion.length; i++) {
-            total += response.data.dataVouchersPromotion[i].value;
+        for (let i = 0; i < response.data.chooseVoucherPromotion.length; i++) {
+            total += parseFloat(response.data.chooseVoucherPromotion[i].value);
         }
         // console.log(
         //     "total: " + total,
@@ -144,7 +144,7 @@ const apply = async () => {
         //     slt.value
         // );
 
-        emit("valueInModalPromotion", total, slt.value);
+        emit("valueInModalPromotion", total.toFixed(3), slt.value);
         // console.log(response.data.dataVouchersPromotion);
         // emit("closeModalPromotion");
     } catch (e) {

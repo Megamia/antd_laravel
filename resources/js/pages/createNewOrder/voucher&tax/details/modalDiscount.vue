@@ -8,42 +8,20 @@
                     </div>
                     <div class="content">
                         <a-radio-group v-model:value="option">
-                            <a-radio :value="1" class="text radio"
-                                >Giảm giá theo phần trăm (%)</a-radio
-                            >
+                            <a-radio :value="1" class="text radio">Giảm giá theo phần trăm (%)</a-radio>
                             <div v-if="option === 1" class="inputDiv">
-                                <a-input
-                                    placeholder="Nhập số"
-                                    v-model:value="percentValue.percentText"
-                                    suffix="%"
-                                    required
-                                    type="number"
-                                />
+                                <a-input placeholder="Nhập số" v-model:value="percentValue.percentText" suffix="%"
+                                    required type="number" @change="percentValueNumberInput" />
                                 <span class="reasonText text">Lý do sửa</span>
-                                <a-input
-                                    placeholder="Nhập lý do"
-                                    v-model:value="percentValue.reasonText"
-                                />
+                                <a-input placeholder="Nhập lý do" v-model:value="percentValue.reasonText" />
                             </div>
-                            <a-radio
-                                :value="2"
-                                class="text radio"
-                                :class="{ radioDown: option === 2 }"
-                                >Giảm giá theo số tiền</a-radio
-                            >
+                            <a-radio :value="2" class="text radio" :class="{ radioDown: option === 2 }">Giảm giá theo số
+                                tiền</a-radio>
                             <div v-if="option === 2" class="inputDiv">
-                                <a-input
-                                    placeholder="Nhập số"
-                                    v-model:value="moneyValue.moneyText"
-                                    suffix="₫"
-                                    type="number"
-                                    required
-                                />
+                                <a-input placeholder="Nhập số" v-model:value="moneyValue.moneyText" suffix="₫" required
+                                    type="number" @change="moneyValueNumberInput" />
                                 <span class="reasonText text">Lý do sửa</span>
-                                <a-input
-                                    placeholder="Nhập lý do"
-                                    v-model:value="moneyValue.reasonText"
-                                />
+                                <a-input placeholder="Nhập lý do" v-model:value="moneyValue.reasonText" />
                             </div>
                         </a-radio-group>
                     </div>
@@ -72,13 +50,42 @@ const Cancel = () => {
 };
 
 const percentValue = ref({
-    percentText: "",
+    percentText: "0",
     reasonText: "",
 });
 const moneyValue = ref({
-    moneyText: "",
+    moneyText: "0",
     reasonText: "",
 });
+
+// Chưa hoàn thiện
+
+const percentValueNumberInput = () => {
+    let inputPercentValue = Number(percentValue.value.percentText);
+    if (percentValue.value.percentText !== "0") {
+        if (inputPercentValue < 0 || inputPercentValue > 100) {
+            alert("Yêu cầu nhập số % hợp lệ trong khoảng 0 đến 100%")
+            percentValue.value.percentText = "0";
+        } else {
+            percentValue.value.percentText = inputPercentValue;
+            console.log(inputPercentValue);
+        }
+    }
+}
+
+// Chưa hoàn thiện
+
+
+const moneyValueNumberInput = () => {
+    if (moneyValue.value.moneyText !== "0") {
+        let inputMoneyValue = Number(moneyValue.value.moneyText);
+        if (inputMoneyValue === 0) {
+            moneyValue.value.moneyText = "0";
+        } else {
+            moneyValue.value.moneyText = inputMoneyValue;
+        }
+    }
+}
 
 const checkEmpty = () => {
     return (
@@ -96,6 +103,7 @@ const apply = () => {
             console.log("moneyValue: ", moneyValue.value);
         }
     }
+
 };
 </script>
 <style scoped>
@@ -126,6 +134,7 @@ const apply = () => {
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
     overflow-y: auto;
+
     .title {
         display: flex;
         flex: 1;
@@ -134,6 +143,7 @@ const apply = () => {
         border-bottom: 1px solid #d9d9dd;
         padding: 10px 12px 10px 12px;
         gap: 10px;
+
         span {
             font-size: 16px;
             font-weight: bold;
@@ -146,11 +156,13 @@ const apply = () => {
         flex: 1;
         flex-direction: column;
         gap: 10px;
+
         .ant-radio-group {
             display: flex;
             flex: 1;
             flex-direction: column;
             padding-block: 10px;
+
             .inputDiv {
                 display: flex;
                 flex: 1;
@@ -159,21 +171,26 @@ const apply = () => {
                 margin: 0 0 10px 35px;
                 gap: 10px;
                 border-bottom: 1px solid #d9d9dd;
+
                 span {
                     border-radius: 0;
                 }
+
                 .reasonText {
                     font-size: 14px;
                 }
             }
+
             .text {
                 font-weight: bold;
             }
+
             .radio {
                 display: flex;
                 flex: 1;
                 padding: 0 0 0 10px;
             }
+
             .radioDown {
                 display: flex;
                 flex: 1;
@@ -183,9 +200,11 @@ const apply = () => {
             }
         }
     }
+
     .buttonDiv {
         display: flex;
         flex: 1;
+
         button {
             display: flex;
             flex: 1;
@@ -197,9 +216,11 @@ const apply = () => {
             background-color: white;
             font-weight: bold;
         }
+
         .buttonCancel {
             color: black;
         }
+
         .buttonApply {
             color: #1890ff;
         }

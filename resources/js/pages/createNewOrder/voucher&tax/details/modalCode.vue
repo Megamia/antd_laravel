@@ -4,15 +4,11 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="title">
-                        <span> Mã ưu đãi/ Coupon </span>
+                        <span>Mã ưu đãi/ Coupon </span>
                     </div>
                     <div class="content">
                         <span>Nhập mã</span>
-                        <input
-                            type="text"
-                            placeholder="Nhập lý do"
-                            v-model="inputCodeText"
-                        />
+                        <input type="text" placeholder="Nhập lý do" v-model="inputCodeText" />
                     </div>
                     <div class="buttonDiv">
                         <button class="button buttonCancel" @click="Cancel">
@@ -30,17 +26,40 @@
 
 <script setup>
 import { ref, defineEmits } from "vue";
+import axios from "axios";
 
-const emit = defineEmits(["closeModalCode"]);
+const emit = defineEmits(["closeModalCode","valueInModalCode"]);
 
 const inputCodeText = ref("");
+
+// const fetchData = async () => {
+//     const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/dataValueVoucherCode`)
+//     console.log(response.data.dataValueVoucherCode);
+    // console.log(response.data.dataValueVoucherCode.find(a => a.code === 'NHAPBUADI'));
+// }
+// onMounted(() => fetchData());
 
 const Cancel = () => {
     emit("closeModalCode");
 };
-const apply = () => {
-    console.log("Input: ", inputCodeText.value);
-};
+const dataVoucherCode = ref("");
+const apply = async () => {
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/chooseVoucherCode`, {
+            code: inputCodeText.value
+        })
+        if (response.data.status === 1) {
+            dataVoucherCode.value = response.data.chooseVoucherCode[0].value;
+            // console.log(dataVoucherCode.value);
+        } else if (response.data.status == 0) {
+            dataVoucherCode.value = response.data.chooseVoucherCode;
+            // console.log(dataVoucherCode.value);
+        }
+        emit("valueInModalCode",dataVoucherCode.value.toString());
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+}
 </script>
 <style scoped>
 .modal-mask {
@@ -70,6 +89,7 @@ const apply = () => {
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
     overflow-y: auto;
+
     .title {
         display: flex;
         flex: 1;
@@ -78,26 +98,31 @@ const apply = () => {
         border-bottom: 1px solid #d9d9dd;
         padding: 10px 12px 10px 12px;
         gap: 10px;
+
         span {
             font-size: 16px;
             font-weight: bold;
             line-height: 24px;
         }
     }
+
     .content {
         display: flex;
         flex: 1;
         flex-direction: column;
         padding: 16px 12px;
         gap: 10px;
+
         input {
             padding: 10px;
             border: 1px solid #d9d9dd;
         }
     }
+
     .buttonDiv {
         display: flex;
         flex: 1;
+
         button {
             display: flex;
             flex: 1;
@@ -109,9 +134,11 @@ const apply = () => {
             background-color: white;
             font-weight: bold;
         }
+
         .buttonCancel {
             color: black;
         }
+
         .buttonApply {
             color: #1890ff;
         }

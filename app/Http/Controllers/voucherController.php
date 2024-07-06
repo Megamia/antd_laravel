@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\value_voucher_promotion;
+use App\Models\value_voucher_code;
 use Illuminate\Http\Request;
 
 class voucherController extends Controller
@@ -10,8 +11,8 @@ class voucherController extends Controller
     //VoucherCode
     public function dataValueVoucherCode(Request $request)
     {
-        $dataValueVoucherCode = value_voucher_promotion::all();
-        if ($dataValueVoucherCode->count() > 0) {
+        $dataValueVoucherCode = value_voucher_code::all();
+        if ($dataValueVoucherCode->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataValueVoucherCode' => $dataValueVoucherCode]);
         } else {
             return response()->json(['status' => 0, 'dataValueVoucherCode' => 'No dataValueVoucherCode']);
@@ -20,12 +21,12 @@ class voucherController extends Controller
     public function chooseVoucherCode(Request $request)
     {
         $data = $request->only('code');
-        $dataVouchers = value_voucher_promotion::whereIn('code', $data['code'])->get();
+        $chooseVoucherCode = value_voucher_code::where('code', $data['code'])->get();
 
-        if ($dataVouchers->isNotEmpty()) {
-            return response()->json(['status' => 1, 'dataVouchers' => $dataVouchers]);
+        if ($chooseVoucherCode->isNotEmpty()) {
+            return response()->json(['status' => 1, 'chooseVoucherCode' => $chooseVoucherCode]);
         } else {
-            return response()->json(['status' => 0, 'dataVouchers' => 'no dataVouchers']);
+            return response()->json(['status' => 0, 'chooseVoucherCode' => 'no chooseVoucherCode']);
         }
     }
     //VoucherCode
@@ -34,7 +35,7 @@ class voucherController extends Controller
     public function dataValueVoucherPromotion(Request $request)
     {
         $dataValueVoucherPromotion = value_voucher_promotion::all();
-        if ($dataValueVoucherPromotion->count() > 0) {
+        if ($dataValueVoucherPromotion->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataValueVoucherPromotion' => $dataValueVoucherPromotion]);
         } else {
             return response()->json(['status' => 0, 'dataValueVoucherPromotion' => 'No dataValueVoucherPromotion']);
@@ -44,12 +45,12 @@ class voucherController extends Controller
     public function chooseVoucherPromotion(Request $request)
     {
         $data = $request->only('id');
-        $dataVouchersPromotion = value_voucher_promotion::whereIn('id', $data['id'])->get();
+        $chooseVoucherPromotion = value_voucher_promotion::whereIn('id', $data['id'])->get();
 
-        if ($dataVouchersPromotion->isNotEmpty()) {
-            return response()->json(['status' => 1, 'dataVouchersPromotion' => $dataVouchersPromotion]);
+        if ($chooseVoucherPromotion->isNotEmpty()) {
+            return response()->json(['status' => 1, 'chooseVoucherPromotion' => $chooseVoucherPromotion]);
         } else {
-            return response()->json(['status' => 0, 'dataVouchersPromotion' => 'no dataVouchersPromotion']);
+            return response()->json(['status' => 0, 'chooseVoucherPromotion' => 'no chooseVoucherPromotion']);
         }
     }
     //VoucherPromotion
