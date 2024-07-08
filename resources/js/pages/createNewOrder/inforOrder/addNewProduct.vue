@@ -89,8 +89,10 @@ import {
 } from "@kalimahapps/vue-icons";
 import modalFilterWithSelection from "./modalFilterWithSelection.vue";
 import { useRouter } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, defineEmits } from "vue";
 import axios from "axios";
+import eventBus from "../../../eventBus";
+const emit = defineEmits(["choosedProduct"]);
 
 const a = ref([]);
 // const selectedUser = ref("");
@@ -172,9 +174,33 @@ const addNewUser = () => {
 //         console.log("Lỗi: " + e);
 //     }
 // };
-const buttonSave = () => {
-    // alert("Chưa xử lý");
-    console.log(a.value.sort().toString());
+const buttonSave = async () => {
+    if (!a.value || a.value.length <= 0) {
+        console.log("Chưa chọn sản phẩm nào");
+    } else {
+        console.log(a.value.sort().toString());
+        // console.log(a.value);
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+                {
+                    id: a.value.sort().toString(),
+                }
+            );
+            if (response.data.status === 1) {
+                console.log(response.data.choosedProduct);
+                eventBus.product.idProduct = a.value.sort().toString();
+                console.log("evB: ", eventBus.product.idProduct);
+                router.back();
+                // emit("choosedProduct", response.data.choosedProduct);
+            } else {
+                console.log("No choosedProduct");
+            }
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    }
+    // console.log(typeof a.value.sort().toString());
 };
 // const test = (user) => {
 //     const index = a.value.indexOf(user);

@@ -18,30 +18,30 @@ class productController extends Controller
         }
     }
     public function upload(Request $request)
-{
-    $request->validate([
-        'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg',
-    ]);
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg',
+        ]);
 
-    if ($request->file()) {
-        $fileName = $request->file->getClientOriginalName();
-        $filePath = public_path('uploads');
+        if ($request->file()) {
+            $fileName = $request->file->getClientOriginalName();
+            $filePath = public_path('uploads');
 
-        if (!file_exists($filePath)) {
-            mkdir($filePath, 0755, true);
+            if (!file_exists($filePath)) {
+                mkdir($filePath, 0755, true);
+            }
+
+            if (file_exists($filePath . '/' . $fileName)) {
+                unlink($filePath . '/' . $fileName);
+            }
+
+            $request->file('file')->move($filePath, $fileName);
+
+            return response()->json(['success' => 'File uploaded successfully.', 'file_path' => '/uploads/' . $fileName]);
         }
 
-        if (file_exists($filePath . '/' . $fileName)) {
-            unlink($filePath . '/' . $fileName);
-        }
-
-        $request->file('file')->move($filePath, $fileName);
-
-        return response()->json(['success' => 'File uploaded successfully.', 'file_path' => '/uploads/' . $fileName]);
+        return response()->json(['error' => 'File upload failed.']);
     }
-
-    return response()->json(['error' => 'File upload failed.']);
-}
 
 
     public function showImg(Request $request)
@@ -93,6 +93,18 @@ class productController extends Controller
             return response()->json(['status' => 1, 'inforProduct' => $product]);
         } else {
             return response()->json(['status' => 0, 'inforProduct' => 'No product']);
+        }
+    }
+    public function choosedProduct(Request $request)
+    {
+        $data = $request->only('id');
+        $choosedProduct = product::whereIn('id', explode(',', $data['id']))->get();
+
+        if ($choosedProduct->isNotEmpty()) {
+            return response()->json(['status' => 1, 'choosedProduct' => $choosedProduct]);
+        } else {
+
+            return response()->json(['status' => 0, 'choosedProduct' => 'No choosedProduct']);
         }
     }
 }

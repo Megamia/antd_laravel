@@ -6,6 +6,12 @@ const eventBus = reactive({
     clear() {
         this.id = null;
     },
+    product: {
+        idProduct: null,
+        clearProduct() {
+            this.idProduct = null;
+        },
+    },
 });
 
 export default eventBus;

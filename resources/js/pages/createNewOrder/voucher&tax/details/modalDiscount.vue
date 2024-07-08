@@ -8,20 +8,44 @@
                     </div>
                     <div class="content">
                         <a-radio-group v-model:value="option">
-                            <a-radio :value="1" class="text radio">Giảm giá theo phần trăm (%)</a-radio>
+                            <a-radio :value="1" class="text radio"
+                                >Giảm giá theo phần trăm (%)</a-radio
+                            >
                             <div v-if="option === 1" class="inputDiv">
-                                <a-input placeholder="Nhập số" v-model:value="percentValue.percentText" suffix="%"
-                                    required type="number" @change="percentValueNumberInput" />
+                                <a-input
+                                    placeholder="Nhập số"
+                                    v-model:value="percentValue.percentText"
+                                    suffix="%"
+                                    required
+                                    type="number"
+                                    @change="percentValueNumberInput"
+                                />
                                 <span class="reasonText text">Lý do sửa</span>
-                                <a-input placeholder="Nhập lý do" v-model:value="percentValue.reasonText" />
+                                <a-input
+                                    placeholder="Nhập lý do"
+                                    v-model:value="percentValue.reasonText"
+                                />
                             </div>
-                            <a-radio :value="2" class="text radio" :class="{ radioDown: option === 2 }">Giảm giá theo số
-                                tiền</a-radio>
+                            <a-radio
+                                :value="2"
+                                class="text radio"
+                                :class="{ radioDown: option === 2 }"
+                                >Giảm giá theo số tiền</a-radio
+                            >
                             <div v-if="option === 2" class="inputDiv">
-                                <a-input placeholder="Nhập số" v-model:value="moneyValue.moneyText" suffix="₫" required
-                                    type="number" @change="moneyValueNumberInput" />
+                                <a-input
+                                    placeholder="Nhập số"
+                                    v-model:value="moneyValue.moneyText"
+                                    suffix="₫"
+                                    required
+                                    type="number"
+                                    @change="moneyValueNumberInput"
+                                />
                                 <span class="reasonText text">Lý do sửa</span>
-                                <a-input placeholder="Nhập lý do" v-model:value="moneyValue.reasonText" />
+                                <a-input
+                                    placeholder="Nhập lý do"
+                                    v-model:value="moneyValue.reasonText"
+                                />
                             </div>
                         </a-radio-group>
                     </div>
@@ -42,7 +66,7 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 
-const emit = defineEmits(["closeModalDiscount"]);
+const emit = defineEmits(["closeModalDiscount", "valueInModalDiscount"]);
 
 const option = ref(1);
 const Cancel = () => {
@@ -64,17 +88,16 @@ const percentValueNumberInput = () => {
     let inputPercentValue = Number(percentValue.value.percentText);
     if (percentValue.value.percentText !== "0") {
         if (inputPercentValue < 0 || inputPercentValue > 100) {
-            alert("Yêu cầu nhập số % hợp lệ trong khoảng 0 đến 100%")
+            alert("Yêu cầu nhập số % hợp lệ trong khoảng 0 đến 100%");
             percentValue.value.percentText = "0";
         } else {
             percentValue.value.percentText = inputPercentValue;
-            console.log(inputPercentValue);
+            // console.log(inputPercentValue);
         }
     }
-}
+};
 
 // Chưa hoàn thiện
-
 
 const moneyValueNumberInput = () => {
     if (moneyValue.value.moneyText !== "0") {
@@ -85,7 +108,7 @@ const moneyValueNumberInput = () => {
             moneyValue.value.moneyText = inputMoneyValue;
         }
     }
-}
+};
 
 const checkEmpty = () => {
     return (
@@ -93,17 +116,23 @@ const checkEmpty = () => {
         (moneyValue.value.moneyText && moneyValue.value.reasonText)
     );
 };
+
 const apply = () => {
     if (!checkEmpty()) {
         alert("Chưa nhập đủ");
     } else {
         if (option.value === 1) {
             console.log("percentValue: ", percentValue.value);
+            emit("valueInModalDiscount", percentValue.value.percentText, {
+                message: "percent",
+            });
         } else if (option.value === 2) {
             console.log("moneyValue: ", moneyValue.value);
+            emit("valueInModalDiscount", moneyValue.value.moneyText, {
+                message: "money",
+            });
         }
     }
-
 };
 </script>
 <style scoped>

@@ -18,11 +18,14 @@ Route::post('swapAnotherAddress', [addressController::class, 'swapAnotherAddress
 Route::delete('deleteAddress/{id}', [addressController::class, 'deleteAddress']);
 Route::get('dataAfterSwap', [addressController::class, 'dataAfterSwap']);
 
-Route::get('inforProduct', [productController::class, 'inforProduct']);
 
+// Product
+Route::get('inforProduct', [productController::class, 'inforProduct']);
 Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
+Route::post('choosedProduct', [productController::class, 'choosedProduct']);
+// Product
 
 //VoucherPromotion
 Route::get('dataValueVoucherPromotion', [voucherController::class, 'dataValueVoucherPromotion']);

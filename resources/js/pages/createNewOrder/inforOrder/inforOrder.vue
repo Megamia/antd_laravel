@@ -25,48 +25,61 @@
         </div>
         <div class="content" v-if="showOrder">
             <div class="totalProduct">
-                <div class="product">
-                    <div class="imgDiv">
-                        <a-image
+                <div v-if="dataProductSelected !== 'No choosedProduct'">
+                    <div
+                        class="product"
+                        v-for="dataProductSelectedItem in dataProductSelected"
+                        :key="dataProductSelectedItem.id"
+                    >
+                        <div class="imgDiv">
+                            <!-- <a-image
                             :width="80"
                             :height="80"
                             src="https://s3-alpha-sig.figma.com/img/27b2/3acc/b01a8548b32136d8258ebb5131b4b5b4?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ki-IpgNmUleGIka9Y2E6aih9HChCU90LUwrolhQyV2wTr~scB1GDPUIlkFAnATLM-4ooNUMCZtxvuS7a4ev~qkEX3TWeDmLStLTsNhYun6V~Pqd31vVyQ0aT~5lxaubUkgHOsblQaM6hOs3a72AUO-XS-0IvMb0y4ak2EfYOQz6ieqON4rnXmE48ggUitCy4Sk4MYeMsA95Xju0LavyvaTPmMreGLi8o6f28AVfpDaA74l2cKn3~-YWOWc2O07gnOEDX1s2HIDA1eV9nni28DLyjboOTd8D2HES26RgHze~0vZUplJJM7T7mqb0xIj48fl9ck1AB~2VbWp0EuZ8WyA__"
-                        />
-                    </div>
-                    <div class="detailProduct">
-                        <div class="products">
-                            <span class="nameProduct">
-                                Tên sản phẩm có phân loại</span
-                            >
-                            <span class="typeProduct"> Phân loại sản phẩm</span>
-                            <span class="costProduct">
-                                200.000đ
-                                <AnOutlinedEdit @click="clickShowModal"
-                            /></span>
+                        /> -->
+                            <img
+                                :src="dataProductSelectedItem.img"
+                                :width="80"
+                                :height="80"
+                            />
                         </div>
-                        <div class="changeQuantityOrder">
-                            <div class="buttonChangeQuantityOrder">
-                                <button
-                                    class="buttonAddOrder"
-                                    @click="buttonAddOrder"
+                        <div class="detailProduct">
+                            <div class="products">
+                                <span class="nameProduct">
+                                    {{ dataProductSelectedItem.name }}</span
                                 >
-                                    +
-                                </button>
-                                <input
-                                    class="inputQuantityOrder"
-                                    v-model="value1"
-                                    type="number"
-                                    required
-                                />
-                                <button
-                                    class="buttonDelOrder"
-                                    @click="buttonDelOrder"
+                                <span class="typeProduct">
+                                    {{ dataProductSelectedItem.tag }}</span
                                 >
-                                    -
-                                </button>
+                                <span class="costProduct">
+                                    {{ dataProductSelectedItem.price }}đ
+                                    <AnOutlinedEdit @click="clickShowModal"
+                                /></span>
                             </div>
-                            <div class="delOrderDiv">
-                                <span @click="nothing">Xóa</span>
+                            <div class="changeQuantityOrder">
+                                <div class="buttonChangeQuantityOrder">
+                                    <button
+                                        class="buttonAddOrder"
+                                        @click="buttonAddOrder"
+                                    >
+                                        +
+                                    </button>
+                                    <input
+                                        class="inputQuantityOrder"
+                                        v-model="value1"
+                                        type="number"
+                                        required
+                                    />
+                                    <button
+                                        class="buttonDelOrder"
+                                        @click="buttonDelOrder"
+                                    >
+                                        -
+                                    </button>
+                                </div>
+                                <div class="delOrderDiv">
+                                    <span @click="nothing">Xóa</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -120,8 +133,10 @@
             </div>
         </div>
         <div class="totalCostOrder">
-            <span class="countOrder">Tạm tính (8 sản phẩm)</span>
-            <span class="costOrder"> 2.900.000đ</span>
+            <span class="countOrder"
+                >Tạm tính ({{ countProduct }} sản phẩm)</span
+            >
+            <span class="costOrder"> {{ totalPrice + "đ" }}</span>
         </div>
     </div>
 </template>
@@ -135,7 +150,9 @@ import {
     AnOutlinedEdit,
 } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
+import eventBus from "../../../eventBus";
+import axios from "axios";
 
 const router = useRouter();
 const showOrder = ref(true);
@@ -167,6 +184,49 @@ const show = () => {
 const buttonAddOrder = () => {
     value1.value++;
 };
+
+const dataProductSelected = ref("");
+const fetchData = async () => {
+    const idProductSelected = ref("");
+    if (eventBus.product.idProduct) {
+        idProductSelected.value = eventBus.product.idProduct;
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+                {
+                    id: idProductSelected.value,
+                }
+            );
+            if (response.data.status === 1) {
+                dataProductSelected.value = response.data.choosedProduct;
+                
+                //Chưa hoàn thiện
+                for (let i = 0; i < response.data.choosedProduct.length; i++) {
+                    totalPrice.value += parseFloat(
+                        response.data.choosedProduct[i].price
+                    );
+                    console.log(
+                        parseFloat(response.data.choosedProduct[i].price)
+                    );
+                }
+                //Chưa hoàn thiện
+
+                countProduct = response.data.choosedProduct.length;
+            } else if (response.data.status == 0) {
+                dataProductSelected.value = response.data.choosedProduct;
+            }
+            // console.log(dataProductSelected.value);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    } else {
+        dataProductSelected.value = "No choosedProduct";
+    }
+};
+
+let countProduct = 0;
+onMounted(() => fetchData());
+
 const buttonDelOrder = () => {
     if (value1.value <= 0) {
         return (value1.value = 0);
@@ -174,6 +234,9 @@ const buttonDelOrder = () => {
         value1.value--;
     }
 };
+
+const totalPrice = ref("");
+let sum = 0;
 
 const nothing = () => {
     alert("Chưa xử lý sự kiện này");

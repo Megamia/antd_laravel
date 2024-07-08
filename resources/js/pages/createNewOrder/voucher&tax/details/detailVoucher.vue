@@ -7,29 +7,48 @@
         <div class="content">
             <div class="inputCode itemContent" @click="showModalCode">
                 <div class="left">
-                    <img src="../../../../../../public/img/c6d6ecaa5187c8e181b28cfcb4ddbf3b.png" class="img" />
+                    <img
+                        src="../../../../../../public/img/c6d6ecaa5187c8e181b28cfcb4ddbf3b.png"
+                        class="img"
+                    />
                     <span>Mã ưu đãi/ Coupon</span>
                 </div>
                 <div class="right">
                     <span :class="{ valueSelected: totalCode !== 0 }">
-                        {{ (totalCode !== 0 || total === 'no chooseVoucherCode') ? totalCode + "đ" : "Nhập mã" }}
+                        {{
+                            totalCode !== 0 || total === "no chooseVoucherCode"
+                                ? totalCode + "đ"
+                                : "Nhập mã"
+                        }}
                         <AkChevronRightSmall />
                     </span>
                 </div>
             </div>
-            <modalCode v-if="isShowModalCode" @close-modal-code="showModalCode"
-                @value-in-modal-code="valueInModalCode" />
+            <modalCode
+                v-if="isShowModalCode"
+                @close-modal-code="showModalCode"
+                @value-in-modal-code="valueInModalCode"
+            />
             <div class="inputDiscount itemContent" @click="showModalDiscount">
                 <div class="left">
                     <span>Chiết khấu</span>
                 </div>
                 <div class="right">
-                    <span>Nhập chiết khấu
+                    <span :class="{ valueSelected: totalDiscount !== 0 }"
+                        >{{
+                            totalDiscount !== 0
+                                ? totalDiscount
+                                : "Nhập chiết khấu"
+                        }}
                         <AkChevronRightSmall />
                     </span>
                 </div>
             </div>
-            <modalDiscount v-if="isShowModalDiscount" @close-modal-discount="showModalDiscount" />
+            <modalDiscount
+                v-if="isShowModalDiscount"
+                @close-modal-discount="showModalDiscount"
+                @value-in-modal-discount="valueInModalDiscount"
+            />
             <div class="inputPromotion itemContent" @click="showModalPromotion">
                 <div class="left">
                     <span>Khuyến mãi</span>
@@ -41,13 +60,19 @@
                     </span>
                 </div>
             </div>
-            <modalPromotion v-if="isShowModalPromotion" @close-modal-promotion="showModalPromotion"
-                @value-in-modal-promotion="valueInModalPromotion" :sltedId="selectedInModalPromotion.sltId" />
+            <modalPromotion
+                v-if="isShowModalPromotion"
+                @close-modal-promotion="showModalPromotion"
+                @value-in-modal-promotion="valueInModalPromotion"
+                :sltedId="selectedInModalPromotion.sltId"
+            />
         </div>
         <div class="saveDive">
             <div class="totalDiv">
                 <span> Tổng cộng giảm giá</span>
-                <span class="totalValue">{{ total !== 0 ? total + "đ" : '' }} </span>
+                <span class="totalValue"
+                    >{{ total !== 0 ? total + "đ" : "" }}
+                </span>
             </div>
             <a-button type="primary" @click="buttonSave">Lưu</a-button>
         </div>
@@ -83,20 +108,30 @@ const valueInModalCode = (dataValueInModalCode) => {
     totalCode = dataValueInModalCode;
     console.log("Giá được giảm từ modal Code: ", totalCode);
     fetchTotal();
-}
+};
 // ModalCode
 
 // ModalDiscount
-
 
 const isShowModalDiscount = ref(false);
 
 const showModalDiscount = () => {
     isShowModalDiscount.value = !isShowModalDiscount.value;
 };
+let totalDiscount = 0;
+
+const valueInModalDiscount = (dataValueInModalDiscount, message) => {
+    isShowModalDiscount.value = !isShowModalDiscount.value;
+    if (message.message === "percent") {
+        totalDiscount = dataValueInModalDiscount + "%";
+    } else if (message.message === "money") {
+        totalDiscount = dataValueInModalDiscount;
+    }
+    console.log("Phần trăm được giảm từ modal Discount: ", totalDiscount);
+    fetchTotal();
+};
 
 // ModalDiscount
-
 
 //ModalPromotion
 
@@ -145,6 +180,7 @@ const buttonSave = () => {
         totalCode ? totalCode : 0,
         "\n",
         "Chiết khấu: ",
+        totalDiscount ? totalDiscount : 0,
         // discountValue.value ? discountValue.value : "0",
         "\n",
         "Khuyến mãi: ",
@@ -158,13 +194,22 @@ const buttonSave = () => {
     return;
 };
 const fetchTotal = () => {
-    total.value =
-        (parseFloat(totalCode) +
-            parseFloat(totalPro)).toFixed(3);
-    // console.log("Tổng giá được giảm: ", total.value);
-    // console.log(typeof totalCode, typeof totalPro);
+    // if (totalDiscount.includes("%")) {
+    //     let numberTotalDiscount = parseFloat(totalDiscount.replace("%", ""));
+    //     total.value = (
+    //         parseFloat(totalCode) +
+    //         numberTotalDiscount +
+    //         parseFloat(totalPro)
+    //     ).toFixed(3);
+    // } else {
+    //     total.value = (
+    //         parseFloat(totalCode) +
+    //         totalDiscount +
+    //         parseFloat(totalPro)
+    //     ).toFixed(3);
+    // }
+    total.value = (parseFloat(totalCode) + parseFloat(totalPro)).toFixed(3);
 };
-// onMounted(() => fetchTotal());
 </script>
 
 <style scoped>
