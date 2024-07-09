@@ -122,12 +122,12 @@ const apply = () => {
         alert("Chưa nhập đủ");
     } else {
         if (option.value === 1) {
-            console.log("percentValue: ", percentValue.value);
+            // console.log("percentValue: ", percentValue.value);
             emit("valueInModalDiscount", percentValue.value.percentText, {
                 message: "percent",
             });
         } else if (option.value === 2) {
-            console.log("moneyValue: ", moneyValue.value);
+            // console.log("moneyValue: ", moneyValue.value);
             emit("valueInModalDiscount", moneyValue.value.moneyText, {
                 message: "money",
             });

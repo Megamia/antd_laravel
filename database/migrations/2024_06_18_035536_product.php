@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('tag');
             $table->integer('quantity');
             $table->string('price');
+            $table->integer('numberSelected')->default(1);
             $table->string('img', 10000);
         });
 
@@ -27,6 +28,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '2',
                 'price' => '249.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/b01a8548b32136d8258ebb5131b4b5b4.jfif'
             ],
             [
@@ -34,6 +36,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '46',
                 'price' => '2.049.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/dd00e9636746a2996dfaf29abd7631b3.jfif'
             ],
             [
@@ -41,6 +44,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '0',
                 'price' => '1.249.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/a420b252cec7770c3d6e9d3dff2a3db4.jfif'
             ],
             [
@@ -48,6 +52,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '29',
                 'price' => '249.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/0b936eb81d043d5545d8b6c5a271f7d6.jfif'
             ],
             [
@@ -55,6 +60,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '161',
                 'price' => '249.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/4275c1c38fbd2f436e76c674485646e1.jfif'
             ],
             [
@@ -62,6 +68,7 @@ return new class extends Migration
                 'tag' => 'Phân loại sản phẩm',
                 'quantity' => '2',
                 'price' => '249.000',
+                'numberSelected' => '1',
                 'img' => 'http://127.0.0.1:8000/uploads/680c37df0e9b8e211650a3298c009484.jfif'
             ],
         ];
@@ -71,6 +78,7 @@ return new class extends Migration
             $address->tag = $item['tag'];
             $address->quantity = $item['quantity'];
             $address->price = $item['price'];
+            $address->numberSelected = $item['numberSelected'];
             $address->img = $item['img'];
             $address->save();
         }

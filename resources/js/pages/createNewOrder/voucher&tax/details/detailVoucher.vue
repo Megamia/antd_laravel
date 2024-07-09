@@ -87,12 +87,21 @@ import {
 import modalCode from "./modalCode.vue";
 import modalDiscount from "./modalDiscount.vue";
 import modalPromotion from "./modalPromotion.vue";
-import { ref } from "vue";
-
+import { ref, onMounted } from "vue";
+import eventBus from "../../../../eventBus";
 const router = useRouter();
 const back = () => {
     router.back();
 };
+const fetchData = () => {
+    if (eventBus.product.priceProduct !== 0) {
+        console.log("evBPrice: " + eventBus.product.priceProduct);
+        // console.log("discount: " + totalPrice, typeof totalPrice);
+    } else {
+        console.log("Chưa chọn sản phẩm nào");
+    }
+};
+onMounted(() => fetchData());
 
 // ModalCode
 
@@ -180,8 +189,7 @@ const buttonSave = () => {
         totalCode ? totalCode : 0,
         "\n",
         "Chiết khấu: ",
-        totalDiscount ? totalDiscount : 0,
-        // discountValue.value ? discountValue.value : "0",
+        totalPrice ? totalPrice : 0,
         "\n",
         "Khuyến mãi: ",
         totalPro ? totalPro : 0,
@@ -193,14 +201,23 @@ const buttonSave = () => {
 
     return;
 };
+
+// let priceProduct = parseFloat(eventBus.product.priceProduct);
+const totalPrice = ref("");
+let numberTotalDiscount = 0;
+totalPrice.value = totalDiscount.toLocaleString("de-DE", {
+    minimumFractionDigits: 2,
+
+    maximumFractionDigits: 2,
+});
 const fetchTotal = () => {
     // if (totalDiscount.includes("%")) {
-    //     let numberTotalDiscount = parseFloat(totalDiscount.replace("%", ""));
-    //     total.value = (
-    //         parseFloat(totalCode) +
-    //         numberTotalDiscount +
-    //         parseFloat(totalPro)
-    //     ).toFixed(3);
+    //     let priceProduct = parseFloat(
+    //         eventBus.product.priceProduct.replace(/\./g, "").replace(/,/g, ".")
+    //     );
+    //     numberTotalDiscount = parseFloat(totalDiscount.replace("%", ""));
+    //     totalDiscount = (numberTotalDiscount * priceProduct) / 100;
+    //     total.value = (parseFloat(totalCode) + parseFloat(totalPro)).toFixed(3);
     // } else {
     //     total.value = (
     //         parseFloat(totalCode) +
@@ -208,7 +225,11 @@ const fetchTotal = () => {
     //         parseFloat(totalPro)
     //     ).toFixed(3);
     // }
-    total.value = (parseFloat(totalCode) + parseFloat(totalPro)).toFixed(3);
+    total.value = (
+        parseFloat(totalCode) +
+        // totalDiscount +
+        parseFloat(totalPro)
+    ).toFixed(3);
 };
 </script>
 

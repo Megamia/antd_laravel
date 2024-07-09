@@ -13,6 +13,7 @@ class product extends Model
         'tag',
         'quantity',
         'price',
+        'numberSelected',
         'img'
     ];
     public $timestamps = false;

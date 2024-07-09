@@ -72,8 +72,9 @@
 
                 </a-radio-group> -->
             </div>
-            <!-- <div style="height: 1000px" /> -->
+            <div style="height: 1000px" />
         </div>
+
         <div class="saveDive">
             <span> Đã chọn ({{ a.length }}) sản phẩm</span>
             <a-button type="primary" @click="buttonSave">Lưu</a-button>
@@ -355,7 +356,7 @@ const filter = computed(() => {
     }
 
     .saveDive {
-        position: fixed;
+        position: absolute; /* fixed*/
         background-color: white;
         bottom: 0;
         width: 100%;

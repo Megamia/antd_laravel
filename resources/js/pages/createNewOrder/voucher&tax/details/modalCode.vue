@@ -55,7 +55,7 @@ const apply = async () => {
             valueCode.value = respone.data.chooseVoucherCode;
         }
         respone.data.chooseVoucherCode.forEach((data) => {
-            console.log("Input: ", data.value);
+            // console.log("Input: ", data.value);
             emit("valueInModalCode", data.value);
         });
     } catch (e) {

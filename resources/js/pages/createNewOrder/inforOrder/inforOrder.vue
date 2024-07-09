@@ -60,31 +60,50 @@
                                 <div class="buttonChangeQuantityOrder">
                                     <button
                                         class="buttonAddOrder"
-                                        @click="buttonAddOrder"
+                                        @click="
+                                            buttonAddOrder(
+                                                dataProductSelectedItem.id
+                                            )
+                                        "
                                     >
                                         +
                                     </button>
+
                                     <input
                                         class="inputQuantityOrder"
-                                        v-model="value1"
+                                        v-model="
+                                            dataProductSelectedItem.numberSelected
+                                        "
                                         type="number"
                                         required
                                     />
                                     <button
                                         class="buttonDelOrder"
-                                        @click="buttonDelOrder"
+                                        @click="
+                                            buttonDelOrder(
+                                                dataProductSelectedItem.id
+                                            )
+                                        "
                                     >
                                         -
                                     </button>
                                 </div>
                                 <div class="delOrderDiv">
-                                    <span @click="nothing">Xóa</span>
+                                    <span
+                                        @click="
+                                            nothing(
+                                                dataProductSelectedItem.price,
+                                                dataProductSelectedItem.numberSelected
+                                            )
+                                        "
+                                        >Xóa</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="product">
+                <!-- <div class="product">
                     <div class="imgDiv">
                         <a-image
                             :width="80"
@@ -129,11 +148,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="totalCostOrder">
-            <span class="countOrder"
+            <span class="countOrder" @click="test"
                 >Tạm tính ({{ countProduct }} sản phẩm)</span
             >
             <span class="costOrder"> {{ totalPrice + "đ" }}</span>
@@ -153,6 +172,10 @@ import { useRouter } from "vue-router";
 import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 import axios from "axios";
+
+const test = () => {
+    console.log(eventBus.product.priceProduct);
+};
 
 const router = useRouter();
 const showOrder = ref(true);
@@ -176,16 +199,63 @@ const clickShowModal = () => {
 };
 const emit = defineEmits(["show", "showModal"]);
 
-const value1 = ref(1);
 const show = () => {
     showOrder.value = !showOrder.value;
     emit("show");
 };
-const buttonAddOrder = () => {
-    value1.value++;
+const buttonAddOrder = (id) => {
+    console.log("id:", id);
+    const product = dataProductSelected.value.find((item) => item.id === id);
+    if (product && product.numberSelected < product.quantity) {
+        product.numberSelected++;
+        // console.log(product.numberSelected, product.quantity);
+        fetchTotalPrice();
+    } else {
+        alert("Vượt quá số lượng tồn kho");
+    }
+};
+const buttonDelOrder = (id) => {
+    console.log("id:", id);
+    const product = dataProductSelected.value.find((item) => item.id === id);
+    if (product)
+        if (product.numberSelected <= 0) {
+            return (product.numberSelected = 0);
+        } else {
+            product.numberSelected--;
+        }
+    fetchTotalPrice();
 };
 
 const dataProductSelected = ref("");
+const totalPrice = ref("");
+
+const fetchTotalPrice = () => {
+    let totalPriceNumber = 0;
+
+    for (let i = 0; i < dataProductSelected.value.length; i++) {
+        const priceProduct = parseFloat(
+            dataProductSelected.value[i].price
+                .replace(/\./g, "")
+                .replace(/,/g, ".")
+        );
+        let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
+        totalPriceNumber += priceProduct * numberSelectedProduct;
+        // console.log(
+        //     "priceProduct: " + priceProduct,
+        //     "\n",
+        //     "quantityProduct: " + value1.value
+        // );
+    }
+
+    totalPrice.value = totalPriceNumber.toLocaleString("de-DE", {
+        minimumFractionDigits:2,
+        maximumFractionDigits: 2,
+    });
+    eventBus.product.priceProduct = totalPrice.value;
+
+    // console.log("totalPrice: " + totalPrice, "type: ", typeof totalPrice.value);
+};
+
 const fetchData = async () => {
     const idProductSelected = ref("");
     if (eventBus.product.idProduct) {
@@ -199,19 +269,9 @@ const fetchData = async () => {
             );
             if (response.data.status === 1) {
                 dataProductSelected.value = response.data.choosedProduct;
-                
-                //Chưa hoàn thiện
-                for (let i = 0; i < response.data.choosedProduct.length; i++) {
-                    totalPrice.value += parseFloat(
-                        response.data.choosedProduct[i].price
-                    );
-                    console.log(
-                        parseFloat(response.data.choosedProduct[i].price)
-                    );
-                }
-                //Chưa hoàn thiện
-
+                fetchTotalPrice();
                 countProduct = response.data.choosedProduct.length;
+                return totalPrice;
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
@@ -227,19 +287,11 @@ const fetchData = async () => {
 let countProduct = 0;
 onMounted(() => fetchData());
 
-const buttonDelOrder = () => {
-    if (value1.value <= 0) {
-        return (value1.value = 0);
-    } else {
-        value1.value--;
-    }
-};
+// let sum = 0;
 
-const totalPrice = ref("");
-let sum = 0;
-
-const nothing = () => {
-    alert("Chưa xử lý sự kiện này");
+const nothing = (a, b) => {
+    // alert("Chưa xử lý sự kiện này");
+    console.log(a, b);
 };
 </script>
 

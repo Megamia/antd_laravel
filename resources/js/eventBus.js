@@ -11,6 +11,7 @@ const eventBus = reactive({
         clearProduct() {
             this.idProduct = null;
         },
+        priceProduct: 0,
     },
 });
 
