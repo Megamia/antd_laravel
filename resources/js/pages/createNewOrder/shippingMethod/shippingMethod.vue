@@ -1,5 +1,5 @@
 <template>
-    <div class="mainShippingMethod" @click="nothing">
+    <div class="mainShippingMethod" @click="closeModalShipping">
         <div class="title">
             <span class="titleTextUp">Phương thức vận chuyển</span>
             <span class="titleTextDown">Nhận hàng trực tiếp</span>
@@ -10,9 +10,38 @@
             </span>
         </div>
     </div>
+    <modalShippingMethod
+        v-if="isModalShipping"
+        @close-modal-shipping="closeModalShipping"
+        @value-in-modal-shipping="valueInModalShipping"
+    />
 </template>
+
 <script setup>
 import { AkChevronRight } from "@kalimahapps/vue-icons";
+import modalShippingMethod from "./detail/modalShippingMethod.vue";
+import { ref } from "vue";
+
+//ModalShipping
+const isModalShipping = ref(false);
+const valueShipping = ref("0");
+
+const closeModalShipping = () => {
+    isModalShipping.value = !isModalShipping.value;
+};
+const valueInModalShipping = (data1) => {
+    isModalShipping.value = !isModalShipping.value;
+    valueShipping.value = data1.toLocaleString("de-DE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+    valueShipping.value = valueShipping.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+    );
+    console.log(valueShipping.value);
+};
+//ModalShipping
 
 const nothing = () => {
     alert("Chưa xử lý sự kiện này");
@@ -50,7 +79,7 @@ const nothing = () => {
         flex: 1;
         justify-content: end;
         align-items: center;
-        color: #00000073
+        color: #878a99;
     }
 }
 </style>

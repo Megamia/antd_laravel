@@ -21,11 +21,15 @@
                 @close-modal-payment="closeModalPayment"
                 @value-in-modal-payment="valueInModalPayment"
             />
-            <div class="statusPayment">
+            <div class="statusPayment selectType">
                 <span>Đã thanh toán</span>
                 <span class="isPaid"
                     ><a-switch v-model:checked="checked"
                 /></span>
+            </div>
+            <div class="source">
+                <span>Nguồn đơn</span>
+                <span class="sell">Bán hàng</span>
             </div>
         </div>
     </div>
@@ -85,7 +89,8 @@ const nothing = () => {
         padding-inline: 10px;
 
         .selectType,
-        .statusPayment {
+        .statusPayment,
+        .source {
             display: flex;
             flex: 1;
             padding-block: 10px;
@@ -96,7 +101,8 @@ const nothing = () => {
             }
 
             .choosePaymentMethod,
-            .isPaid {
+            .isPaid,
+            .sell {
                 display: flex;
                 flex: 1;
                 justify-content: end;
@@ -107,6 +113,9 @@ const nothing = () => {
 
         .selectType {
             border-bottom: 1px solid #d9d9d9;
+        }
+        .source {
+            border: 0;
         }
     }
 }
