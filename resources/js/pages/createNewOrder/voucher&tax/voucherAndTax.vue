@@ -1,23 +1,74 @@
 <template>
     <div class="mainVoucherAndTax">
         <!-- <div class="voucher" @click="nothing"> -->
-            <RouterLink to="/detailVoucher" class="voucher">
-                <span class="name">Giảm giá</span>
-                <span class="cost"> -30.000đ <AkChevronRight /></span>
-            </RouterLink>
+        <RouterLink to="/detailVoucher" class="voucher">
+            <span class="name">Giảm giá</span>
+            <span class="cost"> -30.000đ <AkChevronRight /></span>
+        </RouterLink>
         <!-- </div> -->
-        <div class="ship" @click="nothing">
+        <div class="ship" @click="closeModalShip">
             <span class="name">Phí ship</span>
-            <span class="cost"> 20.000đ <AkChevronRight /></span>
+            <span class="cost"> {{ valueShip }}đ <AkChevronRight /></span>
         </div>
-        <div class="VAT" @click="nothing">
+        <modalShip
+            v-if="isModalShip"
+            @close-modal-ship="closeModalShip"
+            @value-in-modal-ship="valueInModalShip"
+        />
+        <div class="VAT" @click="closeModalVAT">
             <span class="name">Thuế VAT (10%)</span>
-            <span class="cost"> 2.000đ <AkChevronRight /></span>
+            <span class="cost"> {{valueVAT}}đ <AkChevronRight /></span>
         </div>
+        <modalVAT
+            v-if="isModalVAT"
+            @close-modal-VAT="closeModalVAT"
+            @value-in-modal-VAT="valueInModalVAT"
+        />
     </div>
 </template>
 <script setup>
 import { AkChevronRight } from "@kalimahapps/vue-icons";
+import modalShip from "./details/modalShip.vue";
+import modalVAT from "./details/modalVAT.vue";
+import { ref, defineEmits } from "vue";
+
+const emit = defineEmits(["closeModalShip"]);
+
+//ModalShip
+const isModalShip = ref(false);
+const valueShip = ref("0");
+
+const closeModalShip = () => {
+    isModalShip.value = !isModalShip.value;
+};
+const valueInModalShip = (data1) => {
+    isModalShip.value = !isModalShip.value;
+    valueShip.value = data1.toLocaleString("de-DE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+    valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    console.log(valueShip.value);
+};
+//ModalShip
+
+//ModalVAT
+const isModalVAT = ref(false);
+const valueVAT = ref("0");
+
+const closeModalVAT = () => {
+    isModalVAT.value = !isModalVAT.value;
+};
+const valueInModalVAT = (data1) => {
+    isModalVAT.value = !isModalVAT.value;
+    valueVAT.value = data1.toLocaleString("de-DE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+    valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    console.log(valueVAT.value);
+};
+//ModalVAT
 
 const nothing = () => {
     alert("Chưa xử lý sự kiện này");
@@ -40,7 +91,7 @@ const nothing = () => {
         flex-direction: row;
         text-align: center;
         border-bottom: 1px solid #0000000f;
-        color:black;
+        color: black;
         text-decoration: none;
         span {
             display: flex;
