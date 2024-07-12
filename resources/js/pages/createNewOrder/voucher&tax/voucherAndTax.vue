@@ -3,7 +3,14 @@
         <!-- <div class="voucher" @click="nothing"> -->
         <RouterLink to="/detailVoucher" class="voucher">
             <span class="name">Giảm giá</span>
-            <span class="cost"> -30.000đ <AkChevronRight /></span>
+            <span class="cost">
+                {{
+                    eventBus.voucher.valueVoucher
+                        ? eventBus.voucher.valueVoucher + "đ"
+                        : "0đ"
+                }}
+                <AkChevronRight
+            /></span>
         </RouterLink>
         <!-- </div> -->
         <div class="ship" @click="closeModalShip">
@@ -17,7 +24,7 @@
         />
         <div class="VAT" @click="closeModalVAT">
             <span class="name">Thuế VAT (10%)</span>
-            <span class="cost"> {{valueVAT}}đ <AkChevronRight /></span>
+            <span class="cost"> {{ valueVATFinal }}đ <AkChevronRight /></span>
         </div>
         <modalVAT
             v-if="isModalVAT"
@@ -30,10 +37,13 @@
 import { AkChevronRight } from "@kalimahapps/vue-icons";
 import modalShip from "./details/modalShip.vue";
 import modalVAT from "./details/modalVAT.vue";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
+import eventBus from "../../../eventBus";
 
 const emit = defineEmits(["closeModalShip"]);
-
+onMounted(() => {
+    console.log(eventBus.voucher.valueVoucher);
+});
 //ModalShip
 const isModalShip = ref(false);
 const valueShip = ref("0");
@@ -54,19 +64,30 @@ const valueInModalShip = (data1) => {
 
 //ModalVAT
 const isModalVAT = ref(false);
-const valueVAT = ref("0");
-
+let valueVAT = 0;
+const valueVATFinal = ref("0");
 const closeModalVAT = () => {
     isModalVAT.value = !isModalVAT.value;
 };
 const valueInModalVAT = (data1) => {
     isModalVAT.value = !isModalVAT.value;
-    valueVAT.value = data1.toLocaleString("de-DE", {
+    // console.log(
+    //     eventBus.product.priceProduct,
+    //     typeof eventBus.product.priceProduct,
+    //     data1,
+    //     typeof data1
+    // );
+    valueVAT = (eventBus.product.priceProduct * data1) / 100;
+
+    valueVATFinal.value = valueVAT.toLocaleString("de-DE", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
-    valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    console.log(valueVAT.value);
+    valueVATFinal.value = valueVATFinal.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+    );
+    // console.log(valueVATFinal.value);
 };
 //ModalVAT
 

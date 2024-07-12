@@ -78,6 +78,7 @@ const ClickShowModal = () => {
 .mainCreateNewOrderLayout {
   display: flex;
   flex: 1;
+  height: 100%;
   flex-direction: column;
   background-color: #f0f2f5;
   gap: 20px;

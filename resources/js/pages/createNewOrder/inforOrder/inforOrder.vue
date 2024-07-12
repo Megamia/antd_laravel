@@ -248,10 +248,11 @@ const fetchTotalPrice = () => {
     }
 
     totalPrice.value = totalPriceNumber.toLocaleString("de-DE", {
-        minimumFractionDigits:2,
+        minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
-    eventBus.product.priceProduct = totalPrice.value;
+    eventBus.product.priceProduct = totalPriceNumber;
+    
 
     // console.log("totalPrice: " + totalPrice, "type: ", typeof totalPrice.value);
 };

@@ -11,6 +11,16 @@
                             <a-radio :value="1">Nhận hàng trực tiếp</a-radio>
                             <a-radio :value="2">Tự giao hàng</a-radio>
                             <a-radio :value="3">Đối tác vận chuyển</a-radio>
+                            <a-select
+                                v-if="selection === 3"
+                                v-model:value="value"
+                                show-search
+                                placeholder="Chọn đối tác"
+                                style="color: black"
+                                :options="options"
+                                :filter-option="filterOption"
+                                @change="handleChange"
+                            ></a-select>
                         </a-radio-group>
                     </div>
                     <div class="buttonDiv">
@@ -34,6 +44,22 @@ import { ref, defineEmits } from "vue";
 const emit = defineEmits(["closeModalShipping", "valueInModalShipping"]);
 const selection = ref(1);
 const selectionText = ref("");
+
+//Selection
+const value = ref(null);
+const options = ref([
+    { value: "jack", label: "Jack" },
+    { value: "lucy", label: "Lucy" },
+    { value: "tom", label: "Tom" },
+]);
+const filterOption = (input, option) => {
+    return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
+const handleChange = (value) => {
+    console.log(`selected ${value}`);
+};
+//Selection
+
 const Cancel = () => {
     emit("closeModalShipping");
 };

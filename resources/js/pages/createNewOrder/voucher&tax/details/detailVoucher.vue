@@ -34,10 +34,13 @@
                     <span>Chiết khấu</span>
                 </div>
                 <div class="right">
-                    <span :class="{ valueSelected: totalDiscount !== 0 }"
+                    <span
+                        :class="{
+                            valueSelected: totalDiscount !== 0,
+                        }"
                         >{{
                             totalDiscount !== 0
-                                ? totalDiscount
+                                ? valueDiscount + "đ"
                                 : "Nhập chiết khấu"
                         }}
                         <AkChevronRightSmall />
@@ -127,16 +130,25 @@ const isShowModalDiscount = ref(false);
 const showModalDiscount = () => {
     isShowModalDiscount.value = !isShowModalDiscount.value;
 };
+const valueDiscount = ref("0");
 let totalDiscount = 0;
 
 const valueInModalDiscount = (dataValueInModalDiscount, message) => {
     isShowModalDiscount.value = !isShowModalDiscount.value;
     if (message.message === "percent") {
-        totalDiscount = dataValueInModalDiscount + "%";
+        totalDiscount =
+            (eventBus.product.priceProduct * dataValueInModalDiscount) / 100;
     } else if (message.message === "money") {
         totalDiscount = dataValueInModalDiscount;
     }
-    console.log("Phần trăm được giảm từ modal Discount: ", totalDiscount);
+    valueDiscount.value = totalDiscount.toLocaleString("de-DE", {
+        maximumFractionDigits: 2,
+    });
+    valueDiscount.value = valueDiscount.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+    );
+    console.log("Phần trăm được giảm từ modal Discount: ", valueDiscount.value);
     fetchTotal();
 };
 
@@ -189,7 +201,7 @@ const buttonSave = () => {
         totalCode ? totalCode : 0,
         "\n",
         "Chiết khấu: ",
-        totalPrice ? totalPrice : 0,
+        valueDiscount.value ? valueDiscount.value : 0,
         "\n",
         "Khuyến mãi: ",
         totalPro ? totalPro : 0,
@@ -197,39 +209,45 @@ const buttonSave = () => {
         "Total: ",
         total.value
     );
-    // console.log(typeof totalCode, typeof totalPro);
+    if (total.value === "0") {
+        eventBus.voucher.clearValueVoucher();
+    }
+    // console.log(total.value, typeof total.value, eventBus.voucher.valueVoucher);
+    router.back();
 
-    return;
+    // console.log(typeof totalCode, typeof totalPro);
 };
 
 // let priceProduct = parseFloat(eventBus.product.priceProduct);
 const totalPrice = ref("");
 let numberTotalDiscount = 0;
 totalPrice.value = totalDiscount.toLocaleString("de-DE", {
-    minimumFractionDigits: 2,
-
     maximumFractionDigits: 2,
 });
 const fetchTotal = () => {
-    // if (totalDiscount.includes("%")) {
-    //     let priceProduct = parseFloat(
-    //         eventBus.product.priceProduct.replace(/\./g, "").replace(/,/g, ".")
-    //     );
-    //     numberTotalDiscount = parseFloat(totalDiscount.replace("%", ""));
-    //     totalDiscount = (numberTotalDiscount * priceProduct) / 100;
-    //     total.value = (parseFloat(totalCode) + parseFloat(totalPro)).toFixed(3);
-    // } else {
-    //     total.value = (
-    //         parseFloat(totalCode) +
-    //         totalDiscount +
-    //         parseFloat(totalPro)
-    //     ).toFixed(3);
-    // }
-    total.value = (
+    let totalValue = (
         parseFloat(totalCode) +
-        // totalDiscount +
+        totalDiscount +
         parseFloat(totalPro)
     ).toFixed(3);
+    totalValue = totalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    total.value = totalValue;
+    eventBus.voucher.valueVoucher = totalValue;
+    console.log(
+        typeof eventBus.voucher.valueVoucher,
+        eventBus.voucher.valueVoucher
+    );
+    // console.log(
+    //     "Tổng: ",
+    //     "\n",
+    //     "parseFloat(totalCode): " + parseFloat(totalCode),
+    //     "\n",
+    //     "totalDiscount: " + totalDiscount,
+    //     "\n",
+    //     "parseFloat(totalPro): " + parseFloat(totalPro),
+    //     "\n",
+    //     total.value
+    // );
 };
 </script>
 

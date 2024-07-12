@@ -52,10 +52,8 @@ const nothing = () => {
 .mainShippingMethod {
     background-color: white;
     display: flex;
-    flex: 1;
     flex-direction: row;
     padding: 10px;
-
     .title {
         display: flex;
         flex: 1;

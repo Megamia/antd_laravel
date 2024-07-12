@@ -65,6 +65,7 @@
 
 <script setup>
 import { ref, defineEmits } from "vue";
+import eventBus from "../../../../eventBus";
 
 const emit = defineEmits(["closeModalDiscount", "valueInModalDiscount"]);
 
@@ -128,9 +129,17 @@ const apply = () => {
             });
         } else if (option.value === 2) {
             // console.log("moneyValue: ", moneyValue.value);
-            emit("valueInModalDiscount", moneyValue.value.moneyText, {
-                message: "money",
-            });
+            if (
+                moneyValue.value.moneyText > eventBus.product.priceProduct &&
+                eventBus.product.priceProduct
+            ) {
+                alert("Không thể giảm giá cao hơn giá sản phẩm");
+                return;
+            } else {
+                emit("valueInModalDiscount", moneyValue.value.moneyText, {
+                    message: "money",
+                });
+            }
         }
     }
 };

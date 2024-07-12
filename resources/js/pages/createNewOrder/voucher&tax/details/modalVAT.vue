@@ -10,7 +10,7 @@
                         <div class="detail">
                             <span>Thuế VAT</span>
                             <a-input
-                                suffix="đ̲"
+                                suffix="%"
                                 v-model:value="valueVAT"
                                 type="number"
                                 required
@@ -54,7 +54,7 @@ let valueVAT = 10;
 const valueReason = ref("");
 const apply = async () => {
     try {
-        console.log(valueVAT, valueReason.value);
+        // console.log(valueVAT, valueReason.value);
         // const respone = await axios.post(
         //     `${import.meta.env.VITE_APP_URL_API}/chooseVoucherCode`,
         //     {

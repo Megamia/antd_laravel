@@ -13,6 +13,12 @@ const eventBus = reactive({
         },
         priceProduct: 0,
     },
+    voucher: {
+        valueVoucher: 0,
+        clearValueVoucher() {
+            this.valueVoucher = 0;
+        },
+    },
 });
 
 export default eventBus;
