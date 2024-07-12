@@ -54,7 +54,6 @@ const closeModalShip = () => {
 const valueInModalShip = (data1) => {
     isModalShip.value = !isModalShip.value;
     valueShip.value = data1.toLocaleString("de-DE", {
-        minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -80,7 +79,6 @@ const valueInModalVAT = (data1) => {
     valueVAT = (eventBus.product.priceProduct * data1) / 100;
 
     valueVATFinal.value = valueVAT.toLocaleString("de-DE", {
-        minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
     valueVATFinal.value = valueVATFinal.value.replace(
