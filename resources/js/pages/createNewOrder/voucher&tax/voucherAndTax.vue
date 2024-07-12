@@ -37,13 +37,11 @@
 import { AkChevronRight } from "@kalimahapps/vue-icons";
 import modalShip from "./details/modalShip.vue";
 import modalVAT from "./details/modalVAT.vue";
-import { ref, defineEmits, onMounted } from "vue";
+import { ref, defineEmits } from "vue";
 import eventBus from "../../../eventBus";
 
 const emit = defineEmits(["closeModalShip"]);
-onMounted(() => {
-    console.log(eventBus.voucher.valueVoucher);
-});
+
 //ModalShip
 const isModalShip = ref(false);
 const valueShip = ref("0");
