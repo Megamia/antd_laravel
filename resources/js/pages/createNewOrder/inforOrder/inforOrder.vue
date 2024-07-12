@@ -155,7 +155,9 @@
             <span class="countOrder" @click="test"
                 >Tạm tính ({{ countProduct }} sản phẩm)</span
             >
-            <span class="costOrder"> {{ totalPrice + "đ" }}</span>
+            <span class="costOrder">
+                {{ totalPrice ? totalPrice : 0 + "đ" }}</span
+            >
         </div>
     </div>
 </template>
@@ -252,7 +254,6 @@ const fetchTotalPrice = () => {
         maximumFractionDigits: 2,
     });
     eventBus.product.priceProduct = totalPriceNumber;
-    
 
     // console.log("totalPrice: " + totalPrice, "type: ", typeof totalPrice.value);
 };
