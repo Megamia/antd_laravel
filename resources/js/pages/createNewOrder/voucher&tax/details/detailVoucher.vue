@@ -5,6 +5,18 @@
             <span> Giảm giá </span>
         </div>
         <div class="content">
+            <div class="isLoyaltyDiv">
+                <div class="left">
+                    <img
+                        src="../../../../../../public/img/Screenshot2024-07-15091822.png"
+                        class="img"
+                    />
+                    <span> Ưu đãi phân hạng Loyalty </span>
+                </div>
+                <div class="right">
+                    <a-switch v-model:checked="checked" @change="click" />
+                </div>
+            </div>
             <div class="inputCode itemContent" @click="showModalCode">
                 <div class="left">
                     <img
@@ -52,6 +64,14 @@
                 @close-modal-discount="showModalDiscount"
                 @value-in-modal-discount="valueInModalDiscount"
             />
+            <div class="itemContent itemLoyalty" v-if="checked">
+                <div class="left">
+                    <span>Ưu đãi phân hạng Loyalty</span>
+                </div>
+                <div class="right rightLoyalty">
+                    <span> -30.000đ </span>
+                </div>
+            </div>
             <div class="inputPromotion itemContent" @click="showModalPromotion">
                 <div class="left">
                     <span>Khuyến mãi</span>
@@ -92,10 +112,16 @@ import modalDiscount from "./modalDiscount.vue";
 import modalPromotion from "./modalPromotion.vue";
 import { ref, onMounted } from "vue";
 import eventBus from "../../../../eventBus";
+
 const router = useRouter();
+const checked = ref(false);
+const click = () => {
+    fetchTotal();
+};
 const back = () => {
     router.back();
 };
+
 const fetchData = () => {
     if (eventBus.product.priceProduct !== 0) {
         console.log("evBPrice: " + eventBus.product.priceProduct);
@@ -220,16 +246,25 @@ const buttonSave = () => {
 
 // let priceProduct = parseFloat(eventBus.product.priceProduct);
 const totalPrice = ref("");
-let numberTotalDiscount = 0;
 totalPrice.value = totalDiscount.toLocaleString("de-DE", {
     maximumFractionDigits: 2,
 });
 const fetchTotal = () => {
-    let totalValue = (
-        parseFloat(totalCode) +
-        totalDiscount +
-        parseFloat(totalPro)
-    ).toFixed(3);
+    let totalValue = 0;
+    if (checked.value === true) {
+        totalValue = (
+            parseFloat(totalCode) +
+            totalDiscount +
+            30 +
+            parseFloat(totalPro)
+        ).toFixed(3);
+    } else {
+        totalValue = (
+            parseFloat(totalCode) +
+            totalDiscount +
+            parseFloat(totalPro)
+        ).toFixed(3);
+    }
     totalValue = totalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     total.value = totalValue;
     eventBus.voucher.valueVoucher = totalValue;
@@ -285,6 +320,14 @@ const fetchTotal = () => {
         flex-direction: column;
         background-color: white;
 
+        .isLoyaltyDiv {
+            display: flex;
+            flex: 1;
+            background-color: #f0f2f5;
+            padding: 0 12px 20px 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
         .itemContent {
             border-bottom: 1px solid #d9d9d9;
             display: flex;
@@ -295,7 +338,13 @@ const fetchTotal = () => {
             font-size: 14px;
             line-height: 22px;
         }
+        .itemLoyalty {
+            span {
+                padding-right: 24px;
+            }
+        }
 
+        .isLoyaltyDiv,
         .inputCode,
         .inputDiscount,
         .inputPromotion {
@@ -314,10 +363,10 @@ const fetchTotal = () => {
                 display: flex;
                 align-items: center;
                 color: #00000073;
-
                 span {
                     display: flex;
                     align-items: center;
+                    gap: 10px;
                 }
 
                 .valueSelected {

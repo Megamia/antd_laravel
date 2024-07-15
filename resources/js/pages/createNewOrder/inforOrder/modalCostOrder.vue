@@ -1,7 +1,7 @@
 <template>
     <transition name="modal">
         <div class="modal-mask">
-            <div class="modal-wrapper">
+            <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="title">
                         <span class="titleText">Điều chỉnh giá bán</span>
@@ -24,7 +24,7 @@
                         </div>
                         <div class="cost" v-if="currentChange === 'direct'">
                             <span>Giá bán </span>
-                            <a-input v-model:value="cost" type="number" />
+                            <a-input v-model:value="priceProduct" />
                         </div>
                         <div class="percent" v-else>
                             <a-radio-group v-model:value="selectOptions">
@@ -83,53 +83,124 @@
 
 <script setup>
 import { AkPercentage } from "@kalimahapps/vue-icons";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, defineProps, onMounted } from "vue";
+import axios from "axios";
+
+const emit = defineEmits(["showModal", "closeModalCostOrder"]);
+
+const props = defineProps({
+    idProduct: Number,
+});
+const priceProduct = ref("");
+// onMounted(() => {
+//     console.log("props.costProduct: " + props.costProduct);
+// });
 
 const upNumberPercent = ref("");
 const downNumberPercent = ref("");
 const selectOptions = ref(1);
 
-const cost = ref("249.000");
+// const cost = ref("249.000");
 const newCost = ref("");
 const currentChange = ref("direct");
 
-const refresh = () => {};
-const emit = defineEmits(["showModal"]);
+const refresh = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+            {
+                id: props.idProduct,
+            }
+        );
+        priceProduct.value = priceProduct.value.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            "."
+        );
+        if (response.data.status === 1) {
+            for (let i = 0; i < response.data.choosedProduct.length; i++) {
+                //Xóa chấm           defaultPrice.value = response.data.choosedProduct[i].defaultPrice.replace(/\./g, "");
+                if (
+                    priceProduct.value !==
+                    response.data.choosedProduct[i].defaultPrice
+                ) {
+                    if (confirm("Chắc chắn muốn đặt lại giá ban đầu?")) {
+                        priceProduct.value =
+                            response.data.choosedProduct[i].defaultPrice;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        } else if (response.data.status === 0) {
+            console.log(response.data.choosedProduct);
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
 
 const Cancel = () => {
-    console.log("close modal");
-    emit("showModal");
+    emit("closeModalCostOrder");
 };
+
+const fetchData = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+            {
+                id: props.idProduct,
+            }
+        );
+        if (response.data.status === 1) {
+            for (let i = 0; i < response.data.choosedProduct.length; i++) {
+                console.log(response.data.choosedProduct[i].price);
+                priceProduct.value = response.data.choosedProduct[i].price;
+            }
+        } else if (response.data.status === 0) {
+            console.log(response.data.choosedProduct);
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+onMounted(() => fetchData());
+
 const Apply = () => {
-    if (selectOptions.value === 1 && upNumberPercent.value) {
-        newCost.value =
-            parseFloat(cost.value) *
-            (1 + parseFloat(upNumberPercent.value) / 100);
-        alert(
-            `Tăng lên ${upNumberPercent.value}% thành ${parseFloat(
-                newCost.value
-            ).toFixed(4)} thành công`
-        );
-        upNumberPercent.value = null;
-    } else if (selectOptions.value === 2 && downNumberPercent.value) {
-        newCost.value =
-            parseFloat(cost.value) *
-            (1 - parseFloat(downNumberPercent.value) / 100);
-        alert(
-            `Giảm xuống ${downNumberPercent.value}% thành ${parseFloat(
-                newCost.value
-            ).toFixed(4)} thành công`
-        );
-        downNumberPercent.value = null;
-    }
-    currentChange.value = "direct";
-    cost.value = parseFloat(newCost.value).toFixed(4);
-    console.log("Cost: " + cost.value + "\n Type: " + typeof cost.value);
-    if (parseFloat(cost.value) === 0) {
-        cost.value = parseFloat(cost.value).toFixed(2);
-        console.log(cost.value);
-    }
+    priceProduct.value = priceProduct.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+    );
 };
+// const Apply = () => {
+//     if (selectOptions.value === 1 && upNumberPercent.value) {
+//         newCost.value =
+//             parseFloat(cost.value) *
+//             (1 + parseFloat(upNumberPercent.value) / 100);
+//         alert(
+//             `Tăng lên ${upNumberPercent.value}% thành ${parseFloat(
+//                 newCost.value
+//             ).toFixed(4)} thành công`
+//         );
+//         upNumberPercent.value = null;
+//     } else if (selectOptions.value === 2 && downNumberPercent.value) {
+//         newCost.value =
+//             parseFloat(cost.value) *
+//             (1 - parseFloat(downNumberPercent.value) / 100);
+//         alert(
+//             `Giảm xuống ${downNumberPercent.value}% thành ${parseFloat(
+//                 newCost.value
+//             ).toFixed(4)} thành công`
+//         );
+//         downNumberPercent.value = null;
+//     }
+//     currentChange.value = "direct";
+//     cost.value = parseFloat(newCost.value).toFixed(4);
+//     console.log("Cost: " + cost.value + "\n Type: " + typeof cost.value);
+//     if (parseFloat(cost.value) === 0) {
+//         cost.value = parseFloat(cost.value).toFixed(2);
+//         console.log(cost.value);
+//     }
+// };
 </script>
 <style scoped>
 .modal-mask {
@@ -139,7 +210,7 @@ const Apply = () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     display: table;
     transition: opacity 0.3s ease;
 }

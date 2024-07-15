@@ -12,6 +12,7 @@ class product extends Model
         'name',
         'tag',
         'quantity',
+        'defaultPrice',
         'price',
         'numberSelected',
         'img'

@@ -53,9 +53,16 @@
                                 >
                                 <span class="costProduct">
                                     {{ dataProductSelectedItem.price }}đ
-                                    <AnOutlinedEdit @click="clickShowModal"
-                                /></span>
+                                    <AnOutlinedEdit
+                                        @click="
+                                            showModalCostOrder(
+                                                dataProductSelectedItem.id
+                                            )
+                                        "
+                                    />
+                                </span>
                             </div>
+
                             <div class="changeQuantityOrder">
                                 <div class="buttonChangeQuantityOrder">
                                     <button
@@ -103,6 +110,11 @@
                         </div>
                     </div>
                 </div>
+                <modalCostOrder
+                    v-if="isShowModalCostOrder"
+                    @close-modal-cost-order="closeModalCostOrder"
+                    :idProduct="idProduct"
+                />
                 <!-- <div class="product">
                     <div class="imgDiv">
                         <a-image
@@ -163,6 +175,7 @@
 </template>
 <script setup>
 import modalScanQRCode from "./modalScanQrCode.vue";
+import modalCostOrder from "./modalCostOrder.vue";
 import {
     AkChevronDownSmall,
     AkChevronUpSmall,
@@ -174,6 +187,23 @@ import { useRouter } from "vue-router";
 import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 import axios from "axios";
+
+const emit = defineEmits(["show", "showModal"]);
+
+//ModalCostOrder
+let idProduct = 0;
+const isShowModalCostOrder = ref(false);
+
+const showModalCostOrder = (data) => {
+    idProduct = data;
+    console.log("idProduct: ", idProduct);
+    isShowModalCostOrder.value = !isShowModalCostOrder.value;
+};
+
+const closeModalCostOrder = () => {
+    isShowModalCostOrder.value = !isShowModalCostOrder.value;
+};
+//ModalCostOrder
 
 const test = () => {
     console.log(eventBus.product.priceProduct);
@@ -196,10 +226,9 @@ const closeModalScanQrCode = () => {
     isModalScanQRCode.value = false;
 };
 
-const clickShowModal = () => {
-    emit("showModal");
-};
-const emit = defineEmits(["show", "showModal"]);
+// const clickShowModal = () => {
+//     emit("showModal");
+// };
 
 const show = () => {
     showOrder.value = !showOrder.value;
