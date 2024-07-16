@@ -25,6 +25,8 @@ Route::post('uploads', [productController::class, 'upload']);
 Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 Route::post('choosedProduct', [productController::class, 'choosedProduct']);
+Route::post('updatePriceProduct', [productController::class, 'updatePriceProduct']);
+
 // Product
 
 //VoucherPromotion

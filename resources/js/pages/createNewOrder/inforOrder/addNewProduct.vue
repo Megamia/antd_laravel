@@ -96,6 +96,12 @@ import eventBus from "../../../eventBus";
 const emit = defineEmits(["choosedProduct"]);
 
 const a = ref([]);
+// if (eventBus.product.idProduct) {
+//     for (let i = 0; i < eventBus.product.idProduct.length; i++) {
+//         console.log(eventBus.product.idProduct[i].value);
+//     }
+// }
+// a.value = eventBus.product.idProduct.split(",").map((item) => item.trim());
 // const selectedUser = ref("");
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
@@ -121,6 +127,12 @@ const showModalFilterWithSelection = () => {
 const data = ref({});
 
 const fetchData = async () => {
+    if (eventBus.product.idProduct) {
+        eventBus.product.idProduct = eventBus.product.idProduct
+            .split(",")
+            .map(Number);
+        a.value = eventBus.product.idProduct;
+    }
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/inforProduct`
@@ -177,9 +189,9 @@ const addNewUser = () => {
 // };
 const buttonSave = async () => {
     if (!a.value || a.value.length <= 0) {
-        console.log("Chưa chọn sản phẩm nào");
+        alert("Chưa chọn sản phẩm nào");
     } else {
-        console.log(a.value.sort().toString());
+        // console.log(a.value.sort().toString());
         // console.log(a.value);
         try {
             const response = await axios.post(
@@ -189,13 +201,13 @@ const buttonSave = async () => {
                 }
             );
             if (response.data.status === 1) {
-                console.log(response.data.choosedProduct);
+                // console.log(response.data.choosedProduct);
                 eventBus.product.idProduct = a.value.sort().toString();
-                console.log("evB: ", eventBus.product.idProduct);
+                // console.log("evB: ", eventBus.product.idProduct);
                 router.back();
                 // emit("choosedProduct", response.data.choosedProduct);
             } else {
-                console.log("No choosedProduct");
+                // console.log("No choosedProduct");
             }
         } catch (e) {
             console.log("Error: ", e);

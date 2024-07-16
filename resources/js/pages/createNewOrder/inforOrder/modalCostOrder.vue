@@ -86,17 +86,18 @@ import { AkPercentage } from "@kalimahapps/vue-icons";
 import { ref, defineEmits, defineProps, onMounted } from "vue";
 import axios from "axios";
 
-const emit = defineEmits(["showModal", "closeModalCostOrder"]);
+const emit = defineEmits(["showModal", "closeModalCostOrder", "newCost"]);
 
 const props = defineProps({
     idProduct: Number,
 });
 const priceProduct = ref("");
+const defaultPrice = ref("");
 // onMounted(() => {
 //     console.log("props.costProduct: " + props.costProduct);
 // });
 
-const upNumberPercent = ref("");
+let upNumberPercent = ref("");
 const downNumberPercent = ref("");
 const selectOptions = ref(1);
 
@@ -119,13 +120,11 @@ const refresh = async () => {
         if (response.data.status === 1) {
             for (let i = 0; i < response.data.choosedProduct.length; i++) {
                 //Xóa chấm           defaultPrice.value = response.data.choosedProduct[i].defaultPrice.replace(/\./g, "");
-                if (
-                    priceProduct.value !==
-                    response.data.choosedProduct[i].defaultPrice
-                ) {
+                defaultPrice.value =
+                    response.data.choosedProduct[i].defaultPrice;
+                if (priceProduct.value !== defaultPrice.value) {
                     if (confirm("Chắc chắn muốn đặt lại giá ban đầu?")) {
-                        priceProduct.value =
-                            response.data.choosedProduct[i].defaultPrice;
+                        priceProduct.value = defaultPrice.value;
                     } else {
                         return false;
                     }
@@ -159,17 +158,43 @@ const fetchData = async () => {
         } else if (response.data.status === 0) {
             console.log(response.data.choosedProduct);
         }
+        
     } catch (e) {
         console.log("Error: ", e);
     }
 };
 onMounted(() => fetchData());
 
-const Apply = () => {
+const Apply = async () => {
     priceProduct.value = priceProduct.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         "."
     );
+    try {
+        console.log(
+            "upNumberPercent: " + upNumberPercent.value,
+            "\n",
+            "downNumberPercent: " + downNumberPercent.value,
+            "\n",
+            "price: " + priceProduct.value
+        );
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/updatePriceProduct`,
+            {
+                id: props.idProduct,
+                newPrice: priceProduct.value,
+            }
+        );
+        if (response.data.status === 1) {
+            console.log("Cost: " + response.data.newCost);
+            priceProduct.value = response.data.newCost;
+            emit("newCost", priceProduct.value);
+        } else {
+            console.log("Không thay đổi giá");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
 };
 // const Apply = () => {
 //     if (selectOptions.value === 1 && upNumberPercent.value) {

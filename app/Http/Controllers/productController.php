@@ -107,4 +107,19 @@ class productController extends Controller
             return response()->json(['status' => 0, 'choosedProduct' => 'No choosedProduct']);
         }
     }
+    public function updatePriceProduct(Request $request)
+    {
+        $data = $request->only('id', 'newPrice');
+
+        $choosedProductUpdate = product::find($data['id']);
+
+        if ($choosedProductUpdate) {
+            $choosedProductUpdate->price = $data['newPrice'];
+            $choosedProductUpdate->save();
+
+            return response()->json(['status' => 1, 'newCost' => $choosedProductUpdate->price]);
+        } else {
+            return response()->json(['status' => 0, 'newCost' => 'No newCost']);
+        }
+    }
 }

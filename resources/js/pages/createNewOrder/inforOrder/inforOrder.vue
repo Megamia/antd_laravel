@@ -114,6 +114,7 @@
                     v-if="isShowModalCostOrder"
                     @close-modal-cost-order="closeModalCostOrder"
                     :idProduct="idProduct"
+                    @newCost="newCostProduct"
                 />
                 <!-- <div class="product">
                     <div class="imgDiv">
@@ -196,12 +197,20 @@ const isShowModalCostOrder = ref(false);
 
 const showModalCostOrder = (data) => {
     idProduct = data;
-    console.log("idProduct: ", idProduct);
+    // console.log("idProduct: ", idProduct);
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
 };
 
 const closeModalCostOrder = () => {
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
+};
+
+// const newCost = ref("");
+const newCostProduct = (data) => {
+    console.log(data);
+    // newCost.value = data;
+    isShowModalCostOrder.value = !isShowModalCostOrder.value;
+    fetchData();
 };
 //ModalCostOrder
 
@@ -235,7 +244,7 @@ const show = () => {
     emit("show");
 };
 const buttonAddOrder = (id) => {
-    console.log("id:", id);
+    // console.log("id:", id);
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product && product.numberSelected < product.quantity) {
         product.numberSelected++;
@@ -246,7 +255,7 @@ const buttonAddOrder = (id) => {
     }
 };
 const buttonDelOrder = (id) => {
-    console.log("id:", id);
+    // console.log("id:", id);
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product)
         if (product.numberSelected <= 0) {
