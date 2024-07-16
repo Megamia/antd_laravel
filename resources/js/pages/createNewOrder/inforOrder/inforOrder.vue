@@ -205,12 +205,11 @@ const closeModalCostOrder = () => {
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
 };
 
-// const newCost = ref("");
 const newCostProduct = (data) => {
-    console.log(data);
+    // console.log(data);
+    fetchData();
     // newCost.value = data;
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
-    fetchData();
 };
 //ModalCostOrder
 

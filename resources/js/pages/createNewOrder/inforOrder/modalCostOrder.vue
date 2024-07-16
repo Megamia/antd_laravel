@@ -97,8 +97,8 @@ const defaultPrice = ref("");
 //     console.log("props.costProduct: " + props.costProduct);
 // });
 
-let upNumberPercent = ref("");
-const downNumberPercent = ref("");
+let upNumberPercent = 0;
+let downNumberPercent = 0;
 const selectOptions = ref(1);
 
 // const cost = ref("249.000");
@@ -142,6 +142,10 @@ const Cancel = () => {
     emit("closeModalCostOrder");
 };
 
+// priceProduct.value = priceProduct.value.replace(
+//             /\B(?=(\d{3})+(?!\d))/g,
+//             "."
+//         );
 const fetchData = async () => {
     try {
         const response = await axios.post(
@@ -152,32 +156,53 @@ const fetchData = async () => {
         );
         if (response.data.status === 1) {
             for (let i = 0; i < response.data.choosedProduct.length; i++) {
-                console.log(response.data.choosedProduct[i].price);
+                // console.log(response.data.choosedProduct[i].price);
                 priceProduct.value = response.data.choosedProduct[i].price;
+                formatValue();
             }
         } else if (response.data.status === 0) {
             console.log(response.data.choosedProduct);
         }
-        
+        formatValue();
     } catch (e) {
         console.log("Error: ", e);
     }
 };
 onMounted(() => fetchData());
 
-const Apply = async () => {
+const formatValue = () => {
+    priceProduct.value = priceProduct.value.replace(/\./g, "");
     priceProduct.value = priceProduct.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         "."
     );
+};
+const Apply = async () => {
+    formatValue();
     try {
         console.log(
-            "upNumberPercent: " + upNumberPercent.value,
+            "upNumberPercent: " + upNumberPercent,
             "\n",
-            "downNumberPercent: " + downNumberPercent.value,
+            "downNumberPercent: " + downNumberPercent,
             "\n",
             "price: " + priceProduct.value
         );
+        if (currentChange.value !== "direct") {
+            if (selectOptions.value === 1 && upNumberPercent !== 0) {
+                priceProduct.value =
+                    (parseFloat(priceProduct.value) *
+                        (100 + parseFloat(upNumberPercent))) /
+                    100;
+            } else if (selectOptions.value === 2 && downNumberPercent !== 0) {
+                priceProduct.value =
+                    (parseFloat(priceProduct.value) *
+                        parseFloat(upNumberPercent)) /
+                    100;
+            }
+            priceProduct.value = priceProduct.value
+                .toFixed(3)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/updatePriceProduct`,
             {
@@ -186,46 +211,18 @@ const Apply = async () => {
             }
         );
         if (response.data.status === 1) {
-            console.log("Cost: " + response.data.newCost);
             priceProduct.value = response.data.newCost;
+            formatValue();
+            // console.log("Cost: " + priceProduct.value);
             emit("newCost", priceProduct.value);
         } else {
             console.log("Không thay đổi giá");
         }
+        formatValue();
     } catch (e) {
         console.log("Error: ", e);
     }
 };
-// const Apply = () => {
-//     if (selectOptions.value === 1 && upNumberPercent.value) {
-//         newCost.value =
-//             parseFloat(cost.value) *
-//             (1 + parseFloat(upNumberPercent.value) / 100);
-//         alert(
-//             `Tăng lên ${upNumberPercent.value}% thành ${parseFloat(
-//                 newCost.value
-//             ).toFixed(4)} thành công`
-//         );
-//         upNumberPercent.value = null;
-//     } else if (selectOptions.value === 2 && downNumberPercent.value) {
-//         newCost.value =
-//             parseFloat(cost.value) *
-//             (1 - parseFloat(downNumberPercent.value) / 100);
-//         alert(
-//             `Giảm xuống ${downNumberPercent.value}% thành ${parseFloat(
-//                 newCost.value
-//             ).toFixed(4)} thành công`
-//         );
-//         downNumberPercent.value = null;
-//     }
-//     currentChange.value = "direct";
-//     cost.value = parseFloat(newCost.value).toFixed(4);
-//     console.log("Cost: " + cost.value + "\n Type: " + typeof cost.value);
-//     if (parseFloat(cost.value) === 0) {
-//         cost.value = parseFloat(cost.value).toFixed(2);
-//         console.log(cost.value);
-//     }
-// };
 </script>
 <style scoped>
 .modal-mask {
