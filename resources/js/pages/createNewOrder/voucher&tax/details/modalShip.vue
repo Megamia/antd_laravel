@@ -51,24 +51,11 @@ const Cancel = () => {
     emit("closeModalShip");
 };
 
-let valueShip = "";
+let valueShip = 0;
 const valueReason = ref("");
 const apply = async () => {
     try {
-        console.log(valueShip, valueReason.value);
-        // const respone = await axios.post(
-        //     `${import.meta.env.VITE_APP_URL_API}/chooseVoucherCode`,
-        //     {
-        //         code: inputCodeText.value,
-        //     }
-        // );
-        // if (respone.data.status === 1) {
-        //     valueCode.value = respone.data.chooseVoucherCode;
-        // } else if (respone.data.status === 0) {
-        //     valueCode.value = respone.data.chooseVoucherCode;
-        // }
-        // respone.data.chooseVoucherCode.forEach((data) => {
-        //     // console.log("Input: ", data.value);
+        // console.log(valueShip, valueReason.value);
         emit("valueInModalShip", valueShip);
         // });
     } catch (e) {

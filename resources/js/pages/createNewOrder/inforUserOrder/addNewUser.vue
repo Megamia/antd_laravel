@@ -70,6 +70,7 @@
                     >
                 </a-form-item>
             </div>
+            <div style="height: 1000px" />
         </a-form>
     </div>
 </template>
@@ -78,6 +79,9 @@ import { AnOutlinedArrowLeft } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import axios from "axios";
+
+const router = useRouter();
+
 const formState = ref({
     username: "",
     phoneNumber: "",
@@ -94,7 +98,9 @@ const onFinish = async () => {
             }
         );
         if (response.data.status === 1) {
-            console.log("Success: ", formState.value);
+            // console.log("Success: ", formState.value);
+            alert(`Thêm mới người dùng ${formState.value.username} thành công`);
+            router.back();
         } else {
             console.log("Faile");
         }
@@ -106,7 +112,6 @@ const onFinish = async () => {
 const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
 };
-const router = useRouter();
 
 const back = () => {
     router.back();

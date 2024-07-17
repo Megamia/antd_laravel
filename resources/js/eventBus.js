@@ -18,6 +18,14 @@ const eventBus = reactive({
         clearValueVoucher() {
             this.valueVoucher = 0;
         },
+        valueShip:0,
+        clearValueShip() {
+            this.valueShip = 0;
+        },
+        valueVAT:0,
+        clearValueVAT() {
+            this.valueVAT = 0;
+        },
     },
 });
 

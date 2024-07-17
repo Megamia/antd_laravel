@@ -97,12 +97,7 @@
                                 </div>
                                 <div class="delOrderDiv">
                                     <span
-                                        @click="
-                                            nothing(
-                                                dataProductSelectedItem.price,
-                                                dataProductSelectedItem.numberSelected
-                                            )
-                                        "
+                                        @click="del(dataProductSelectedItem.id)"
                                         >Xóa</span
                                     >
                                 </div>
@@ -189,7 +184,7 @@ import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 import axios from "axios";
 
-const emit = defineEmits(["show", "showModal"]);
+const emit = defineEmits(["show", "showModal", "inforProduct"]);
 
 //ModalCostOrder
 let idProduct = 0;
@@ -310,7 +305,6 @@ const fetchData = async () => {
                 dataProductSelected.value = response.data.choosedProduct;
                 fetchTotalPrice();
                 countProduct = response.data.choosedProduct.length;
-                return totalPrice;
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
@@ -321,6 +315,8 @@ const fetchData = async () => {
     } else {
         dataProductSelected.value = "No choosedProduct";
     }
+    // console.log(countProduct, totalPrice.value);
+    emit("inforProduct", countProduct, totalPrice.value);
 };
 
 let countProduct = 0;
@@ -328,9 +324,16 @@ onMounted(() => fetchData());
 
 // let sum = 0;
 
-const nothing = (a, b) => {
-    // alert("Chưa xử lý sự kiện này");
-    console.log(a, b);
+const del = (id) => {
+    dataProductSelected.value = dataProductSelected.value.filter(
+        (product) => product.id !== id
+    );
+
+    eventBus.product.idProduct = eventBus.product.idProduct.replace(id, "");
+    // console.log(eventBus.product.idProduct);
+
+    countProduct = dataProductSelected.value.length;
+    fetchTotalPrice();
 };
 </script>
 

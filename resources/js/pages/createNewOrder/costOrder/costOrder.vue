@@ -3,10 +3,12 @@
         <div class="costDiv">
             <div class="title">
                 <span class="left">Tổng cộng </span>
-                <span class="right">(8 sản phẩm)</span>
+                <span class="right"
+                    >({{ props.quantityProduct }} sản phẩm)</span
+                >
             </div>
             <div class="cost">
-                <span>3.000.000đ</span>
+                <span>{{ props.priceProduct }}đ</span>
             </div>
         </div>
         <div class="order">
@@ -15,11 +17,25 @@
     </div>
 </template>
 <script setup>
-// import { ref } from "vue";
+import { ref, defineProps, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const props = defineProps({
+    quantityProduct: Number,
+    priceProduct: String,
+});
+// const fetchData = () => {
+//     console.log(
+//         "quantityProduct: ",
+//         props.quantityProduct,
+//         "\n",
+//         "priceProduct: ",
+//         props.priceProduct
+//     );
+// };
+// onMounted(() => fetchData());
 const createOrder = () => {
     router.push("/createOrderSuccess");
 };

@@ -26,10 +26,11 @@
                     <span>Mã ưu đãi/ Coupon</span>
                 </div>
                 <div class="right">
-                    <span :class="{ valueSelected: totalCode !== 0 }">
+                    <span :class="{ valueSelected: totalCodeString !== '0' }">
                         {{
-                            totalCode !== 0 || total === "no chooseVoucherCode"
-                                ? totalCode + "đ"
+                            totalCodeString !== "0" ||
+                            total === "no chooseVoucherCode"
+                                ? totalCodeString + "đ"
                                 : "Nhập mã"
                         }}
                         <AkChevronRightSmall />
@@ -77,8 +78,12 @@
                     <span>Khuyến mãi</span>
                 </div>
                 <div class="right">
-                    <span :class="{ valueSelected: totalPro !== 0 }">
-                        {{ totalPro !== 0 ? totalPro + "đ" : "Chọn mã" }}
+                    <span :class="{ valueSelected: totalProString !== '0' }">
+                        {{
+                            totalProString !== "0"
+                                ? totalProString + "đ"
+                                : "Chọn mã"
+                        }}
                         <AkChevronRightSmall />
                     </span>
                 </div>
@@ -124,7 +129,7 @@ const back = () => {
 
 const fetchData = () => {
     if (eventBus.product.priceProduct !== 0) {
-        console.log("evBPrice: " + eventBus.product.priceProduct);
+        // console.log("evBPrice: " + eventBus.product.priceProduct);
         // console.log("discount: " + totalPrice, typeof totalPrice);
     } else {
         console.log("Chưa chọn sản phẩm nào");
@@ -141,10 +146,13 @@ const showModalCode = () => {
 };
 
 let totalCode = 0;
+const totalCodeString = ref("0");
 const valueInModalCode = (dataValueInModalCode) => {
     isShowModalCode.value = !isShowModalCode.value;
     totalCode = dataValueInModalCode;
-    console.log("Giá được giảm từ modal Code: ", totalCode);
+    totalCodeString.value = dataValueInModalCode;
+    totalCode = totalCode.replace(/\./g, "");
+    // console.log("Giá được giảm từ modal Code: ", totalCode);
     fetchTotal();
 };
 // ModalCode
@@ -165,7 +173,7 @@ const valueInModalDiscount = (dataValueInModalDiscount, message) => {
         totalDiscount =
             (eventBus.product.priceProduct * dataValueInModalDiscount) / 100;
     } else if (message.message === "money") {
-        totalDiscount = dataValueInModalDiscount;
+        totalDiscount = parseFloat(dataValueInModalDiscount);
     }
     valueDiscount.value = totalDiscount.toLocaleString("de-DE", {
         maximumFractionDigits: 2,
@@ -174,7 +182,8 @@ const valueInModalDiscount = (dataValueInModalDiscount, message) => {
         /\B(?=(\d{3})+(?!\d))/g,
         "."
     );
-    console.log("Phần trăm được giảm từ modal Discount: ", valueDiscount.value);
+    console.log(valueDiscount.value);
+    // console.log("Phần trăm được giảm từ modal Discount: ", valueDiscount.value);
     fetchTotal();
 };
 
@@ -187,6 +196,7 @@ const showModalPromotion = () => {
     isShowModalPromotion.value = !isShowModalPromotion.value;
 };
 let totalPro = 0;
+const totalProString = ref("0");
 const selectedInModalPromotion = ref({
     sltId: [],
 });
@@ -201,13 +211,9 @@ const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
     //     totalPro += array[i];
     // }
     totalPro = datavalueInModalPromotion;
-    console.log(
-        "Giá được giảm từ modal Promotion: ",
-        totalPro
-        // "\n",
-        // "id các item đã chọn: ",
-        // slt
-    );
+    totalProString.value = datavalueInModalPromotion;
+    totalPro = totalPro.replace(/\./g, "");
+    // console.log("Giá được giảm từ modal Promotion: ", totalPro);
 
     selectedInModalPromotion.value.sltId = slt;
     fetchTotal();
@@ -222,19 +228,19 @@ const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
 // let total = 0;
 const total = ref("0");
 const buttonSave = () => {
-    console.log(
-        "Mã ưu đãi: ",
-        totalCode ? totalCode : 0,
-        "\n",
-        "Chiết khấu: ",
-        valueDiscount.value ? valueDiscount.value : 0,
-        "\n",
-        "Khuyến mãi: ",
-        totalPro ? totalPro : 0,
-        "\n",
-        "Total: ",
-        total.value
-    );
+    // console.log(
+    //     "Mã ưu đãi: ",
+    //     totalCode ? totalCode : 0,
+    //     "\n",
+    //     "Chiết khấu: ",
+    //     valueDiscount.value ? valueDiscount.value : 0,
+    //     "\n",
+    //     "Khuyến mãi: ",
+    //     totalPro ? totalPro : 0,
+    //     "\n",
+    //     "Total: ",
+    //     total.value
+    // );
     if (total.value === "0") {
         eventBus.voucher.clearValueVoucher();
     }
@@ -245,44 +251,31 @@ const buttonSave = () => {
 };
 
 // let priceProduct = parseFloat(eventBus.product.priceProduct);
-const totalPrice = ref("");
-totalPrice.value = totalDiscount.toLocaleString("de-DE", {
-    maximumFractionDigits: 2,
-});
+// const totalPrice = ref("");
+// totalPrice.value = totalDiscount.toLocaleString("de-DE", {
+//     maximumFractionDigits: 2,
+// });
 const fetchTotal = () => {
     let totalValue = 0;
-    if (checked.value === true) {
-        totalValue = (
-            parseFloat(totalCode) +
-            totalDiscount +
-            30 +
-            parseFloat(totalPro)
-        ).toFixed(3);
-    } else {
-        totalValue = (
-            parseFloat(totalCode) +
-            totalDiscount +
-            parseFloat(totalPro)
-        ).toFixed(3);
-    }
-    totalValue = totalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    total.value = totalValue;
-    eventBus.voucher.valueVoucher = totalValue;
-    console.log(
-        typeof eventBus.voucher.valueVoucher,
-        eventBus.voucher.valueVoucher
-    );
+
+    totalValue = parseFloat(totalCode) + parseFloat(totalPro) + totalDiscount;
     // console.log(
-    //     "Tổng: ",
-    //     "\n",
     //     "parseFloat(totalCode): " + parseFloat(totalCode),
     //     "\n",
     //     "totalDiscount: " + totalDiscount,
     //     "\n",
-    //     "parseFloat(totalPro): " + parseFloat(totalPro),
-    //     "\n",
-    //     total.value
+    //     "parseFloat(totalPro): " + parseFloat(totalPro)
     // );
+    if (checked.value === true) {
+        totalValue = totalValue + 30000;
+    }
+    // if(totalValue.toString().length>3)
+    // console.log(totalValue.toString().length);
+    // totalValue = totalValue.replace(/\./g, "");
+    eventBus.voucher.valueVoucher = totalValue;
+    totalValue = totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    // console.log("totalValue: " + totalValue);
+    total.value = totalValue;
 };
 </script>
 

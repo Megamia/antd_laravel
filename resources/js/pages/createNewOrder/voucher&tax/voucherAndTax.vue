@@ -4,11 +4,7 @@
         <RouterLink to="/detailVoucher" class="voucher">
             <span class="name">Giảm giá</span>
             <span class="cost">
-                {{
-                    eventBus.voucher.valueVoucher
-                        ? eventBus.voucher.valueVoucher + "đ"
-                        : "0đ"
-                }}
+                {{ valueVoucher ? valueVoucher + "đ" : "0đ" }}
                 <AkChevronRight
             /></span>
         </RouterLink>
@@ -42,6 +38,11 @@ import eventBus from "../../../eventBus";
 
 const emit = defineEmits(["closeModalShip"]);
 
+const valueVoucher = ref("0");
+valueVoucher.value = eventBus.voucher.valueVoucher.toString();
+valueVoucher.value = valueVoucher.value.replace(/\./g, "");
+valueVoucher.value = valueVoucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
 //ModalShip
 const isModalShip = ref(false);
 const valueShip = ref("0");
@@ -51,39 +52,37 @@ const closeModalShip = () => {
 };
 const valueInModalShip = (data1) => {
     isModalShip.value = !isModalShip.value;
-    valueShip.value = data1.toLocaleString("de-DE", {
-        maximumFractionDigits: 2,
-    });
+    valueShip.value = data1;
+    eventBus.voucher.valueShip = data1;
+    valueShip.value = valueShip.value.replace(/\./g, "");
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    console.log(valueShip.value);
+    // console.log(valueShip.value);
 };
 //ModalShip
 
 //ModalVAT
 const isModalVAT = ref(false);
-let valueVAT = 0;
+const valueVAT = ref("0");
 const valueVATFinal = ref("0");
 const closeModalVAT = () => {
     isModalVAT.value = !isModalVAT.value;
 };
 const valueInModalVAT = (data1) => {
     isModalVAT.value = !isModalVAT.value;
-    // console.log(
-    //     eventBus.product.priceProduct,
-    //     typeof eventBus.product.priceProduct,
-    //     data1,
-    //     typeof data1
-    // );
-    valueVAT = (eventBus.product.priceProduct * data1) / 100;
+    if (eventBus.product.priceProduct !== 0) {
+        valueVAT.value = (
+            (eventBus.product.priceProduct * data1.value) /
+            100
+        ).toString();
+    }
+    valueVATFinal.value = valueVAT.value.replace(/\./g, "");
 
-    valueVATFinal.value = valueVAT.toLocaleString("de-DE", {
-        maximumFractionDigits: 2,
-    });
     valueVATFinal.value = valueVATFinal.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         "."
     );
-    // console.log(valueVATFinal.value);
+    eventBus.voucher.valueVAT =
+        (eventBus.product.priceProduct * data1.value) / 100;
 };
 //ModalVAT
 

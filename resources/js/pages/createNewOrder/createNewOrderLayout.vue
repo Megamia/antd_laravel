@@ -1,36 +1,43 @@
 <template>
-  <div class="mainCreateNewOrderLayout">
-    <div class="title">
-      <h1>Tạo mới đơn hàng</h1>
-    </div>
-    <div class="userOrder">
-      <userOrder />
-    </div>
+    <div class="mainCreateNewOrderLayout">
+        <div class="title">
+            <h1>Tạo mới đơn hàng</h1>
+        </div>
+        <div class="userOrder">
+            <userOrder />
+        </div>
 
-    <div class="productOrderDiv">
-      <inforOrder @show="showOrHidden" @showModal="ClickShowModal" />
-      <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
+        <div class="productOrderDiv">
+            <inforOrder
+                @show="showOrHidden"
+                @showModal="ClickShowModal"
+                @infor-product="inforProduct"
+            />
+            <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
+        </div>
+        <div class="voucherAndTax">
+            <voucherAndTax />
+        </div>
+        <div class="noteOrder">
+            <noteOrder />
+        </div>
+        <div class="inforPayment">
+            <inforPayment />
+        </div>
+        <div class="shippingMethod">
+            <shippingMethod />
+        </div>
+        <div class="anthoerInfor">
+            <anthoerInfor v-if="isOpen" />
+        </div>
+        <div class="costOrder">
+            <costOrder
+                :quantityProduct="quantityProduct"
+                :priceProduct="priceProduct"
+            />
+            <div style="height: 1000px; width: 100%" />
+        </div>
     </div>
-    <div class="voucherAndTax">
-      <voucherAndTax />
-    </div>
-    <div class="noteOrder">
-      <noteOrder />
-    </div>
-    <div class="inforPayment">
-      <inforPayment />
-    </div>
-    <div class="shippingMethod">
-      <shippingMethod />
-    </div>
-    <div class="anthoerInfor">
-      <anthoerInfor v-if="isOpen" />
-    </div>
-    <div class="costOrder">
-      <costOrder />
-      <div style="height: 1000px; width: 100%" />
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -44,55 +51,77 @@ import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
 import modalCostOrder from "./inforOrder/modalCostOrder.vue";
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import eventBus from "../../eventBus";
 // import axios from "axios";
 const isOpen = ref(true);
 const showModal = ref(false);
 const showOrHidden = () => {
-  isOpen.value = !isOpen.value;
+    isOpen.value = !isOpen.value;
 };
 const ClickShowModal = () => {
-  showModal.value = !showModal.value;
+    showModal.value = !showModal.value;
 };
 
-// const fetchData = async () => {
-//   try {
-//     const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/dataUserOrder`);
-//     console.log(response.data);
-//     if (response.data.status === 1) {
-//       //   isChoose.value = false;
-//       console.log("Tiếp tục");
-//     } else {
-//       // alert("Vui lòng chọn lại");
-//       //   isChoose.value = true;
-//       console.log("Dừng");
-//     }
-//   } catch (e) {
-//     console.log("Error: ", e);
-//   }
-// };
-// onMounted(() => fetchData());
+const click = () => {
+    console.log("priceProduc: " + eventBus.product.priceProduct);
+    console.log("Voucher: " + eventBus.voucher.valueVoucher);
+    console.log("Ship: " + eventBus.voucher.valueShip);
+    console.log("VAT: " + eventBus.voucher.valueVAT);
+    let giamgia = 0;
+    giamgia =
+        parseFloat(eventBus.voucher.valueVoucher) +
+        parseFloat(eventBus.voucher.valueShip) +
+        parseFloat(eventBus.voucher.valueVAT);
+    console.log("Tổng giảm: " + giamgia);
+    let priceProductValue = 0;
+    priceProductValue = parseFloat(eventBus.product.priceProduct) - giamgia;
+    console.log(priceProductValue.toString());
+    // priceProduct.value = priceProductValue.toString();
+};
+onMounted(() => click());
+// if (priceProduct.value !== 0) {
+//     priceProduct.value = priceProduct.value.replace(
+//         /\B(?=(\d{3})+(?!\d))/g,
+//         "."
+//     );
+// }
+
+//InforOrder
+let quantityProduct = 0;
+const priceProduct = ref("0");
+const inforProduct = (data1, data2) => {
+    quantityProduct = data1;
+    if (data2) {
+        priceProduct.value = data2;
+    }
+};
+//InforOrder
+
+//CostOrder
+
+//CostOrder
 </script>
 
 <style scoped>
 .mainCreateNewOrderLayout {
-  display: flex;
-  flex: 1;
-  height: 100%;
-  flex-direction: column;
-  background-color: #f0f2f5;
-  gap: 20px;
+    display: flex;
+    flex: 1;
+    height: 100%;
+    flex-direction: column;
+    background-color: #f0f2f5;
+    gap: 20px;
 
-  .title {
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
-    text-align: center;
+    .title {
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
+        text-align: center;
 
-    h1 {
-      padding-top: 15px;
-      font-size: 20px;
-      font-weight: bold;
+        h1 {
+            padding-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
-  }
 }
 </style>

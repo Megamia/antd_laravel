@@ -1,7 +1,7 @@
 <template>
     <transition name="modal">
         <div class="modal-mask">
-            <div class="modal-wrapper">
+            <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="title">
                         <span class="titleText" @click="a">Chi tiết khách hàng</span>

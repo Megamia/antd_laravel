@@ -79,7 +79,7 @@ const percentValue = ref({
     reasonText: "",
 });
 const moneyValue = ref({
-    moneyText: "0",
+    moneyText: 0,
     reasonText: "",
 });
 
@@ -124,6 +124,10 @@ const apply = () => {
     } else {
         if (option.value === 1) {
             // console.log("percentValue: ", percentValue.value);
+            console.log(
+                percentValue.value.percentText,
+                typeof percentValue.value.percentText
+            );
             emit("valueInModalDiscount", percentValue.value.percentText, {
                 message: "percent",
             });
@@ -136,6 +140,11 @@ const apply = () => {
                 alert("Không thể giảm giá cao hơn giá sản phẩm");
                 return;
             } else {
+                console.log(
+                    moneyValue.value.moneyText ,
+                    typeof moneyValue.value.moneyText,
+                    eventBus.product.priceProduct
+                );
                 emit("valueInModalDiscount", moneyValue.value.moneyText, {
                     message: "money",
                 });
