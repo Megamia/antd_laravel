@@ -2,7 +2,9 @@
     <div class="mainShippingMethod" @click="closeModalShipping">
         <div class="title">
             <span class="titleTextUp">Phương thức vận chuyển</span>
-            <span class="titleTextDown">Nhận hàng trực tiếp</span>
+            <span class="titleTextDown">{{
+                valueShipping ? valueShipping : "Nhận hàng trực tiếp"
+            }}</span>
         </div>
         <div class="icon">
             <span>
@@ -24,21 +26,22 @@ import { ref } from "vue";
 
 //ModalShipping
 const isModalShipping = ref(false);
-const valueShipping = ref("0");
+const valueShipping = ref("");
 
 const closeModalShipping = () => {
     isModalShipping.value = !isModalShipping.value;
 };
-const valueInModalShipping = (data1) => {
+const valueInModalShipping = (data1, data2) => {
     isModalShipping.value = !isModalShipping.value;
-    valueShipping.value = data1.toLocaleString("de-DE", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-    valueShipping.value = valueShipping.value.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        "."
-    );
+    // valueShipping.value = data1.toLocaleString("de-DE", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    // });
+    // valueShipping.value = valueShipping.value.replace(
+    //     /\B(?=(\d{3})+(?!\d))/g,
+    //     "."
+    // );
+    valueShipping.value = data1 + " " + data2;
     console.log(valueShipping.value);
 };
 //ModalShipping

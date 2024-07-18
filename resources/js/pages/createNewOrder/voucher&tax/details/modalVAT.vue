@@ -42,6 +42,7 @@
 
 <script setup>
 import { ref, defineEmits } from "vue";
+import eventBus from "../../../../eventBus";
 // import axios from "axios";
 
 const emit = defineEmits(["closeModalVAT", "valueInModalVAT"]);
@@ -54,7 +55,10 @@ const valueVAT = ref("10");
 const valueReason = ref("");
 const apply = async () => {
     try {
-        emit("valueInModalVAT", valueVAT);
+        let value =
+            (eventBus.product.priceProduct * parseFloat(valueVAT.value)) / 100;
+
+        emit("valueInModalVAT", value);
     } catch (e) {
         console.log("Error: ", e);
     }

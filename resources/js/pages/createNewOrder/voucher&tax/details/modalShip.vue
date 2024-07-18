@@ -42,21 +42,31 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
+import eventBus from "../../../../eventBus";
 // import axios from "axios";
 
-const emit = defineEmits(["closeModalShip", "valueInModalShip"]);
+const emit = defineEmits([
+    "closeModalShip",
+    "valueInModalShip",
+    "fetchDataModal",
+]);
+let valueShip = 0;
 
 const Cancel = () => {
     emit("closeModalShip");
 };
 
-let valueShip = 0;
 const valueReason = ref("");
 const apply = async () => {
     try {
         // console.log(valueShip, valueReason.value);
-        emit("valueInModalShip", valueShip);
+        if (valueShip <= eventBus.product.priceProduct) {
+            emit("valueInModalShip", valueShip);
+            emit("fetchDataModal");
+        } else {
+            console.log("Tiền ship không thể cao hơn giá trị sản phẩm");
+        }
         // });
     } catch (e) {
         console.log("Error: ", e);

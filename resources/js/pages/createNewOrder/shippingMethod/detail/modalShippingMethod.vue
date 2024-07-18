@@ -55,8 +55,11 @@ const options = ref([
 const filterOption = (input, option) => {
     return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
+
+const userSelected = ref("");
 const handleChange = (value) => {
     console.log(`selected ${value}`);
+    userSelected.value = value;
 };
 //Selection
 
@@ -86,7 +89,7 @@ const apply = async () => {
         // }
         // respone.data.chooseVoucherCode.forEach((data) => {
         //     // console.log("Input: ", data.value);
-        emit("valueInModalShipping", selectionText.value);
+        emit("valueInModalShipping", selectionText.value, userSelected.value);
         // });
     } catch (e) {
         console.log("Error: ", e);

@@ -11,16 +11,21 @@
         <!-- </div> -->
         <div class="ship" @click="closeModalShip">
             <span class="name">Phí ship</span>
-            <span class="cost"> {{ valueShip }}đ <AkChevronRight /></span>
+            <span class="cost">
+                {{ valueShip ? valueShip : "0" }}đ <AkChevronRight
+            /></span>
         </div>
         <modalShip
             v-if="isModalShip"
             @close-modal-ship="closeModalShip"
             @value-in-modal-ship="valueInModalShip"
+            @fetch-data-modal="fetchDataModal"
         />
         <div class="VAT" @click="closeModalVAT">
             <span class="name">Thuế VAT (10%)</span>
-            <span class="cost"> {{ valueVATFinal }}đ <AkChevronRight /></span>
+            <span class="cost">
+                {{ valueVAT ? valueVAT : "0" }}đ <AkChevronRight
+            /></span>
         </div>
         <modalVAT
             v-if="isModalVAT"
@@ -33,15 +38,15 @@
 import { AkChevronRight } from "@kalimahapps/vue-icons";
 import modalShip from "./details/modalShip.vue";
 import modalVAT from "./details/modalVAT.vue";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 
-const emit = defineEmits(["closeModalShip"]);
+const emit = defineEmits(["closeModalShip", "fetchData"]);
 
 const valueVoucher = ref("0");
 valueVoucher.value = eventBus.voucher.valueVoucher.toString();
 valueVoucher.value = valueVoucher.value.replace(/\./g, "");
-valueVoucher.value = valueVoucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+valueVoucher.value = valueVoucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 //ModalShip
 const isModalShip = ref(false);
@@ -53,10 +58,13 @@ const closeModalShip = () => {
 const valueInModalShip = (data1) => {
     isModalShip.value = !isModalShip.value;
     valueShip.value = data1;
-    eventBus.voucher.valueShip = data1;
     valueShip.value = valueShip.value.replace(/\./g, "");
-    valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    // console.log(valueShip.value);
+    valueShip.value = parseFloat(valueShip.value);
+    eventBus.voucher.valueShip = valueShip.value;
+    valueShip.value = valueShip.value.toString();
+    // console.log(eventBus.voucher.valueShip);
+    valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    emit("fetchData");
 };
 //ModalShip
 
@@ -69,23 +77,50 @@ const closeModalVAT = () => {
 };
 const valueInModalVAT = (data1) => {
     isModalVAT.value = !isModalVAT.value;
-    if (eventBus.product.priceProduct !== 0) {
-        valueVAT.value = (
-            (eventBus.product.priceProduct * data1.value) /
-            100
-        ).toString();
+    if (!eventBus.voucher.valueVAT) {
+        eventBus.voucher.valueVAT = parseFloat(data1);
+        // console.log(
+        //     "eventBus.voucher.valueVAT: " + eventBus.voucher.valueVAT,
+        //     typeof eventBus.voucher.valueVAT
+        // );
     }
-    valueVATFinal.value = valueVAT.value.replace(/\./g, "");
+    valueVAT.value = parseFloat(data1);
+    valueVAT.value = valueVAT.value.toString();
+    valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    valueVATFinal.value = valueVATFinal.value.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        "."
-    );
-    eventBus.voucher.valueVAT =
-        (eventBus.product.priceProduct * data1.value) / 100;
+    // if (eventBus.product.priceProduct !== 0) {
+    //     valueVAT.value = data1.toString();
+    // }
+    // valueVATFinal.value = valueVAT.value.replace(/\./g, "");
+
+    // valueVATFinal.value = valueVATFinal.value.replace(
+    //     /\B(?=(\d{3})+(?!\d))/g,
+    //     "."
+    // );
+    // eventBus.voucher.valueVAT =
+    //     (eventBus.product.priceProduct * data1.value) / 100;
+    emit("fetchData");
 };
 //ModalVAT
 
+const fetchDataModal = () => {
+    emit("fetchData");
+};
+
+const fetchData = () => {
+    if (eventBus.voucher.valueShip) {
+        valueShip.value = eventBus.voucher.valueShip;
+        valueShip.value = valueShip.value.toString();
+        valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    if (eventBus.voucher.valueVAT) {
+        // console.log("eventBus.voucher.valueVAT: " + eventBus.voucher.valueVAT);
+        valueVAT.value = eventBus.voucher.valueVAT.toString();
+        valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        // console.log(valueVAT.value);
+    }
+};
+onMounted(() => fetchData());
 const nothing = () => {
     alert("Chưa xử lý sự kiện này");
 };

@@ -93,7 +93,7 @@ import { useRouter } from "vue-router";
 import { ref, computed, onMounted, defineEmits } from "vue";
 import axios from "axios";
 import eventBus from "../../../eventBus";
-const emit = defineEmits(["choosedProduct"]);
+const emit = defineEmits(["choosedProduct", "fetchData"]);
 
 const a = ref([]);
 // if (eventBus.product.idProduct) {
@@ -132,6 +132,8 @@ const fetchData = async () => {
             .split(",")
             .map(Number);
         a.value = eventBus.product.idProduct;
+        a.value = a.value.filter((item) => item !== 0);
+        console.log(a.value);
     }
     try {
         const response = await axios.get(

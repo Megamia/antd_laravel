@@ -8,7 +8,11 @@
                 >
             </div>
             <div class="cost">
-                <span>{{ props.priceProduct }}đ</span>
+                <span
+                    >{{
+                        props.priceProductValue ? props.priceProductValue : "0"
+                    }}đ</span
+                >
             </div>
         </div>
         <div class="order">
@@ -24,7 +28,7 @@ const router = useRouter();
 
 const props = defineProps({
     quantityProduct: Number,
-    priceProduct: String,
+    priceProductValue: String,
 });
 // const fetchData = () => {
 //     console.log(

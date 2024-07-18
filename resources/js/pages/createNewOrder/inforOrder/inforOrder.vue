@@ -164,7 +164,7 @@
                 >Tạm tính ({{ countProduct }} sản phẩm)</span
             >
             <span class="costOrder">
-                {{ totalPrice ? totalPrice : 0 + "đ" }}</span
+                {{ totalPrice ? totalPrice + "đ" : 0 + "đ" }}</span
             >
         </div>
     </div>
@@ -184,7 +184,7 @@ import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 import axios from "axios";
 
-const emit = defineEmits(["show", "showModal", "inforProduct"]);
+const emit = defineEmits(["show", "showModal", "inforProduct", "fetchData"]);
 
 //ModalCostOrder
 let idProduct = 0;
@@ -270,7 +270,7 @@ const fetchTotalPrice = () => {
         const priceProduct = parseFloat(
             dataProductSelected.value[i].price
                 .replace(/\./g, "")
-                .replace(/,/g, ".")
+                .replace(/,/g, ",")
         );
         let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
         totalPriceNumber += priceProduct * numberSelectedProduct;
@@ -281,12 +281,13 @@ const fetchTotalPrice = () => {
         // );
     }
 
-    totalPrice.value = totalPriceNumber.toLocaleString("de-DE", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
+    totalPrice.value = totalPriceNumber.toString();
+    totalPrice.value = totalPrice.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // .toLocaleString("de-DE", {
+    //     maximumFractionDigits: 2,
+    // });
     eventBus.product.priceProduct = totalPriceNumber;
-
+    emit("fetchData");
     // console.log("totalPrice: " + totalPrice, "type: ", typeof totalPrice.value);
 };
 

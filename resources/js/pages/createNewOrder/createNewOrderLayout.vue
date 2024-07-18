@@ -12,11 +12,12 @@
                 @show="showOrHidden"
                 @showModal="ClickShowModal"
                 @infor-product="inforProduct"
+                @fetch-data="click"
             />
             <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
         </div>
         <div class="voucherAndTax">
-            <voucherAndTax />
+            <voucherAndTax @fetch-data="click" />
         </div>
         <div class="noteOrder">
             <noteOrder />
@@ -33,7 +34,7 @@
         <div class="costOrder">
             <costOrder
                 :quantityProduct="quantityProduct"
-                :priceProduct="priceProduct"
+                :priceProductValue="priceProductValue"
             />
             <div style="height: 1000px; width: 100%" />
         </div>
@@ -64,19 +65,23 @@ const ClickShowModal = () => {
 };
 
 const click = () => {
-    console.log("priceProduc: " + eventBus.product.priceProduct);
-    console.log("Voucher: " + eventBus.voucher.valueVoucher);
-    console.log("Ship: " + eventBus.voucher.valueShip);
-    console.log("VAT: " + eventBus.voucher.valueVAT);
+    // console.log("priceProduc: " + eventBus.product.priceProduct);
+    // console.log("Voucher: " + eventBus.voucher.valueVoucher);
+    // console.log("Ship: " + eventBus.voucher.valueShip);
+    // console.log("VAT: " + eventBus.voucher.valueVAT);
     let giamgia = 0;
     giamgia =
         parseFloat(eventBus.voucher.valueVoucher) +
         parseFloat(eventBus.voucher.valueShip) +
         parseFloat(eventBus.voucher.valueVAT);
-    console.log("Tổng giảm: " + giamgia);
-    let priceProductValue = 0;
-    priceProductValue = parseFloat(eventBus.product.priceProduct) - giamgia;
-    console.log(priceProductValue.toString());
+    // console.log("Tổng giảm: " + giamgia);
+    priceProductValue.value = eventBus.product.priceProduct - giamgia;
+    priceProductValue.value = priceProductValue.value.toString();
+    priceProductValue.value = priceProductValue.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ","
+    );
+    // console.log(priceProductValue.value);
     // priceProduct.value = priceProductValue.toString();
 };
 onMounted(() => click());
@@ -86,6 +91,7 @@ onMounted(() => click());
 //         "."
 //     );
 // }
+const priceProductValue = ref("0");
 
 //InforOrder
 let quantityProduct = 0;
