@@ -133,7 +133,7 @@ const fetchData = async () => {
             .map(Number);
         a.value = eventBus.product.idProduct;
         a.value = a.value.filter((item) => item !== 0);
-        console.log(a.value);
+        // console.log(a.value);
     }
     try {
         const response = await axios.get(

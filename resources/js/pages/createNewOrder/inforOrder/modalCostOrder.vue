@@ -113,6 +113,7 @@ const refresh = async () => {
                 id: props.idProduct,
             }
         );
+        priceProduct.value = priceProduct.value.replace(/\./g, "");
         priceProduct.value = priceProduct.value.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             "."
@@ -131,7 +132,7 @@ const refresh = async () => {
                 }
             }
         } else if (response.data.status === 0) {
-            console.log(response.data.choosedProduct);
+            // console.log(response.data.choosedProduct);
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -171,37 +172,53 @@ const fetchData = async () => {
 onMounted(() => fetchData());
 
 const formatValue = () => {
+    priceProduct.value = priceProduct.value.replace(/\,/g, "");
     priceProduct.value = priceProduct.value.replace(/\./g, "");
     priceProduct.value = priceProduct.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
-        "."
+        ","
     );
 };
 const Apply = async () => {
-    formatValue();
     try {
-        console.log(
-            "upNumberPercent: " + upNumberPercent,
-            "\n",
-            "downNumberPercent: " + downNumberPercent,
-            "\n",
-            "price: " + priceProduct.value
-        );
+        // console.log(
+        //     "upNumberPercent: " + upNumberPercent,
+        //     "\n",
+        //     "downNumberPercent: " + downNumberPercent,
+        //     "\n",
+        //     "price: " + priceProduct.value
+        // );
+        //     priceProduct.value = priceProduct.value.replace(/\./g, "");
+        // priceProduct.value = priceProduct.value.replace(
+        //     /\B(?=(\d{3})+(?!\d))/g,
+        //     ","
+        // );
         if (currentChange.value !== "direct") {
+            priceProduct.value = priceProduct.value.replace(/\,/g, "");
+            priceProduct.value = priceProduct.value.replace(/\./g, "");
+
+            priceProduct.value = parseFloat(priceProduct.value);
             if (selectOptions.value === 1 && upNumberPercent !== 0) {
                 priceProduct.value =
-                    (parseFloat(priceProduct.value) *
-                        (100 + parseFloat(upNumberPercent))) /
+                    (priceProduct.value * (100 + parseFloat(upNumberPercent))) /
                     100;
             } else if (selectOptions.value === 2 && downNumberPercent !== 0) {
                 priceProduct.value =
-                    (parseFloat(priceProduct.value) *
-                        parseFloat(upNumberPercent)) /
+                    (priceProduct.value *
+                        (100 - parseFloat(downNumberPercent))) /
                     100;
             }
-            priceProduct.value = priceProduct.value
-                .toFixed(3)
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            priceProduct.value = priceProduct.value.toString();
+            priceProduct.value = priceProduct.value.replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                ","
+            );
+        } else if (currentChange.value === "direct") {
+            formatValue();
+        }
+        if (priceProduct.value.length > 21) {
+            alert("Giá trị quá lớn !");
+            return;
         }
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/updatePriceProduct`,

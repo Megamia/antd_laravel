@@ -267,18 +267,15 @@ const fetchTotalPrice = () => {
     let totalPriceNumber = 0;
 
     for (let i = 0; i < dataProductSelected.value.length; i++) {
-        const priceProduct = parseFloat(
-            dataProductSelected.value[i].price
-                .replace(/\./g, "")
-                .replace(/,/g, ",")
+        // console.log(dataProductSelected.value[i].price);
+        let priceProduct = dataProductSelected.value[i].price.replace(
+            /\,/g,
+            ""
         );
+        priceProduct = parseFloat(priceProduct);
+        // console.log(priceProduct);
         let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
         totalPriceNumber += priceProduct * numberSelectedProduct;
-        // console.log(
-        //     "priceProduct: " + priceProduct,
-        //     "\n",
-        //     "quantityProduct: " + value1.value
-        // );
     }
 
     totalPrice.value = totalPriceNumber.toString();
@@ -305,7 +302,8 @@ const fetchData = async () => {
             if (response.data.status === 1) {
                 dataProductSelected.value = response.data.choosedProduct;
                 fetchTotalPrice();
-                countProduct = response.data.choosedProduct.length;
+                countProduct = eventBus.product.idProduct.replace(/\,/g, "");
+                countProduct = countProduct.length;
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
@@ -333,8 +331,11 @@ const del = (id) => {
     eventBus.product.idProduct = eventBus.product.idProduct.replace(id, "");
     // console.log(eventBus.product.idProduct);
 
-    countProduct = dataProductSelected.value.length;
+    countProduct = eventBus.product.idProduct.replace(/\,/g, "");
+    countProduct = countProduct.length;
     fetchTotalPrice();
+    emit("fetchData");
+    emit("inforProduct", countProduct, totalPrice.value);
 };
 </script>
 

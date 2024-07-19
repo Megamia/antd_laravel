@@ -81,6 +81,7 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
+    // inforProduct();
     // console.log(priceProductValue.value);
     // priceProduct.value = priceProductValue.toString();
 };
@@ -97,6 +98,7 @@ const priceProductValue = ref("0");
 let quantityProduct = 0;
 const priceProduct = ref("0");
 const inforProduct = (data1, data2) => {
+    // console.log(data1, data2);
     quantityProduct = data1;
     if (data2) {
         priceProduct.value = data2;
