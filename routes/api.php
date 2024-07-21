@@ -3,6 +3,7 @@
 use App\Http\Controllers\addressController;
 use App\Http\Controllers\inforUserOrderController;
 use App\Http\Controllers\productController;
+use App\Http\Controllers\tagController;
 use App\Http\Controllers\voucherController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,13 @@ Route::post('updatePriceProduct', [productController::class, 'updatePriceProduct
 Route::post('inforProductWithTag', [productController::class, 'inforProductWithTag']);
 // Product
 
+//Tag
+Route::get('itemFilterWithTag', [tagController::class, 'itemFilterWithTag']);
+Route::post('titleFilterWithTag', [tagController::class, 'titleFilterWithTag']);
+Route::post('choosedTag', [tagController::class, 'choosedTag']);
+Route::post('dataTagItem', [tagController::class, 'dataTagItem']);
+//Tag
+
 //VoucherPromotion
 Route::get('dataValueVoucherPromotion', [voucherController::class, 'dataValueVoucherPromotion']);
 Route::post('chooseVoucherPromotion', [voucherController::class, 'chooseVoucherPromotion']);
@@ -37,5 +45,4 @@ Route::post('chooseVoucherPromotion', [voucherController::class, 'chooseVoucherP
 //VoucherCode
 Route::get('dataValueVoucherCode', [voucherController::class, 'dataValueVoucherCode']);
 Route::post('chooseVoucherCode', [voucherController::class, 'chooseVoucherCode']);
-
 //VoucherCode

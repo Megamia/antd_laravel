@@ -124,8 +124,8 @@ class productController extends Controller
     }
     public function inforProductWithTag(Request $request)
     {
-        $data = $request->only('tags');
-        $inforProductWithTag = product::where('tags', $data['tags'])->first();
+        $data = $request->only('tag');
+        $inforProductWithTag = product::whereIn('tag_id', explode(',', $data['tag']))->get();
         if ($inforProductWithTag) {
             return response()->json(['status' => 1, 'inforProductWithTag' => $inforProductWithTag]);
         } else {

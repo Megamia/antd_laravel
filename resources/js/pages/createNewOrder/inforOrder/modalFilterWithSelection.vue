@@ -4,36 +4,33 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="content">
-                        <div
-                            v-for="(dataParent, index) in dataParentDefault"
-                            :key="index"
-                        >
-                            <div class="title">
-                                <AnOutlinedArrowLeft
-                                    v-if="dataParent.iconBack"
-                                />
-                                <span class="titleText">{{
-                                    dataParent.title
-                                }}</span>
+                        <div class="title">
+                            <AnOutlinedArrowLeft v-if="titleId >= 2" @click="back" />
+                            <span class="titleText" @click="test">{{ titleFilterWithTagValue }}</span>
+                        </div>
+                        <div v-for="(dataParent, index) in dataParentDefault" :key="index">
+                            <div class="contentSelection">
+                                <span class="titleText"
+                                    @click="handleCurrentSelectionChange(dataParent.id_item, dataParent.parent_id, dataParent.id)">{{
+                                        dataParent.name
+                                    }}
+                                    <AkChevronRightSmall v-if="dataParent.itemChil === 1" />
+
+                                </span>
+                                <!-- <span v-else @click="show(dataParent.id_item, dataParent.parent_id)">
+                                    {{ dataParent.name }}
+                                </span> -->
                             </div>
 
-                            <div
-                                class="contentSelection"
-                                v-for="(dataChil, index) in dataParent.items"
-                                :key="index"
-                            >
-                                <span
-                                    @click="
-                                        handleCurrentSelectionChange(
-                                            dataChil.id
-                                        )
-                                    "
-                                    >{{ dataChil.title }}
-                                    <AkChevronRightSmall
-                                        v-if="dataChil.iconNext"
-                                    />
+                            <!-- <div class="contentSelection" >
+                                <span @click="
+                                    handleCurrentSelectionChange(
+                                        dataParent.id_item
+                                    )
+                                    ">{{ dataParent.id_item }}
+                                    <AkChevronRightSmall v-if="dataParent.itemChil" />
                                 </span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -48,8 +45,8 @@ import {
     AnOutlinedArrowLeft,
 } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, defineEmits } from "vue";
-
+import { ref, defineEmits, onMounted } from "vue";
+import axios from "axios";
 // const show = () => {
 //     console.log("flattenedData: ",flattenedData.value);
 // };
@@ -57,30 +54,123 @@ const router = useRouter();
 const emit = defineEmits(["showModal", "tags"]);
 
 const back = () => {
-    currentSelection.value = "Parent";
+    titleId = titleId - 1
+
+    fetchData()
+    fetchDataTitle()
+    return
 };
-const handleCurrentSelectionChange = (item) => {
-    if (item === 0) {
-        return;
-    } else {
-        console.log(item);
-        emit("tags", item);
+
+const test = () => {
+    console.log(titleId)
+}
+
+const show = (data1, data2) => {
+    console.log(data1, data2)
+}
+
+let currentItemId = 1;
+let iconback = 0;
+
+
+const handleCurrentSelectionChange = async (id_item, parent_id, id) => {
+    console.log(id_item, parent_id, id);
+    // if (id_item !== 0) {
+    //     console.log("parent_id: ", parent_id, "\n", "id_item: ", id_item)
+    //     if (currentItemId === parent_id) {
+    //         currentItemId = parent_id + 1
+    //     }
+    //     if (currentItemId !== parent_id) {
+    //         parent_id = currentItemId + 1
+    //         console.log("Khác", parent_id)
+    //     }
+    //     fetchDataItem()
+    //     fetchDataTitle()
+    //     console.log("parent_id: ", parent_id, "\n", "id_item: ", id_item)
+
+
+    //     // emit("tags", item);
+    // }
+    parent_id = parent_id + 1
+    try {
+        console.log(parent_id, id_item)
+        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/dataTagItem`, {
+            parent_id: parent_id,
+            id_item: id_item
+        });
+        if (response.data.status === 1) {
+            console.log(response.data.dataTagItem)
+            dataParentDefault.value = response.data.dataTagItem
+        } else if (response.data.status === 0) {
+            console.log(response.data.dataTagItem)
+        }
+        fetchDataTitle(id_item)
+        emit("tags", id);
+    } catch (e) {
+        console.log("Error: ", e);
     }
 };
 
-const dataParentDefault = ref([
-    {
-        title: "Lọc sản phẩm",
-        iconBack: false,
-        items: [
-            { id: 0, title: "Tất cả sản phẩm", iconNext: false },
-            { id: 1, title: "Tag1", iconNext: true },
-            { id: 2, title: "Tag2", iconNext: true },
-            { id: 3, title: "Tag3", iconNext: true },
-        ],
-    },
-]);
+const dataParentDefault = ref("");
+const titleFilterWithTagValue = ref("");
+const titleValue = ref("")
+let titleId;
 
+const fetchDataTitle = async (id_item) => {
+    try {
+
+        if (id_item) {
+            titleId = id_item + 1;
+        } else {
+            titleId = 1;
+        }
+        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/titleFilterWithTag`, {
+            title_id: titleId
+        });
+        if (response.data.status === 1) {
+            // console.log(response.data.titleFilterWithTag);
+            titleFilterWithTagValue.value = response.data.titleFilterWithTag.title_name
+
+        } else if (response.data.status === 0) {
+            // console.log(response.data.titleFilterWithTag);
+        }
+    } catch (e) {
+
+        console.log("Error: ", e);
+    }
+}
+
+
+let currentParentId = 1;
+
+const fetchData = async () => {
+    try {
+        // console.log(currentParentId)
+        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/choosedTag`, {
+            parent_id: currentParentId
+        });
+        if (response.data.status === 1) {
+            dataParentDefault.value = response.data.choosedTag;
+            // console.log(dataParentDefault.value)
+        } else if (response.data.status === 0) {
+            // console.log(dataParentDefault.value);
+        }
+        fetchDataTitle()
+    } catch (e) {
+        console.log("Error: ", e)
+    }
+}
+onMounted(async () => {
+    try {
+        await Promise.all([
+            fetchData()
+            // , fetchDataTitle()
+        ]);
+        // Both fetchDataItem and fetchDataTitle have completed
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+});
 const Cancel = () => {
     emit("showModal");
 };
@@ -117,6 +207,7 @@ const Cancel = () => {
         flex: 1;
         flex-direction: column;
         padding-inline: 20px;
+
         .title {
             display: flex;
             flex: 1;
@@ -131,10 +222,12 @@ const Cancel = () => {
                 font-size: 16px;
                 font-weight: 600;
             }
+
             .icon {
                 position: absolute;
             }
         }
+
         .contentSelection {
             border-bottom: 1px solid #d9d9d9;
             padding-block: 12px;
@@ -151,9 +244,11 @@ const Cancel = () => {
                 color: black;
             }
         }
+
         .contentSelectionLast {
             border: 0;
         }
+
         .testSelection {
             display: flex;
             flex: 1;
@@ -187,6 +282,7 @@ const Cancel = () => {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+
 .active {
     border-color: #1890ff;
     color: #1890ff;

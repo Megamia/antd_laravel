@@ -6,58 +6,41 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search
-                    v-model:value="nameOrPhoneNumber"
-                    placeholder="Nhập tên sản phẩm/combo"
-                />
+                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên sản phẩm/combo" />
             </div>
             <div class="filterWithSelection">
-                <span class="filterSpan" @click="showModalFilterWithSelection"
-                    >Tất cả sản phẩm <AkChevronDownSmall
-                /></span>
+                <span class="filterSpan" @click="showModalFilterWithSelection">Tất cả sản phẩm
+                    <AkChevronDownSmall />
+                </span>
             </div>
-            <modalFilterWithSelection
-                v-if="isShowModalFilterWithSelection"
-                @showModal="showModalFilterWithSelection"
-                @tags="filterWithTag"
-            />
+            <modalFilterWithSelection v-if="isShowModalFilterWithSelection" @showModal="showModalFilterWithSelection"
+                @tags="filterWithTag" />
             <div class="productInfor">
                 <a-checkbox-group v-model:value="a" style="width: 100%">
-                    <div
-                        class="productItems"
-                        v-for="product in filter"
-                        :key="product.id"
-                    >
-                        <a-checkbox
-                            :value="product.id"
-                            style="margin-left: 12px; margin-top: 12px"
-                            :disabled="product.quantity <= 0"
-                        />
+                    <div class="productItems" v-for="product in filter" :key="product.id">
+                        <a-checkbox :value="product.id" style="margin-left: 12px; margin-top: 12px"
+                            :disabled="product.quantity <= 0" />
                         <div class="productInforRadio">
-                            <img
-                                style="
+                            <img style="
                                     width: 60px;
                                     height: 60px;
                                     margin-block: 10px;
-                                "
-                                :src="product.img"
-                            />
+                                " :src="product.img" />
                             <div class="detailsProduct">
                                 <div class="nameAndTagProduct">
                                     <span class="nameProduct">{{
                                         product.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="tagProduct">{{
                                         product.tag
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="priceAndQuantityProduct">
                                     <span class="priceProduct">
                                         {{ product.price }}đ
                                     </span>
                                     <span class="quantityProduct">
-                                        <span class="labelQuantity"
-                                            >Tồn kho:
+                                        <span class="labelQuantity">Tồn kho:
                                         </span>
                                         {{ product.quantity }}
                                     </span>
@@ -116,8 +99,10 @@ const showModalFilterWithSelection = () => {
 const filterWithTag = (data) => {
     isShowModalFilterWithSelection.value =
         !isShowModalFilterWithSelection.value;
-    console.log("filterWithTag:", data);
+    // console.log("filterWithTag:", data);
     tag.value = data;
+    // console.log("tag.value:", tag.value);
+    fetchData();
 };
 // const click = () => {
 //     if (a.value === "guest") {
@@ -145,15 +130,16 @@ const fetchData = async () => {
     }
     try {
         if (tag.value) {
+            console.log(tag.value);
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
                 {
-                    tags: tag.value,
+                    tag: tag.value,
                 }
             );
             if (response.data.status === 1) {
                 data.value = response.data.inforProductWithTag;
-                console.log(data.value);
+                // console.log(data.value);
                 return data.value;
             } else {
                 console.log("Faile");
@@ -310,6 +296,7 @@ const filter = computed(() => {
             padding: 10px 12px 10px 12px;
             border-bottom: 1px solid #d9d9dd;
         }
+
         .filterWithSelection {
             background-color: #f0f2f5;
             padding: 12px;
@@ -326,6 +313,7 @@ const filter = computed(() => {
             display: flex;
             flex-direction: column;
             margin-bottom: 70px;
+
             button {
                 display: flex;
                 flex: 1;
@@ -355,6 +343,7 @@ const filter = computed(() => {
                         flex-direction: column;
                         padding: 12px;
                         gap: 10px;
+
                         .nameAndTagProduct {
                             display: flex;
                             flex: 1;
@@ -363,11 +352,13 @@ const filter = computed(() => {
                             .nameProduct {
                                 font-size: 14px;
                             }
+
                             .tagProduct {
                                 font-size: 12px;
                                 color: #00000073;
                             }
                         }
+
                         .priceAndQuantityProduct {
                             display: flex;
                             flex: 1;
@@ -382,6 +373,7 @@ const filter = computed(() => {
                             .quantityProduct {
                                 font-size: 14px;
                                 font-weight: 600;
+
                                 .labelQuantity {
                                     font-size: 12px;
                                     font-weight: 500;
@@ -396,7 +388,8 @@ const filter = computed(() => {
     }
 
     .saveDive {
-        position: absolute; /* fixed*/
+        position: absolute;
+        /* fixed*/
         background-color: white;
         bottom: 0;
         width: 100%;

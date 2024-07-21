@@ -5,19 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class product extends Model
+class tag_title extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'tag_id',
-        'quantity',
-        'defaultPrice',
-        'price',
-        'numberSelected',
-        'img'
+        'title_name',
     ];
     public $timestamps = false;
-    protected $table = 'product';
+    protected $table = 'tag_title';
     protected $hidden = [];
 }

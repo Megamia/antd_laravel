@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,12 @@ return new class extends Migration
         Schema::create('product', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('tag');
+            $table->unsignedBigInteger('tag_id')->nullable();
+
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tag')
+                ->onDelete('cascade');
             $table->integer('quantity');
             $table->string('defaultPrice');
             $table->string('price');
@@ -26,7 +32,7 @@ return new class extends Migration
         $data = [
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag1',
+                'tag_id' => '1',
                 'quantity' => '2',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -35,7 +41,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag3',
+                'tag_id' => '2',
                 'quantity' => '46',
                 'defaultPrice' => '2.049.000',
                 'price' => '2.049.000',
@@ -44,7 +50,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag2',
+                'tag_id' => '3',
                 'quantity' => '0',
                 'defaultPrice' => '1.249.000',
                 'price' => '1.249.000',
@@ -53,7 +59,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag2',
+                'tag_id' => '4',
                 'quantity' => '29',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -62,7 +68,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag3',
+                'tag_id' => '5',
                 'quantity' => '161',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -71,7 +77,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag' => 'Tag3',
+                'tag_id' => '6',
                 'quantity' => '2',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -82,7 +88,7 @@ return new class extends Migration
         foreach ($data as $item) {
             $address = new Product();
             $address->name = $item['name'];
-            $address->tag = $item['tag'];
+            $address->tag_id = $item['tag_id'];
             $address->quantity = $item['quantity'];
             $address->defaultPrice = $item['defaultPrice'];
             $address->price = $item['price'];
