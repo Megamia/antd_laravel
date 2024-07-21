@@ -19,6 +19,7 @@
             <modalFilterWithSelection
                 v-if="isShowModalFilterWithSelection"
                 @showModal="showModalFilterWithSelection"
+                @tags="filterWithTag"
             />
             <div class="productInfor">
                 <a-checkbox-group v-model:value="a" style="width: 100%">
@@ -95,6 +96,7 @@ import axios from "axios";
 import eventBus from "../../../eventBus";
 const emit = defineEmits(["choosedProduct", "fetchData"]);
 
+const tag = ref("");
 const a = ref([]);
 // if (eventBus.product.idProduct) {
 //     for (let i = 0; i < eventBus.product.idProduct.length; i++) {
@@ -110,6 +112,12 @@ const isShowModalFilterWithSelection = ref(false);
 const showModalFilterWithSelection = () => {
     isShowModalFilterWithSelection.value =
         !isShowModalFilterWithSelection.value;
+};
+const filterWithTag = (data) => {
+    isShowModalFilterWithSelection.value =
+        !isShowModalFilterWithSelection.value;
+    console.log("filterWithTag:", data);
+    tag.value = data;
 };
 // const click = () => {
 //     if (a.value === "guest") {
@@ -136,18 +144,36 @@ const fetchData = async () => {
         // console.log(a.value);
     }
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/inforProduct`
-        );
-        if (response.data.status === 1) {
-            data.value = response.data.inforProduct;
+        if (tag.value) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
+                {
+                    tags: tag.value,
+                }
+            );
+            if (response.data.status === 1) {
+                data.value = response.data.inforProductWithTag;
+                console.log(data.value);
+                return data.value;
+            } else {
+                console.log("Faile");
+            }
         } else {
-            console.log("Faile");
+            const response = await axios.get(
+                `${import.meta.env.VITE_APP_URL_API}/inforProduct`
+            );
+            if (response.data.status === 1) {
+                data.value = response.data.inforProduct;
+                return data.value;
+            } else {
+                console.log("Faile");
+            }
         }
     } catch (e) {
         console.log("Error: ", e);
     }
 };
+
 onMounted(() => fetchData());
 
 const back = () => {

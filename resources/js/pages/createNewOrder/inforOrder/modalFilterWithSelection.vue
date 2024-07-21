@@ -5,7 +5,6 @@
                 <div class="modal-container">
                     <div class="content">
                         <div
-                            v-if="currentSelection === 'Parent'"
                             v-for="(dataParent, index) in dataParentDefault"
                             :key="index"
                         >
@@ -36,65 +35,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div>
-                            <div v-for="item in flattenedData" :key="item.id">
-                                <div v-if="currentSelection === item.id">
-                                    <div class="title">
-                                        <AnOutlinedArrowLeft @click="back" />
-                                        <span class="titleText">{{
-                                            item.title
-                                        }}</span>
-                                    </div>
-
-                                    <div
-                                        class="contentSelection"
-                                        v-for="childItem in item.itemsChil"
-                                        :key="childItem.id"
-                                    >
-                                        <span
-                                            @click="
-                                                handleCurrentSelectionChange(
-                                                    childItem.id
-                                                )
-                                            "
-                                        >
-                                            {{ childItem.name }}
-                                            <AkChevronRightSmall
-                                                v-if="childItem.iconNext"
-                                            />
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <!-- <div
-                            v-if="currentSelection === 'a'"
-                            class="testSelection"
-                        >
-                            <div class="title">
-                                <span class="icon">
-                                    <AnOutlinedArrowLeft @click="back" />
-                                </span>
-                                <span class="titleText"> Thương hiệu</span>
-                            </div>
-                            <div class="contentSelection">
-                                <span @click="handleCurrentSelectionChange('a')"
-                                    >Danh mục cấp 2 <AkChevronRightSmall
-                                /></span>
-                            </div>
-                        </div>
-                        <div
-                            v-if="currentSelection === 'b'"
-                            class="testSelection"
-                        >
-                            <div class="title">
-                                <span class="titleText">Danh mục</span>
-                            </div>
-                            <div class="contentSelection">
-                                <span> b</span>
-                            </div>
-                        </div> -->
                 </div>
             </div>
         </div>
@@ -107,14 +48,13 @@ import {
     AnOutlinedArrowLeft,
 } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, defineEmits, computed } from "vue";
+import { ref, defineEmits } from "vue";
 
 // const show = () => {
 //     console.log("flattenedData: ",flattenedData.value);
 // };
 const router = useRouter();
-
-const currentSelection = ref("Parent");
+const emit = defineEmits(["showModal", "tags"]);
 
 const back = () => {
     currentSelection.value = "Parent";
@@ -123,91 +63,23 @@ const handleCurrentSelectionChange = (item) => {
     if (item === 0) {
         return;
     } else {
-        currentSelection.value = item;
-        console.log(currentSelection.value);
+        console.log(item);
+        emit("tags", item);
     }
 };
-const flattenedData = computed(() => {
-    const flatten = (dataChildDefault) => {
-        return dataChildDefault.reduce((acc, item) => {
-            acc.push(item);
-            if (item.itemsChil) {
-                acc = acc.concat(flatten(item.itemsChil));
-            }
-            return acc;
-        }, []);
-    };
-    return (
-        console.log(flatten(dataChildDefault.value)[0].items),
-        flatten(dataChildDefault.value)[0].items
-    );
-});
+
 const dataParentDefault = ref([
     {
         title: "Lọc sản phẩm",
         iconBack: false,
         items: [
             { id: 0, title: "Tất cả sản phẩm", iconNext: false },
-            { id: 1, title: "Thương hiệu", iconNext: true },
-            { id: 2, title: "Danh mục", iconNext: true },
-            { id: 3, title: "Tags", iconNext: true },
+            { id: 1, title: "Tag1", iconNext: true },
+            { id: 2, title: "Tag2", iconNext: true },
+            { id: 3, title: "Tag3", iconNext: true },
         ],
     },
 ]);
-const dataChildDefault = ref([
-  {
-    items: [
-      {
-        id: 1,
-        title: "Thương hiệu",
-        iconBack: true,
-        iconNext: false,
-        itemsChil: [
-          { id: 1, name: "Danh mục cấp 2", iconNext: false },
-          {
-            id: 2,
-            name: "Danh mục cấp 2",
-            iconNext: true,
-            title: "Thương hiệu",
-            itemsChil: [
-              { id: 1, name: "Danh mục cấp 3", iconNext: false },
-              { id: 2, name: "Danh mục cấp 3", iconNext: true },
-              { id: 3, name: "Danh mục cấp 3", iconNext: true },
-            ],
-          },
-          { id: 3, name: "Danh mục cấp 2", iconNext: true },
-          { id: 4, name: "Danh mục cấp 2", iconNext: true },
-        ],
-      },
-      {
-        id: 2,
-        title: "Danh mục",
-        iconBack: true,
-        iconNext: false,
-        itemsChil: [
-          { id: 1, name: "Danh mục cấp 2", iconNext: false },
-          { id: 2, name: "Danh mục cấp 2", iconNext: true },
-          { id: 3, name: "Danh mục cấp 2", iconNext: true },
-          { id: 4, name: "Danh mục cấp 2", iconNext: true },
-        ],
-      },
-      {
-        id: 3,
-        title: "Tags",
-        iconBack: true,
-        iconNext: false,
-        itemsChil: [
-          { id: 1, name: "Danh mục cấp 2", iconNext: false },
-          { id: 2, name: "Danh mục cấp 2", iconNext: true },
-          { id: 3, name: "Danh mục cấp 2", iconNext: true },
-          { id: 4, name: "Danh mục cấp 2", iconNext: true },
-        ],
-      },
-    ],
-  },
-]);
-
-const emit = defineEmits(["showModal"]);
 
 const Cancel = () => {
     emit("showModal");

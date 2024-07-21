@@ -122,4 +122,14 @@ class productController extends Controller
             return response()->json(['status' => 0, 'newCost' => 'No newCost']);
         }
     }
+    public function inforProductWithTag(Request $request)
+    {
+        $data = $request->only('tags');
+        $inforProductWithTag = product::where('tags', $data['tags'])->first();
+        if ($inforProductWithTag) {
+            return response()->json(['status' => 1, 'inforProductWithTag' => $inforProductWithTag]);
+        } else {
+            return response()->json(['status' => 0, 'inforProductWithTag' => 'No inforProductWithTag']);
+        }
+    }
 }

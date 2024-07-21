@@ -26,7 +26,7 @@ Route::get('showImg', [productController::class, 'showImg']);
 Route::post('addNewProduct', [productController::class, 'addNewProduct']);
 Route::post('choosedProduct', [productController::class, 'choosedProduct']);
 Route::post('updatePriceProduct', [productController::class, 'updatePriceProduct']);
-
+Route::post('inforProductWithTag', [productController::class, 'inforProductWithTag']);
 // Product
 
 //VoucherPromotion
