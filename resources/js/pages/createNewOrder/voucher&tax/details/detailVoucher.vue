@@ -121,7 +121,7 @@ import eventBus from "../../../../eventBus";
 const router = useRouter();
 const checked = ref(null);
 const click = () => {
-    console.log(checked.value);
+    // console.log(checked.value);
 
     fetchTotal();
 };
@@ -148,7 +148,7 @@ onMounted(() => fetchData());
 // ModalCode
 
 const test = () => {
-    console.log(checked.value);
+    // console.log(checked.value);
 };
 const isShowModalCode = ref(false);
 
@@ -243,7 +243,7 @@ const buttonSave = () => {
     if (total.value === "0") {
         eventBus.voucher.clearValueVoucher();
     }
-    console.log(checked.value);
+    // console.log(checked.value);
     eventBus.voucher.isLoyalty = checked.value;
     fetchData();
     router.back();

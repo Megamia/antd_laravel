@@ -5,20 +5,35 @@
                 <div class="modal-container">
                     <div class="content">
                         <div class="title">
-                            <AnOutlinedArrowLeft v-if="titleId >= 2" @click="back" />
-                            <span class="titleText" @click="test">{{ titleFilterWithTagValue }}</span>
+                            <AnOutlinedArrowLeft
+                                v-if="titleId >= 2"
+                                @click="back"
+                            />
+                            <span class="titleText" @click="test">{{
+                                titleFilterWithTagValue
+                            }}</span>
                         </div>
                         <div class="contentSelection" v-if="titleId === 1">
                             <span @click="showAll">Tất cả sản phẩm</span>
                         </div>
-                        <div v-for="(dataParent, index) in dataParentDefault" :key="index">
+                        <div
+                            v-for="(dataParent, index) in dataParentDefault"
+                            :key="index"
+                        >
                             <div class="contentSelection">
-                                <span class="titleText"
-                                    @click="handleCurrentSelectionChange(dataParent.id_item, dataParent.parent_id, dataParent.id)">{{
-                                        dataParent.name
-                                    }}
-                                    <AkChevronRightSmall v-if="dataParent.itemChil === 1" />
-
+                                <span
+                                    class="titleText"
+                                    @click="
+                                        handleCurrentSelectionChange(
+                                            dataParent.id_item,
+                                            dataParent.parent_id,
+                                            dataParent.id
+                                        )
+                                    "
+                                    >{{ dataParent.name }}
+                                    <AkChevronRightSmall
+                                        v-if="dataParent.itemChil === 1"
+                                    />
                                 </span>
                                 <!-- <span v-else @click="show(dataParent.id_item, dataParent.parent_id)">
                                     {{ dataParent.name }}
@@ -57,97 +72,86 @@ const router = useRouter();
 const emit = defineEmits(["showModal", "tags"]);
 
 const back = () => {
-    titleId = titleId - 1
+    titleId = titleId - 1;
 
-    fetchData()
-    fetchDataTitle()
-    return
+    fetchData();
+    fetchDataTitle();
+    return;
 };
 
 const test = () => {
-    console.log(titleId)
-}
+    console.log(titleId);
+};
 
 const show = (data1, data2) => {
-    console.log(data1, data2)
-}
+    console.log(data1, data2);
+};
 
 let currentItemId = 1;
 let iconback = 0;
-const itemChoosed = ref("")
+const itemChoosed = ref("");
 
 const showAll = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/itemFilterWithTag`)
+        const response = await axios.get(
+            `${import.meta.env.VITE_APP_URL_API}/itemFilterWithTag`
+        );
         if (response.data.status === 1) {
             // console.log("All: ", response.data.inforProduct)
             itemChoosed.value = response.data.itemFilterWithTag;
-            let ids = itemChoosed.value.map(item => item.id).join(',');
-            console.log("IDs: ", ids);
-            emit('tags', ids)
+            let ids = itemChoosed.value.map((item) => item.id).join(",");
+            // console.log("IDs: ", ids);
+            emit("tags", ids);
         } else if (response.data.status === 0) {
-            console.log("No all: ", response.data.itemFilterWithTag)
+            console.log(response.data.itemFilterWithTag);
         }
     } catch (e) {
-        console.log("Error: ", e)
+        console.log("Error: ", e);
     }
-}
+};
 
-const choosed = ref("")
-let level = 0
+const choosed = ref("");
+let level = 0;
 const handleCurrentSelectionChange = (id_item, parent_id, id) => {
-    console.log(id_item, parent_id, id);
-    fetchDataItem(id_item, parent_id)
-    choosed.value = dataParentDefault.value.filter(item => item.id === id);
+    // console.log(id_item, parent_id, id);
+    fetchDataItem(id_item, parent_id);
+    choosed.value = dataParentDefault.value.filter((item) => item.id === id);
     for (let i = 0; i < choosed.value.length; i++) {
-        level = choosed.value[i].parent_id
-        choosed.value = choosed.value[i].id
+        level = choosed.value[i].parent_id;
+        choosed.value = choosed.value[i].id;
         // console.log("level:", level)
     }
-    console.log("choosed.value: ", choosed.value);
-    console.log("Level: ", level)
+    // console.log("choosed.value: ", choosed.value);
+    // console.log("Level: ", level)
     if (level === 3) {
-        emit('tags', choosed.value)
+        emit("tags", choosed.value);
     }
 
     // for(let i=0;i<dataParentDefault.value.length;i++){
     //     itemChoosed.value=dataParentDefault.value[i].find(item=>item.)
     // }
     // console.log('itemChoosed.value: ', itemChoosed.value)
-}
+};
 
 const fetchDataItem = async (id_item, parent_id) => {
-    // if (id_item !== 0) {
-    //     console.log("parent_id: ", parent_id, "\n", "id_item: ", id_item)
-    //     if (currentItemId === parent_id) {
-    //         currentItemId = parent_id + 1
-    //     }
-    //     if (currentItemId !== parent_id) {
-    //         parent_id = currentItemId + 1
-    //         console.log("Khác", parent_id)
-    //     }
-    //     fetchDataItem()
-    //     fetchDataTitle()
-    //     console.log("parent_id: ", parent_id, "\n", "id_item: ", id_item)
-
-
-    //     // emit("tags", item);
-    // }
-    parent_id = parent_id + 1
+    parent_id = parent_id + 1;
     try {
-        console.log(parent_id, id_item)
-        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/dataTagItem`, {
-            parent_id: parent_id,
-            id_item: id_item
-        });
+        // console.log(parent_id, id_item)
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/dataTagItem`,
+            {
+                parent_id: parent_id,
+                id_item: id_item,
+            }
+        );
         if (response.data.status === 1) {
-            console.log(response.data.dataTagItem)
-            dataParentDefault.value = response.data.dataTagItem
-            console.log(dataParentDefault.value)
+            // console.log(response.data.dataTagItem)
+            dataParentDefault.value = response.data.dataTagItem;
+            // console.log(dataParentDefault.value)
         } else if (response.data.status === 0) {
-            console.log(response.data.dataTagItem)
+            // console.log(response.data.dataTagItem)
         }
-        fetchDataTitle(id_item)
+        fetchDataTitle(id_item);
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -155,62 +159,61 @@ const fetchDataItem = async (id_item, parent_id) => {
 
 const dataParentDefault = ref("");
 const titleFilterWithTagValue = ref("");
-const titleValue = ref("")
 let titleId;
 
 const fetchDataTitle = async (id_item) => {
     try {
-
         if (id_item) {
             titleId = id_item + 1;
         } else {
             titleId = 1;
         }
-        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/titleFilterWithTag`, {
-            title_id: titleId
-        });
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/titleFilterWithTag`,
+            {
+                title_id: titleId,
+            }
+        );
         if (response.data.status === 1) {
             // console.log(response.data.titleFilterWithTag);
-            titleFilterWithTagValue.value = response.data.titleFilterWithTag.title_name
-
+            titleFilterWithTagValue.value =
+                response.data.titleFilterWithTag.title_name;
         } else if (response.data.status === 0) {
             // console.log(response.data.titleFilterWithTag);
         }
     } catch (e) {
-
         console.log("Error: ", e);
     }
-}
-
+};
 
 let currentParentId = 1;
 
 const fetchData = async () => {
     try {
-        // console.log(currentParentId)
-        const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/choosedTag`, {
-            parent_id: currentParentId
-        });
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/choosedTag`,
+            {
+                parent_id: currentParentId,
+            }
+        );
         if (response.data.status === 1) {
             dataParentDefault.value = response.data.choosedTag;
-            // console.log(dataParentDefault.value)
         } else if (response.data.status === 0) {
             // console.log(dataParentDefault.value);
         }
-        fetchDataTitle()
+        fetchDataTitle();
     } catch (e) {
-        console.log("Error: ", e)
+        console.log("Error: ", e);
     }
-}
+};
 onMounted(async () => {
     try {
         await Promise.all([
-            fetchData()
+            fetchData(),
             // , fetchDataTitle()
         ]);
-        // Both fetchDataItem and fetchDataTitle have completed
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
     }
 });
 const Cancel = () => {

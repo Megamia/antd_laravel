@@ -146,7 +146,7 @@ const fetchData = async () => {
 
     try {
         if (tag.value) {
-            console.log(tag.value);
+            // console.log(tag.value);
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
                 {
@@ -206,7 +206,7 @@ const buttonSave = async () => {
                 router.back();
                 // emit("choosedProduct", response.data.choosedProduct);
             } else {
-                // console.log("No choosedProduct");
+                console.log("No choosedProduct");
             }
         } catch (e) {
             console.log("Error: ", e);
