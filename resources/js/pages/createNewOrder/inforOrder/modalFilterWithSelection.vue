@@ -8,6 +8,9 @@
                             <AnOutlinedArrowLeft v-if="titleId >= 2" @click="back" />
                             <span class="titleText" @click="test">{{ titleFilterWithTagValue }}</span>
                         </div>
+                        <div class="contentSelection" v-if="titleId === 1">
+                            <span @click="showAll">Tất cả sản phẩm</span>
+                        </div>
                         <div v-for="(dataParent, index) in dataParentDefault" :key="index">
                             <div class="contentSelection">
                                 <span class="titleText"
@@ -71,10 +74,49 @@ const show = (data1, data2) => {
 
 let currentItemId = 1;
 let iconback = 0;
+const itemChoosed = ref("")
 
+const showAll = async () => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_APP_URL_API}/itemFilterWithTag`)
+        if (response.data.status === 1) {
+            // console.log("All: ", response.data.inforProduct)
+            itemChoosed.value = response.data.itemFilterWithTag;
+            let ids = itemChoosed.value.map(item => item.id).join(',');
+            console.log("IDs: ", ids);
+            emit('tags', ids)
+        } else if (response.data.status === 0) {
+            console.log("No all: ", response.data.itemFilterWithTag)
+        }
+    } catch (e) {
+        console.log("Error: ", e)
+    }
+}
 
-const handleCurrentSelectionChange = async (id_item, parent_id, id) => {
+const choosed = ref("")
+let level = 0
+const handleCurrentSelectionChange = (id_item, parent_id, id) => {
     console.log(id_item, parent_id, id);
+    fetchDataItem(id_item, parent_id)
+    choosed.value = dataParentDefault.value.filter(item => item.id === id);
+    for (let i = 0; i < choosed.value.length; i++) {
+        level = choosed.value[i].parent_id
+        choosed.value = choosed.value[i].id
+        // console.log("level:", level)
+    }
+    console.log("choosed.value: ", choosed.value);
+    console.log("Level: ", level)
+    if (level === 3) {
+        emit('tags', choosed.value)
+    }
+
+    // for(let i=0;i<dataParentDefault.value.length;i++){
+    //     itemChoosed.value=dataParentDefault.value[i].find(item=>item.)
+    // }
+    // console.log('itemChoosed.value: ', itemChoosed.value)
+}
+
+const fetchDataItem = async (id_item, parent_id) => {
     // if (id_item !== 0) {
     //     console.log("parent_id: ", parent_id, "\n", "id_item: ", id_item)
     //     if (currentItemId === parent_id) {
@@ -101,11 +143,11 @@ const handleCurrentSelectionChange = async (id_item, parent_id, id) => {
         if (response.data.status === 1) {
             console.log(response.data.dataTagItem)
             dataParentDefault.value = response.data.dataTagItem
+            console.log(dataParentDefault.value)
         } else if (response.data.status === 0) {
             console.log(response.data.dataTagItem)
         }
         fetchDataTitle(id_item)
-        emit("tags", id);
     } catch (e) {
         console.log("Error: ", e);
     }

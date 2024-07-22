@@ -32,7 +32,7 @@ return new class extends Migration
         $data = [
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '1',
+                'tag_id' => '14',
                 'quantity' => '2',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -41,7 +41,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '2',
+                'tag_id' => '16',
                 'quantity' => '46',
                 'defaultPrice' => '2.049.000',
                 'price' => '2.049.000',
@@ -50,7 +50,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '3',
+                'tag_id' => '14',
                 'quantity' => '0',
                 'defaultPrice' => '1.249.000',
                 'price' => '1.249.000',
@@ -59,7 +59,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '4',
+                'tag_id' => '14',
                 'quantity' => '29',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -68,7 +68,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '5',
+                'tag_id' => '15',
                 'quantity' => '161',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
@@ -77,7 +77,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Tên của sản phẩm',
-                'tag_id' => '6',
+                'tag_id' => '17',
                 'quantity' => '2',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
