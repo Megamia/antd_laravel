@@ -98,7 +98,7 @@ import eventBus from "../../../eventBus";
 const emit = defineEmits(["choosedProduct", "fetchData"]);
 
 const tag = ref("");
-const a = ref([]);
+const a = ref([1]);
 // if (eventBus.product.idProduct) {
 //     for (let i = 0; i < eventBus.product.idProduct.length; i++) {
 //         console.log(eventBus.product.idProduct[i].value);
@@ -188,7 +188,8 @@ const addNewUser = () => {
 
 const buttonSave = async () => {
     if (!a.value || a.value.length <= 0) {
-        alert("Chưa chọn sản phẩm nào");
+        alert("Hãy chọn ít nhất 1 sản phẩm");
+        a.value = [1];
     } else {
         // console.log(a.value.sort().toString());
         // console.log(a.value);

@@ -16,31 +16,32 @@
                         <div class="contentSelection" v-if="titleId === 1">
                             <span @click="showAll">Tất cả sản phẩm</span>
                         </div>
-                        <div
-                            v-for="(dataParent, index) in dataParentDefault"
-                            :key="index"
-                        >
-                            <div class="contentSelection">
-                                <span
-                                    class="titleText"
-                                    @click="
-                                        handleCurrentSelectionChange(
-                                            dataParent.id_item,
-                                            dataParent.parent_id,
-                                            dataParent.id
-                                        )
-                                    "
-                                    >{{ dataParent.name }}
-                                    <AkChevronRightSmall
-                                        v-if="dataParent.itemChil === 1"
-                                    />
-                                </span>
-                                <!-- <span v-else @click="show(dataParent.id_item, dataParent.parent_id)">
+                        <div class="itemDetail">
+                            <div
+                                v-for="(dataParent, index) in dataParentDefault"
+                                :key="index"
+                            >
+                                <div class="contentSelection">
+                                    <span
+                                        class="titleText"
+                                        @click="
+                                            handleCurrentSelectionChange(
+                                                dataParent.id_item,
+                                                dataParent.parent_id,
+                                                dataParent.id
+                                            )
+                                        "
+                                        >{{ dataParent.name }}
+                                        <AkChevronRightSmall
+                                            v-if="dataParent.itemChil === 1"
+                                        />
+                                    </span>
+                                    <!-- <span v-else @click="show(dataParent.id_item, dataParent.parent_id)">
                                     {{ dataParent.name }}
                                 </span> -->
-                            </div>
+                                </div>
 
-                            <!-- <div class="contentSelection" >
+                                <!-- <div class="contentSelection" >
                                 <span @click="
                                     handleCurrentSelectionChange(
                                         dataParent.id_item
@@ -49,6 +50,7 @@
                                     <AkChevronRightSmall v-if="dataParent.itemChil" />
                                 </span>
                             </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -251,7 +253,6 @@ const Cancel = () => {
         display: flex;
         flex: 1;
         flex-direction: column;
-        padding-inline: 20px;
 
         .title {
             display: flex;
@@ -259,7 +260,9 @@ const Cancel = () => {
             justify-content: space-between;
             border-bottom: 1px solid #d9d9d9;
             padding-block: 20px;
-
+            padding-inline: 20px;
+            align-items: center;
+            
             .titleText {
                 display: flex;
                 flex: 1;
@@ -279,6 +282,7 @@ const Cancel = () => {
             font-size: 14px;
             line-height: 22px;
             color: black;
+            margin-inline: 20px;
 
             span {
                 display: flex;
@@ -305,6 +309,8 @@ const Cancel = () => {
                 justify-content: space-between;
                 align-items: center;
             }
+        }
+        .itemDetail {
         }
     }
 }
