@@ -1,4 +1,3 @@
-// eventBus.js
 import { reactive } from "vue";
 
 const eventBus = reactive({

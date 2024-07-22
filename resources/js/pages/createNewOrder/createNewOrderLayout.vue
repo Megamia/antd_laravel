@@ -2,9 +2,9 @@
     <div class="mainCreateNewOrderLayout">
         <div class="title">
             <div class="h1">
-                <h1>Tạo mới đơn hàng</h1>
+                <h1 @click="test">Tạo mới đơn hàng</h1>
             </div>
-            <div class="loyalty" v-if="eventBus.voucher.isLoyalty">
+            <div class="loyalty" v-if="isLoyalty">
                 <span
                     ><AkCircleCheckFill />Đã áp dụng ưu đãi phân hạng
                     Loyalty</span
@@ -64,6 +64,7 @@ import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 import { ref, onMounted } from "vue";
 import eventBus from "../../eventBus";
 // import axios from "axios";
+const isLoyalty = ref(false);
 const isOpen = ref(true);
 const showModal = ref(false);
 const showOrHidden = () => {
@@ -71,6 +72,9 @@ const showOrHidden = () => {
 };
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
+};
+const test = () => {
+    console.log(eventBus.voucher.isLoyalty);
 };
 
 const click = () => {
@@ -101,6 +105,10 @@ onMounted(() => click());
 //         "."
 //     );
 // }
+const fetchData = () => {
+    isLoyalty.value = eventBus.voucher.isLoyalty;
+};
+onMounted(() => fetchData());
 const priceProductValue = ref("0");
 
 //InforOrder

@@ -119,9 +119,10 @@ import { ref, onMounted } from "vue";
 import eventBus from "../../../../eventBus";
 
 const router = useRouter();
-const checked = ref("");
+const checked = ref(null);
 const click = () => {
-    eventBus.voucher.isLoyalty = !eventBus.voucher.isLoyalty;
+    console.log(checked.value);
+
     fetchTotal();
 };
 const back = () => {
@@ -130,6 +131,10 @@ const back = () => {
 
 const fetchData = () => {
     checked.value = eventBus.voucher.isLoyalty;
+    // if (eventBus.voucher.isLoyalty) {
+    //     checked.value = eventBus.voucher.isLoyalty;
+    // }
+    // console.log(eventBus.voucher.isLoyalty);
     if (eventBus.product.priceProduct !== 0) {
         // console.log("evBPrice: " + eventBus.product.priceProduct);
         // console.log("discount: " + totalPrice, typeof totalPrice);
@@ -143,7 +148,7 @@ onMounted(() => fetchData());
 // ModalCode
 
 const test = () => {
-    console.log(eventBus.voucher.isLoyalty);
+    console.log(checked.value);
 };
 const isShowModalCode = ref(false);
 
@@ -235,33 +240,15 @@ const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
 // let total = 0;
 const total = ref("0");
 const buttonSave = () => {
-    // console.log(
-    //     "Mã ưu đãi: ",
-    //     totalCode ? totalCode : 0,
-    //     "\n",
-    //     "Chiết khấu: ",
-    //     valueDiscount.value ? valueDiscount.value : 0,
-    //     "\n",
-    //     "Khuyến mãi: ",
-    //     totalPro ? totalPro : 0,
-    //     "\n",
-    //     "Total: ",
-    //     total.value
-    // );
     if (total.value === "0") {
         eventBus.voucher.clearValueVoucher();
     }
-    // console.log(total.value, typeof total.value, eventBus.voucher.valueVoucher);
+    console.log(checked.value);
+    eventBus.voucher.isLoyalty = checked.value;
+    fetchData();
     router.back();
-
-    // console.log(typeof totalCode, typeof totalPro);
 };
 
-// let priceProduct = parseFloat(eventBus.product.priceProduct);
-// const totalPrice = ref("");
-// totalPrice.value = totalDiscount.toLocaleString("de-DE", {
-//     maximumFractionDigits: 2,
-// });
 const fetchTotal = () => {
     let totalValue = 0;
 
@@ -275,7 +262,6 @@ const fetchTotal = () => {
     // );
     if (checked.value === true) {
         totalValue = totalValue + 30000;
-        eventBus.voucher.isLoyalty = true;
     }
     // if(totalValue.toString().length>3)
     // console.log(totalValue.toString().length);
