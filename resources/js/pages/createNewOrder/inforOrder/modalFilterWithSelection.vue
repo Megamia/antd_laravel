@@ -262,7 +262,7 @@ const Cancel = () => {
             padding-block: 20px;
             padding-inline: 20px;
             align-items: center;
-            
+
             .titleText {
                 display: flex;
                 flex: 1;
@@ -310,8 +310,8 @@ const Cancel = () => {
                 align-items: center;
             }
         }
-        .itemDetail {
-        }
+        /* .itemDetail {
+        } */
     }
 }
 

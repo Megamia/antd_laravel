@@ -4,6 +4,7 @@ use App\Http\Controllers\addressController;
 use App\Http\Controllers\inforUserOrderController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\tagController;
+use App\Http\Controllers\userCRMController;
 use App\Http\Controllers\voucherController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,3 +47,7 @@ Route::post('chooseVoucherPromotion', [voucherController::class, 'chooseVoucherP
 Route::get('dataValueVoucherCode', [voucherController::class, 'dataValueVoucherCode']);
 Route::post('chooseVoucherCode', [voucherController::class, 'chooseVoucherCode']);
 //VoucherCode
+
+//UserCRM
+Route::get('inforUserCRM', [userCRMController::class, 'inforUserCRM']);
+//UserCRM
