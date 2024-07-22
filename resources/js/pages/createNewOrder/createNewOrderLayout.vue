@@ -1,7 +1,15 @@
 <template>
     <div class="mainCreateNewOrderLayout">
         <div class="title">
-            <h1>Tạo mới đơn hàng</h1>
+            <div class="h1">
+                <h1>Tạo mới đơn hàng</h1>
+            </div>
+            <div class="loyalty" v-if="eventBus.voucher.isLoyalty">
+                <span
+                    ><AkCircleCheckFill />Đã áp dụng ưu đãi phân hạng
+                    Loyalty</span
+                >
+            </div>
         </div>
         <div class="userOrder">
             <userOrder />
@@ -51,6 +59,7 @@ import shippingMethod from "./shippingMethod/shippingMethod.vue";
 import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
 import costOrder from "./costOrder/costOrder.vue";
 import modalCostOrder from "./inforOrder/modalCostOrder.vue";
+import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 
 import { ref, onMounted } from "vue";
 import eventBus from "../../eventBus";
@@ -121,14 +130,36 @@ const inforProduct = (data1, data2) => {
     gap: 20px;
 
     .title {
-        background-color: white;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: #f0f2f5;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
         text-align: center;
+        gap: 5px;
+        .h1 {
+            background-color: white;
+            h1 {
+                padding-top: 15px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }
+        .loyalty {
+            display: flex;
+            flex: 1;
+            background-color: #f6ffed;
+            padding: 9px 16px 9px 16px;
+            span {
+                display: flex;
+                flex: 1;
+                align-items: center;
 
-        h1 {
-            padding-top: 15px;
-            font-size: 20px;
-            font-weight: bold;
+                gap: 10px;
+                svg {
+                    color: #52c41a;
+                }
+            }
         }
     }
 }

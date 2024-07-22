@@ -7,9 +7,11 @@
         <div class="content">
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
-                    <a-button type="text" @click="addNewAddress">
-                        <CaAddAlt />Thêm địa chỉ mới
-                    </a-button>
+                    <div style="display: flex; flex: 1">
+                        <a-button type="text" @click="addNewAddress">
+                            <CaAddAlt />Thêm địa chỉ mới
+                        </a-button>
+                    </div>
                     <div v-if="address">
                         <div
                             class="userItems"
@@ -47,8 +49,8 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else style="padding: 10px;">
-                        <span style="font-size: 20px;">No Data Address</span>
+                    <div v-else style="padding: 10px">
+                        <span style="font-size: 20px">No Data Address</span>
                     </div>
                 </a-radio-group>
                 <div style="height: 1000px" />
@@ -114,7 +116,7 @@ const back = () => {
 
 const addNewAddress = () => {
     // router.push("/addNewAddress");
-    console.log(address.value);
+    // console.log(address.value);
 };
 
 const buttonSave = async () => {

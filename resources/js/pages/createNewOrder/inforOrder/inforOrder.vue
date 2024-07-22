@@ -267,15 +267,13 @@ const fetchTotalPrice = () => {
     let totalPriceNumber = 0;
 
     for (let i = 0; i < dataProductSelected.value.length; i++) {
-        // console.log(dataProductSelected.value[i].price);
-        let priceProduct = dataProductSelected.value[i].price.replace(
-            /\,/g,
-            ""
-        );
-        priceProduct = parseFloat(priceProduct);
+        let priceProduct = dataProductSelected.value[i].price.replace(/\./g, "");
+        priceProduct=priceProduct.replace(/\,/g, "")
+        
         // console.log(priceProduct);
         let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
         totalPriceNumber += priceProduct * numberSelectedProduct;
+        priceProduct = parseFloat(priceProduct);
     }
 
     totalPrice.value = totalPriceNumber.toString();

@@ -6,41 +6,59 @@
         </div>
         <div class="content">
             <div class="search">
-                <a-input-search v-model:value="nameOrPhoneNumber" placeholder="Nhập tên sản phẩm/combo" />
+                <a-input-search
+                    v-model:value="nameOrPhoneNumber"
+                    placeholder="Nhập tên sản phẩm/combo"
+                />
             </div>
             <div class="filterWithSelection">
-                <span class="filterSpan" @click="showModalFilterWithSelection">Tất cả sản phẩm
+                <span class="filterSpan" @click="showModalFilterWithSelection"
+                    >Tất cả sản phẩm
                     <AkChevronDownSmall />
                 </span>
             </div>
-            <modalFilterWithSelection v-if="isShowModalFilterWithSelection" @showModal="showModalFilterWithSelection"
-                @tags="filterWithTag" />
+            <modalFilterWithSelection
+                v-if="isShowModalFilterWithSelection"
+                @showModal="showModalFilterWithSelection"
+                @tags="filterWithTag"
+            />
             <div class="productInfor">
                 <a-checkbox-group v-model:value="a" style="width: 100%">
-                    <div class="productItems" v-for="product in filter" :key="product.id">
-                        <a-checkbox :value="product.id" style="margin-left: 12px; margin-top: 12px"
-                            :disabled="product.quantity <= 0" />
+                    <div
+                        class="productItems"
+                        v-for="product in filter"
+                        :key="product.id"
+                    >
+                        <a-checkbox
+                            :value="product.id"
+                            style="margin-left: 12px; margin-top: 12px"
+                            :disabled="product.quantity <= 0"
+                        />
                         <div class="productInforRadio">
-                            <img style="
+                            <img
+                                style="
                                     width: 60px;
                                     height: 60px;
                                     margin-block: 10px;
-                                " :src="product.img" />
+                                "
+                                :src="product.img"
+                            />
                             <div class="detailsProduct">
                                 <div class="nameAndTagProduct">
                                     <span class="nameProduct">{{
                                         product.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="tagProduct">{{
                                         product.tag
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="priceAndQuantityProduct">
                                     <span class="priceProduct">
                                         {{ product.price }}đ
                                     </span>
                                     <span class="quantityProduct">
-                                        <span class="labelQuantity">Tồn kho:
+                                        <span class="labelQuantity"
+                                            >Tồn kho:
                                         </span>
                                         {{ product.quantity }}
                                     </span>
@@ -121,13 +139,11 @@ const data = ref({});
 
 const fetchData = async () => {
     if (eventBus.product.idProduct) {
-        eventBus.product.idProduct = eventBus.product.idProduct
-            .split(",")
-            .map(Number);
-        a.value = eventBus.product.idProduct;
-        a.value = a.value.filter((item) => item !== 0);
-        // console.log(a.value);
+        let values = Object.values(eventBus.product.idProduct);
+        eventBus.product.idProduct = values.join(",").split(",").map(Number);
+        a.value = eventBus.product.idProduct.filter((item) => item !== 0);
     }
+
     try {
         if (tag.value) {
             console.log(tag.value);
@@ -163,44 +179,13 @@ const fetchData = async () => {
 onMounted(() => fetchData());
 
 const back = () => {
-    router.back();
+    buttonSave();
 };
 
 const addNewUser = () => {
     router.push("/addProduct");
 };
 
-// const buttonSave = async () => {
-//     try {
-//         // if (a.value === "guest") {
-//         //     console.log("Đã chọn khách lẻ");
-//         // } else if (a.value && a.value != "guest") {
-//         //     selectedUser.value = data.value.find((user) => user.id === a.value);
-//         //     console.log("Đã chọn user: ", selectedUser.value);
-//         // }
-
-//         // router.back();
-
-//         const response = await axios.post(
-//             `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
-//             {
-//                 id: a.value,
-//             }
-//         );
-//         if (response.data.status === 1) {
-//             // if (a.value === "guest") {
-//             //     console.log("Đã chọn: ", response.data.dataUserOrder);
-//             // } else {
-//             //     console.log("Đã chọn: ", response.data.dataUserOrder.name);
-//             // }
-//             router.back();
-//         } else {
-//             // console.log("Faile");
-//         }
-//     } catch (e) {
-//         console.log("Lỗi: " + e);
-//     }
-// };
 const buttonSave = async () => {
     if (!a.value || a.value.length <= 0) {
         alert("Chưa chọn sản phẩm nào");
@@ -227,16 +212,7 @@ const buttonSave = async () => {
             console.log("Error: ", e);
         }
     }
-    // console.log(typeof a.value.sort().toString());
 };
-// const test = (user) => {
-//     const index = a.value.indexOf(user);
-//     if (index > -1) {
-//         a.value.splice(index, 1);
-//     } else {
-//         a.value.push(user);
-//     }
-// };
 const filter = computed(() => {
     if (nameOrPhoneNumber.value) {
         return data.value.filter((product) => {

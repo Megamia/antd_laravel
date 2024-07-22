@@ -2,7 +2,7 @@
     <div class="mainDetailVoucher">
         <div class="title">
             <AnOutlinedArrowLeft @click="back" />
-            <span> Giảm giá </span>
+            <span @click="test"> Giảm giá </span>
         </div>
         <div class="content">
             <div class="isLoyaltyDiv">
@@ -119,8 +119,9 @@ import { ref, onMounted } from "vue";
 import eventBus from "../../../../eventBus";
 
 const router = useRouter();
-const checked = ref(false);
+const checked = ref("");
 const click = () => {
+    eventBus.voucher.isLoyalty = !eventBus.voucher.isLoyalty;
     fetchTotal();
 };
 const back = () => {
@@ -128,17 +129,22 @@ const back = () => {
 };
 
 const fetchData = () => {
+    checked.value = eventBus.voucher.isLoyalty;
     if (eventBus.product.priceProduct !== 0) {
         // console.log("evBPrice: " + eventBus.product.priceProduct);
         // console.log("discount: " + totalPrice, typeof totalPrice);
     } else {
         console.log("Chưa chọn sản phẩm nào");
     }
+    fetchTotal();
 };
 onMounted(() => fetchData());
 
 // ModalCode
 
+const test = () => {
+    console.log(eventBus.voucher.isLoyalty);
+};
 const isShowModalCode = ref(false);
 
 const showModalCode = () => {
@@ -175,14 +181,15 @@ const valueInModalDiscount = (dataValueInModalDiscount, message) => {
     } else if (message.message === "money") {
         totalDiscount = parseFloat(dataValueInModalDiscount);
     }
-    valueDiscount.value = totalDiscount.toLocaleString("de-DE", {
-        maximumFractionDigits: 2,
-    });
+    // valueDiscount.value = totalDiscount.toLocaleString("de-DE", {
+    //     maximumFractionDigits: 2,
+    // });
+    valueDiscount.value = totalDiscount.toString();
     valueDiscount.value = valueDiscount.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
-        "."
+        ","
     );
-    console.log(valueDiscount.value);
+    // console.log(valueDiscount.value);
     // console.log("Phần trăm được giảm từ modal Discount: ", valueDiscount.value);
     fetchTotal();
 };
@@ -268,6 +275,7 @@ const fetchTotal = () => {
     // );
     if (checked.value === true) {
         totalValue = totalValue + 30000;
+        eventBus.voucher.isLoyalty = true;
     }
     // if(totalValue.toString().length>3)
     // console.log(totalValue.toString().length);
