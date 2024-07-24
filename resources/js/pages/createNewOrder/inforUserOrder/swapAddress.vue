@@ -12,6 +12,12 @@
                             <CaAddAlt />Thêm địa chỉ mới
                         </a-button>
                     </div>
+                    <modalSwapAddress
+                        v-if="open"
+                        @cancel="Cancel"
+                        @Apply="Apply"
+                    />
+
                     <div v-if="address">
                         <div
                             class="userItems"
@@ -44,8 +50,9 @@
                             <div class="iconTrashDiv">
                                 <BxTrashAlt
                                     class="iconTrash"
-                                    @click="deleteAddress(items.id)"
+                                    @click="showModal"
                                 />
+                                <!-- @click="deleteAddress(items.id)" -->
                             </div>
                         </div>
                     </div>
@@ -72,11 +79,23 @@ import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../../eventBus";
+import modalSwapAddress from "./modalSwapAddress.vue";
 
 const a = ref(null);
 const router = useRouter();
-
+const open = ref(false);
+const showModal = () => {
+    open.value = true;
+};
 const address = ref("");
+
+const Cancel = () => {
+    open.value = false;
+};
+const Apply = () => {
+    open.value = true;
+    // deleteAddress();
+};
 
 const deleteAddress = async (id) => {
     try {
@@ -115,7 +134,7 @@ const back = () => {
 };
 
 const addNewAddress = () => {
-    // router.push("/addNewAddress");
+    router.push("/addNewAddress");
     // console.log(address.value);
 };
 
@@ -230,6 +249,7 @@ const buttonSave = async () => {
                 .iconTrashDiv {
                     display: flex;
                     flex: 1;
+                    justify-content: end;
                     svg {
                         font-size: 16px;
                     }

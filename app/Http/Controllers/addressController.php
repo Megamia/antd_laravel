@@ -48,4 +48,31 @@ class addressController extends Controller
         $address->delete();
         return response()->json(['status' => 1, 'message' => "Delete address success"]);
     }
+    public function addNewAddress(Request $request)
+    {
+        $data = $request->only(
+            'username',
+            'phoneNumber',
+            'city',
+            'district',
+            'ward',
+            'address'
+        );
+        if (is_null($data['username'])) {
+            $data['username'] = 'user';
+        }
+        $newAddress = address::create([
+            'name' => $data['username'],
+            'phoneNumber' => $data['phoneNumber'],
+            'city' => $data['city'],
+            'district' => $data['district'],
+            'ward' => $data['ward'],
+            'address' => $data['address'],
+        ]);
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Address has been add to database', 'newAddress' => $newAddress
+        ]);
+    }
 }

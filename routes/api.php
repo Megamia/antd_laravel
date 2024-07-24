@@ -15,11 +15,13 @@ Route::get('deleteSession', [inforUserOrderController::class, 'deleteSession']);
 Route::post('addUserOrder', [inforUserOrderController::class, 'addUserOder']);
 Route::post('newDataUserOrderAfterSwap', [addressController::class, 'newDataUserOrderAfterSwap']);
 
+//Address
 Route::get('inforAddress', [addressController::class, 'inforAddress']);
 Route::post('swapAnotherAddress', [addressController::class, 'swapAnotherAddress']);
 Route::delete('deleteAddress/{id}', [addressController::class, 'deleteAddress']);
 Route::get('dataAfterSwap', [addressController::class, 'dataAfterSwap']);
-
+Route::post('addNewAddress', [addressController::class, 'addNewAddress']);
+//Address
 
 // Product
 Route::get('inforProduct', [productController::class, 'inforProduct']);

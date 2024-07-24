@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('inforUserOrder', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->bigInteger('phoneNumber');
+            $table->string('phoneNumber');
             $table->string('email')->nullable()->default('example@gmail');
             $table->string('text')->nullable();
             $table->integer('number')->nullable();

@@ -68,15 +68,11 @@ class inforUserOrderController extends Controller
             'username',
             'phoneNumber',
             'email'
-            // 'text',
-            // 'number',
-            // 'date',
-            // 'dropDown',
-            // 'checkBox',
-            // 'address',
-            // 'email2'
         ]);
-        $existingUser = inforUserOrder::where('email', $data['email'])->first();
+        if (is_null($data['email'])) {
+            $data['email'] = 'example@gmail.com';
+        }
+        $existingUser = inforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
         if ($existingUser) {
             return response()->json(['status' => 0, 'message' => 'User already exists']);
         }
