@@ -160,11 +160,11 @@ const isFiltering = computed(() => {
     flex: 1;
     flex-direction: column;
     background-color: #f0f2f5;
-    gap: 20px;
 
     .title {
         background-color: white;
         display: flex;
+        max-height: 100px;
         padding: 16px 36px 16px 12px;
         align-items: center;
 
@@ -187,13 +187,18 @@ const isFiltering = computed(() => {
         display: flex;
         flex-direction: column;
         background-color: white;
-
+        overflow-y: scroll;
+        padding-block: 20px;
+    background-color: #f0f2f5;
+        
         .search {
             padding: 10px 12px 10px 12px;
             border-bottom: 1px solid #d9d9dd;
+            background-color: white;
         }
 
         .userInfor {
+            background-color: white;
             display: flex;
             flex-direction: column;
 

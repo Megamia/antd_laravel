@@ -11,40 +11,43 @@
                 >
             </div>
         </div>
-        <div class="userOrder">
-            <userOrder />
-        </div>
+        <div class="content">
+            <div class="userOrder">
+                <userOrder />
+            </div>
 
-        <div class="productOrderDiv">
-            <inforOrder
-                @show="showOrHidden"
-                @showModal="ClickShowModal"
-                @infor-product="inforProduct"
-                @fetch-data="click"
-            />
-            <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
+            <div class="productOrderDiv">
+                <inforOrder
+                    @show="showOrHidden"
+                    @showModal="ClickShowModal"
+                    @infor-product="inforProduct"
+                    @fetch-data="click"
+                />
+                <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
+            </div>
+            <div class="voucherAndTax">
+                <voucherAndTax @fetch-data="click" />
+            </div>
+            <div class="noteOrder">
+                <noteOrder />
+            </div>
+            <div class="inforPayment">
+                <inforPayment />
+            </div>
+            <div class="shippingMethod">
+                <shippingMethod />
+            </div>
+            <div class="anthoerInfor">
+                <anthoerInfor v-if="isOpen" />
+            </div>
         </div>
-        <div class="voucherAndTax">
-            <voucherAndTax @fetch-data="click" />
-        </div>
-        <div class="noteOrder">
-            <noteOrder />
-        </div>
-        <div class="inforPayment">
-            <inforPayment />
-        </div>
-        <div class="shippingMethod">
-            <shippingMethod />
-        </div>
-        <div class="anthoerInfor">
-            <anthoerInfor v-if="isOpen" />
-        </div>
-        <div class="costOrder">
-            <costOrder
-                :quantityProduct="quantityProduct"
-                :priceProductValue="priceProductValue"
-            />
-            <div style="height: 1000px; width: 100%" />
+        <div class="footer">
+            <div class="costOrder">
+                <costOrder
+                    :quantityProduct="quantityProduct"
+                    :priceProductValue="priceProductValue"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -131,15 +134,13 @@ const inforProduct = (data1, data2) => {
 <style scoped>
 .mainCreateNewOrderLayout {
     display: flex;
-    flex: 1;
-    height: 100%;
+    height: 100vh;
     flex-direction: column;
     background-color: #f0f2f5;
-    gap: 20px;
-
+    /* gap: 20px; */
     .title {
         display: flex;
-        flex: 1;
+        max-height: 100px;
         flex-direction: column;
         background-color: #f0f2f5;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
@@ -155,9 +156,10 @@ const inforProduct = (data1, data2) => {
         }
         .loyalty {
             display: flex;
-            flex: 1;
             background-color: #f6ffed;
+            flex: 1;
             padding: 9px 16px 9px 16px;
+
             span {
                 display: flex;
                 flex: 1;
@@ -168,6 +170,22 @@ const inforProduct = (data1, data2) => {
                     color: #52c41a;
                 }
             }
+        }
+    }
+    .content {
+        padding-block: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: #f0f2f5;
+        gap: 20px;
+        overflow-y: scroll;
+    }
+    .footer {
+        display: flex;
+        widows: 100%;
+        .costOrder{
+            display: flex;
+            flex:1;
         }
     }
 }

@@ -4,14 +4,14 @@
             <AnOutlinedArrowLeft @click="back" />
             <span> Thêm mới khách hàng </span>
         </div>
-        <a-form
-            :model="formState"
-            name="basic"
-            autocomplete="off"
-            @finish="onFinish"
-            @finishFailed="onFinishFailed"
-        >
-            <div class="content">
+        <div class="content">
+            <a-form
+                :model="formState"
+                name="basic"
+                autocomplete="off"
+                @finish="onFinish"
+                @finishFailed="onFinishFailed"
+            >
                 <a-form-item
                     label="Họ và tên"
                     name="username"
@@ -98,9 +98,8 @@
                         >Thêm mới</a-button
                     >
                 </a-form-item>
-            </div>
-            <div style="height: 1000px" />
-        </a-form>
+            </a-form>
+        </div>
     </div>
 </template>
 <script setup>
@@ -195,13 +194,13 @@ const back = () => {
 <style scoped>
 .mainAddNewUser {
     display: flex;
-    flex: 1;
     flex-direction: column;
     background-color: #f0f2f5;
     gap: 20px;
 
     .title {
         background-color: white;
+        max-height: 100px;
         display: flex;
         padding: 16px 36px 16px 12px;
         align-items: center;
@@ -223,10 +222,8 @@ const back = () => {
 
     .content {
         display: flex;
-        flex: 1;
         flex-direction: column;
         background-color: white;
-
         .ant-form-item {
             padding-inline: 10px;
         }

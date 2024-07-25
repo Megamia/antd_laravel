@@ -284,6 +284,7 @@ const fetchTotal = () => {
     .title {
         background-color: white;
         display: flex;
+        max-height: 100px;
         padding: 16px 36px 16px 12px;
         align-items: center;
 
