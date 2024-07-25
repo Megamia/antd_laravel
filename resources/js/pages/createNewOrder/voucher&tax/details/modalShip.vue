@@ -62,6 +62,9 @@ const apply = async () => {
     try {
         // console.log(valueShip, valueReason.value);
         if (valueShip <= eventBus.product.priceProduct) {
+            // valueShip = valueShip.toString();
+            // console.log(typeof valueShip);
+            // valueShip = valueShip.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             emit("valueInModalShip", valueShip);
             emit("fetchDataModal");
         } else {

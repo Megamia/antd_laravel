@@ -58,7 +58,7 @@ const filterOption = (input, option) => {
 
 const userSelected = ref("");
 const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
     userSelected.value = value;
 };
 //Selection

@@ -15,7 +15,8 @@
                     <modalSwapAddress
                         v-if="open"
                         @cancel="Cancel"
-                        @Apply="Apply"
+                        @apply="Apply"
+                        :idUser="idUser"
                     />
 
                     <div v-if="address">
@@ -50,7 +51,7 @@
                             <div class="iconTrashDiv">
                                 <BxTrashAlt
                                     class="iconTrash"
-                                    @click="showModal"
+                                    @click="showModal(items.id)"
                                 />
                                 <!-- @click="deleteAddress(items.id)" -->
                             </div>
@@ -84,34 +85,54 @@ import modalSwapAddress from "./modalSwapAddress.vue";
 const a = ref(null);
 const router = useRouter();
 const open = ref(false);
-const showModal = () => {
-    open.value = true;
-};
+let idUser = 0;
+// const showModal = () => {
+//     open.value = true;
+// };
 const address = ref("");
 
 const Cancel = () => {
     open.value = false;
 };
-const Apply = () => {
-    open.value = true;
-    // deleteAddress();
-};
-
-const deleteAddress = async (id) => {
+const Apply = async (id) => {
     try {
         const response = await axios.delete(
             `${import.meta.env.VITE_APP_URL_API}/deleteAddress/${id}`
         );
         if (response.data.status === 1) {
-            console.log("Delete address success");
+            alert("Delete address success");
             await fetchData();
+            open.value = false;
         } else {
-            console.log("Faile to delete address");
+            alert("Faile to delete address");
+            return;
         }
     } catch (e) {
         console.log("Error: ", e);
     }
+    // deleteAddress();
 };
+
+const showModal = (id) => {
+    open.value = true;
+    idUser = id;
+};
+
+// const deleteAddress = async (id) => {
+//     try {
+//         const response = await axios.delete(
+//             `${import.meta.env.VITE_APP_URL_API}/deleteAddress/${id}`
+//         );
+//         if (response.data.status === 1) {
+//             console.log("Delete address success");
+//             await fetchData();
+//         } else {
+//             console.log("Faile to delete address");
+//         }
+//     } catch (e) {
+//         console.log("Error: ", e);
+//     }
+// };
 
 const fetchData = async () => {
     try {

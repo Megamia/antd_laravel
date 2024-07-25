@@ -17,7 +17,7 @@
                             Hủy
                         </button>
                         <button class="buttonApply" @click="Apply">
-                            Xóa địa chỉ
+                            <span> Xóa địa chỉ </span>
                         </button>
                     </div>
                 </div>
@@ -28,18 +28,20 @@
 
 <script setup>
 // import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, defineProps } from "vue";
 
 const open = ref(false);
-const emit = defineEmits(["Cancel", "Apply"]);
-
+const emit = defineEmits(["cancel", "apply"]);
+const props = defineProps({
+    idUser: Number,
+});
 const Cancel = () => {
     // open.value = false;
-    emit("Cancel");
+    emit("cancel");
 };
 
 const Apply = () => {
-    emit("Apply");
+    emit("apply", props.idUser);
 };
 </script>
 <style scoped>
@@ -71,7 +73,7 @@ const Apply = () => {
     .title {
         display: flex;
         flex: 1;
-        padding-block: 20px;
+        padding-block: 15px;
         .titleText {
             display: flex;
             flex: 1;
@@ -84,14 +86,16 @@ const Apply = () => {
         display: flex;
         flex: 1;
         flex-direction: column;
-        padding-inline: 10px;
+        padding-inline: 15px;
         span {
             display: flex;
             flex: 1;
+            text-align: center;
             /* justify-content: center; */
             align-items: center;
             color: #00000073;
             font-size: 14px;
+            padding-bottom: 20px;
         }
     }
     .buttonChange {
@@ -108,7 +112,15 @@ const Apply = () => {
             border: 1px solid #d9d9d9;
             color: black;
             font-size: 16px;
-            padding: 15px;
+            padding: 10px;
+        }
+        .buttonCancel {
+        }
+        .buttonApply {
+            span {
+                font-weight: bold;
+                color: #ff4d4f;
+            }
         }
     }
 }

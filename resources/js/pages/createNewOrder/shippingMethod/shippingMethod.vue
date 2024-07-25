@@ -42,7 +42,7 @@ const valueInModalShipping = (data1, data2) => {
     //     "."
     // );
     valueShipping.value = data1 + " " + data2;
-    console.log(valueShipping.value);
+    // console.log(valueShipping.value);
 };
 //ModalShipping
 

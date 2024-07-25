@@ -13,9 +13,11 @@
             </div>
             <div class="userInfor">
                 <a-radio-group v-model:value="a">
-                    <a-button type="text" @click="addNewUser">
-                        <CaAddAlt />Thêm mới khách hàng
-                    </a-button>
+                    <div style="display: flex; flex: 1" @click="addNewUser">
+                        <a-button type="text">
+                            <CaAddAlt />Thêm mới khách hàng
+                        </a-button>
+                    </div>
                     <div class="userItems" v-if="!isFiltering">
                         <a-radio value="guest">
                             <div class="userInforRadio">
@@ -231,7 +233,7 @@ const isFiltering = computed(() => {
     }
 
     .saveDive {
-        position: absolute;
+        position: fixed;
         display: flex;
         background-color: white;
         bottom: 0;
