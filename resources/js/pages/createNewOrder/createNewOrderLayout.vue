@@ -178,7 +178,7 @@ const inforProduct = (data1, data2) => {
         flex-direction: column;
         background-color: #f0f2f5;
         gap: 20px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .footer {
         display: flex;
