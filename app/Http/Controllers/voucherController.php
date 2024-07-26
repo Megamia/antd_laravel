@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\value_voucher_promotion;
-use App\Models\value_voucher_code;
+use App\Models\VoucherPromotionValue;
+use App\Models\VoucherCodeValue;
 use Illuminate\Http\Request;
 
-class voucherController extends Controller
+class VoucherController extends Controller
 {
     //VoucherCode
     public function dataValueVoucherCode(Request $request)
     {
-        $dataValueVoucherCode = value_voucher_code::all();
+        $dataValueVoucherCode = VoucherCodeValue::all();
         if ($dataValueVoucherCode->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataValueVoucherCode' => $dataValueVoucherCode]);
         } else {
@@ -21,7 +21,7 @@ class voucherController extends Controller
     public function chooseVoucherCode(Request $request)
     {
         $data = $request->only('code');
-        $chooseVoucherCode = value_voucher_code::where('code', $data['code'])->get();
+        $chooseVoucherCode = VoucherCodeValue::where('code', $data['code'])->get();
 
         if ($chooseVoucherCode->isNotEmpty()) {
             return response()->json(['status' => 1, 'chooseVoucherCode' => $chooseVoucherCode]);
@@ -34,7 +34,7 @@ class voucherController extends Controller
     //VoucherPromotion
     public function dataValueVoucherPromotion(Request $request)
     {
-        $dataValueVoucherPromotion = value_voucher_promotion::all();
+        $dataValueVoucherPromotion = VoucherPromotionValue::all();
         if ($dataValueVoucherPromotion->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataValueVoucherPromotion' => $dataValueVoucherPromotion]);
         } else {
@@ -45,7 +45,7 @@ class voucherController extends Controller
     public function chooseVoucherPromotion(Request $request)
     {
         $data = $request->only('id');
-        $chooseVoucherPromotion = value_voucher_promotion::whereIn('id', $data['id'])->get();
+        $chooseVoucherPromotion = VoucherPromotionValue::whereIn('id', $data['id'])->get();
 
         if ($chooseVoucherPromotion->isNotEmpty()) {
             return response()->json(['status' => 1, 'chooseVoucherPromotion' => $chooseVoucherPromotion]);

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\address;
+use App\Models\Address;
 use Illuminate\Http\Request;
-use App\Models\inforUserOrder;
+use App\Models\InforUserOrder;
 
-class addressController extends Controller
+class AddressController extends Controller
 {
     public function inforAddress(Request $request)
     {
-        $address = address::all();
+        $address = Address::all();
         if ($address->count() > 0) {
             return response()->json(['status' => 1, 'inforAddress' => $address]);
         } else {
@@ -31,8 +31,8 @@ class addressController extends Controller
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                $dataUser = inforUserOrder::where('id', $user_id)->first();
-                $newDataAddress = address::where('id', $newAddress['id'])->first();
+                $dataUser = InforUserOrder::where('id', $user_id)->first();
+                $newDataAddress = Address::where('id', $newAddress['id'])->first();
                 return response()->json(['status' => 1, 'dataUserOrder' => ['data' => $dataUser, 'address' => $newDataAddress]]);
             }
         } else {
@@ -61,7 +61,7 @@ class addressController extends Controller
         if (is_null($data['username'])) {
             $data['username'] = 'user';
         }
-        $newAddress = address::create([
+        $newAddress = Address::create([
             'name' => $data['username'],
             'phoneNumber' => $data['phoneNumber'],
             'city' => $data['city'],

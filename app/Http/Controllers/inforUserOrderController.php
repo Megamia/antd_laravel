@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\inforUserOrder;
+use App\Models\InforUserOrder;
 use Illuminate\Http\Request;
 
-class inforUserOrderController extends Controller
+class InforUserOrderController extends Controller
 {
     public function data(Request $request)
     {
-        $users = inforUserOrder::all();
+        $users = InforUserOrder::all();
         if ($users->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataUser' => $users]);
         } else {

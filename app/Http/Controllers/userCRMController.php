@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\userCRM;
+use App\Models\UserCRM;
 
-class userCRMController extends Controller
+class UserCRMController extends Controller
 {
     public function inforUserCRM(Request $request)
     {
-        $inforUserCRM = userCRM::all();
+        $inforUserCRM = UserCRM::all();
         if ($inforUserCRM->count() > 0) {
             return response()->json(['status' => 1, 'inforUserCRM' => $inforUserCRM]);
         } else {

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
-class productController extends Controller
+class ProductController extends Controller
 {
     public function inforProduct(Request $request)
     {
-        $product = product::all();
+        $product = Product::all();
         if ($product->count() > 0) {
             return response()->json(['status' => 1, 'inforProduct' => $product]);
         } else {
@@ -78,11 +78,11 @@ class productController extends Controller
             'quantity' => 'required|integer',
             'img' => 'nullable|string',
         ]);
-        $existingProduct = product::where('name', $data['name'])->first();
+        $existingProduct = Product::where('name', $data['name'])->first();
         if ($existingProduct) {
             return response()->json(['status' => 0, 'inforProduct' => 'Product already exists']);
         }
-        $product = product::create([
+        $product = Product::create([
             'name' => $data['name'],
             'tag' => $data['tag'],
             'price' => $data['price'],
@@ -98,7 +98,7 @@ class productController extends Controller
     public function choosedProduct(Request $request)
     {
         $data = $request->only('id');
-        $choosedProduct = product::whereIn('id', explode(',', $data['id']))->get();
+        $choosedProduct = Product::whereIn('id', explode(',', $data['id']))->get();
 
         if ($choosedProduct->isNotEmpty()) {
             return response()->json(['status' => 1, 'choosedProduct' => $choosedProduct]);
@@ -111,7 +111,7 @@ class productController extends Controller
     {
         $data = $request->only('id', 'newPrice');
 
-        $choosedProductUpdate = product::find($data['id']);
+        $choosedProductUpdate = Product::find($data['id']);
 
         if ($choosedProductUpdate) {
             $choosedProductUpdate->price = $data['newPrice'];
@@ -125,7 +125,7 @@ class productController extends Controller
     public function inforProductWithTag(Request $request)
     {
         $data = $request->only('tag');
-        $inforProductWithTag = product::whereIn('tag_id', explode(',', $data['tag']))->get();
+        $inforProductWithTag = Product::whereIn('tag_id', explode(',', $data['tag']))->get();
         if ($inforProductWithTag) {
             return response()->json(['status' => 1, 'inforProductWithTag' => $inforProductWithTag]);
         } else {
