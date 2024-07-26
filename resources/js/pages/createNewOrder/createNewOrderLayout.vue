@@ -13,37 +13,37 @@
         </div>
         <div class="content">
             <div class="userOrder">
-                <userOrder />
+                <UserOrder />
             </div>
 
             <div class="productOrderDiv">
-                <inforOrder
+                <InforOrder
                     @show="showOrHidden"
                     @showModal="ClickShowModal"
                     @infor-product="inforProduct"
                     @fetch-data="click"
                 />
-                <modalCostOrder v-if="showModal" @showModal="ClickShowModal" />
+                <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
             <div class="voucherAndTax">
-                <voucherAndTax @fetch-data="click" />
+                <VoucherAndTax @fetch-data="click" />
             </div>
             <div class="noteOrder">
-                <noteOrder />
+                <NoteOrder />
             </div>
             <div class="inforPayment">
-                <inforPayment />
+                <InforPayment />
             </div>
             <div class="shippingMethod">
-                <shippingMethod />
+                <ShippingMethod />
             </div>
             <div class="anthoerInfor">
-                <anthoerInfor v-if="isOpen" />
+                <AnotherInfor v-if="isOpen" />
             </div>
         </div>
         <div class="footer">
             <div class="costOrder">
-                <costOrder
+                <CostOrder
                     :quantityProduct="quantityProduct"
                     :priceProductValue="priceProductValue"
                 />
@@ -53,15 +53,15 @@
 </template>
 
 <script setup>
-import userOrder from "./inforUserOrder/userOrder.vue";
-import inforOrder from "./inforOrder/inforOrder.vue";
-import voucherAndTax from "./voucher&tax/voucherAndTax.vue";
-import noteOrder from "./note/noteOrder.vue";
-import inforPayment from "./inforPayment/inforPayment.vue";
-import shippingMethod from "./shippingMethod/shippingMethod.vue";
-import anthoerInfor from "./anthoerInfor/anotherInfor.vue";
-import costOrder from "./costOrder/costOrder.vue";
-import modalCostOrder from "./inforOrder/modalCostOrder.vue";
+import UserOrder from "./InforUserOrder/UserOrder.vue";
+import InforOrder from "./InforOrder/InforOrder.vue";
+import VoucherAndTax from "./Voucher&tax/VoucherAndTax.vue";
+import NoteOrder from "./Note/NoteOrder.vue";
+import InforPayment from "./InforPayment/InforPayment.vue";
+import ShippingMethod from "./ShippingMethod/ShippingMethod.vue";
+import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
+import CostOrder from "./CostOrder/CostOrder.vue";
+import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 
 import { ref, onMounted } from "vue";
@@ -183,9 +183,9 @@ const inforProduct = (data1, data2) => {
     .footer {
         display: flex;
         widows: 100%;
-        .costOrder{
+        .costOrder {
             display: flex;
-            flex:1;
+            flex: 1;
         }
     }
 }

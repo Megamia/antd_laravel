@@ -96,7 +96,7 @@ import {
     CaAddAlt,
     AkChevronDownSmall,
 } from "@kalimahapps/vue-icons";
-import modalFilterWithSelection from "./modalFilterWithSelection.vue";
+import ModalFilterWithSelection from "./ModalFilterWithSelection.vue";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted, defineEmits } from "vue";
 import axios from "axios";

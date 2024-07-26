@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class value_voucher_code extends Model
+class VoucherCodeValue extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -14,6 +14,6 @@ class value_voucher_code extends Model
         'voucher_id',
     ];
     public $timestamps = false;
-    protected $table = 'value_voucher_code';
+    protected $table = 'VoucherCodeValue';
     protected $hidden = [];
 }

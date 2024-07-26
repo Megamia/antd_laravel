@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inforUserOrder', function (Blueprint $table) {
+        Schema::create('InforUserOrder', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('phoneNumber');
@@ -104,6 +104,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inforUserOrder');
+        Schema::dropIfExists('InforUserOrder');
     }
 };

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class voucher extends Model
+class Voucher extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -13,6 +13,6 @@ class voucher extends Model
 
     ];
     public $timestamps = false;
-    protected $table = 'vouchers';
+    protected $table = 'Voucher';
     protected $hidden = [];
 }

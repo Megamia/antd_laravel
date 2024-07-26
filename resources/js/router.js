@@ -1,25 +1,25 @@
 import { createRouter, createWebHistory } from "vue-router";
-import CreateNewOrderLayout from "./pages/createNewOrder/createNewOrderLayout.vue";
-import detailInforUserOrder from "./pages/createNewOrder/inforUserOrder/detailInforUserOrder.vue";
-import userOrder from "./pages/createNewOrder/inforUserOrder/userOrder.vue";
-import inforOrder from "./pages/createNewOrder/inforOrder/inforOrder.vue";
-import voucherAndTax from "./pages/createNewOrder/voucher&tax/voucherAndTax.vue";
-import noteOrder from "./pages/createNewOrder/note/noteOrder.vue";
-import inforPayment from "./pages/createNewOrder/inforPayment/inforPayment.vue";
-import shippingMethod from "./pages/createNewOrder/shippingMethod/shippingMethod.vue";
-import anotherInfor from "./pages/createNewOrder/anthoerInfor/anotherInfor.vue";
-import costOrder from "./pages/createNewOrder/costOrder/costOrder.vue";
-import modalCostOrder from "./pages/createNewOrder/inforOrder/modalCostOrder.vue";
-import createOrderSuccess from "./pages/createNewOrder/createOrderSuccess.vue";
-import addNewUser from "./pages/createNewOrder/inforUserOrder/addNewUser.vue";
-import chooseUser from "./pages/createNewOrder/inforUserOrder/chooseUser.vue";
-import swapAddress from "./pages/createNewOrder/inforUserOrder/swapAddress.vue";
-import addNewAddress from "./pages/createNewOrder/inforUserOrder/addNewAddress.vue";
-import addNewProduct from "./pages/createNewOrder/inforOrder/addNewProduct.vue";
-import addProduct from "./pages/createNewOrder/inforOrder/addProduct.vue";
-import item1Modal from "./pages/createNewOrder/inforOrder/itemModalFilterWithSelection/itemModal1.vue";
-import detailVoucher from "./pages/createNewOrder/voucher&tax/details/detailVoucher.vue";
-import exPage from "./pages/client/exPage.vue";
+import CreateNewOrderLayout from "./pages/CreateNewOrder/CreateNewOrderLayout.vue";
+import DetailInforUserOrder from "./pages/CreateNewOrder/InforUserOrder/DetailInforUserOrder.vue";
+import UserOrder from "./pages/CreateNewOrder/InforUserOrder/UserOrder.vue";
+import InforOrder from "./pages/CreateNewOrder/InforOrder/InforOrder.vue";
+import VoucherAndTax from "./pages/CreateNewOrder/Voucher&tax/VoucherAndTax.vue";
+import NoteOrder from "./pages/CreateNewOrder/Note/NoteOrder.vue";
+import InforPayment from "./pages/CreateNewOrder/InforPayment/InforPayment.vue";
+import ShippingMethod from "./pages/CreateNewOrder/ShippingMethod/ShippingMethod.vue";
+import AnotherInfor from "./pages/CreateNewOrder/AnotherInfor/AnotherInfor.vue";
+import CostOrder from "./pages/CreateNewOrder/CostOrder/CostOrder.vue";
+import ModalCostOrder from "./pages/CreateNewOrder/InforOrder/ModalCostOrder.vue";
+import CreateOrderSuccess from "./pages/CreateNewOrder/CreateOrderSuccess.vue";
+import AddNewUser from "./pages/CreateNewOrder/InforUserOrder/AddNewUser.vue";
+import ChooseUser from "./pages/CreateNewOrder/InforUserOrder/ChooseUser.vue";
+import SwapAddress from "./pages/CreateNewOrder/InforUserOrder/SwapAddress.vue";
+import AddNewAddress from "./pages/CreateNewOrder/InforUserOrder/AddNewAddress.vue";
+import AddNewProduct from "./pages/CreateNewOrder/InforOrder/AddNewProduct.vue";
+import AddProduct from "./pages/CreateNewOrder/InforOrder/AddProduct.vue";
+import Item1Modal from "./pages/CreateNewOrder/InforOrder/ItemModalFilterWithSelection/ItemModal1.vue";
+import DetailVoucher from "./pages/CreateNewOrder/Voucher&tax/Details/DetailVoucher.vue";
+import ExPage from "./pages/client/ExPage.vue";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -29,105 +29,105 @@ const router = createRouter({
             name: "CreateNewOrderLayout",
         },
         {
-            path: "/createOrderSuccess",
-            component: createOrderSuccess,
-            name: "createOrderSuccess",
+            path: "/CreateOrderSuccess",
+            component: CreateOrderSuccess,
+            name: "CreateOrderSuccess",
         },
 
         {
-            path: "/userOrder",
-            component: userOrder,
-            name: "userOrder",
+            path: "/UserOrder",
+            component: UserOrder,
+            name: "UserOrder",
         },
         {
-            path: "/detailInforUserOrder",
-            component: detailInforUserOrder,
-            name: "detailInforUserOrder",
+            path: "/DetailInforUserOrder",
+            component: DetailInforUserOrder,
+            name: "DetailInforUserOrder",
         },
         {
-            path: "/inforOrder",
-            component: inforOrder,
-            name: "inforOrder",
+            path: "/InforOrder",
+            component: InforOrder,
+            name: "InforOrder",
         },
         {
-            path: "/voucherAndTax",
-            component: voucherAndTax,
-            name: "voucherAndTax",
+            path: "/VoucherAndTax",
+            component: VoucherAndTax,
+            name: "VoucherAndTax",
         },
         {
-            path: "/noteOrder",
-            component: noteOrder,
-            name: "noteOrder",
+            path: "/NoteOrder",
+            component: NoteOrder,
+            name: "NoteOrder",
         },
         {
-            path: "/inforPayment",
-            component: inforPayment,
-            name: "inforPayment",
+            path: "/InforPayment",
+            component: InforPayment,
+            name: "InforPayment",
         },
         {
-            path: "/shippingMethod",
-            component: shippingMethod,
-            name: "shippingMethod",
+            path: "/ShippingMethod",
+            component: ShippingMethod,
+            name: "ShippingMethod",
         },
         {
-            path: "/anotherInfor",
-            component: anotherInfor,
-            name: "anotherInfor",
+            path: "/AnotherInfor",
+            component: AnotherInfor,
+            name: "AnotherInfor",
         },
         {
-            path: "/costOrder",
-            component: costOrder,
-            name: "costOrder",
+            path: "/CostOrder",
+            component: CostOrder,
+            name: "CostOrder",
         },
         {
-            path: "/modalCostOrder",
-            component: modalCostOrder,
-            name: "modalCostOrder",
+            path: "/ModalCostOrder",
+            component: ModalCostOrder,
+            name: "ModalCostOrder",
         },
         {
-            path: "/addNewUser",
-            component: addNewUser,
-            name: "addNewUser",
+            path: "/AddNewUser",
+            component: AddNewUser,
+            name: "AddNewUser",
         },
         {
-            path: "/chooseUser",
-            component: chooseUser,
-            name: "chooseUser",
+            path: "/ChooseUser",
+            component: ChooseUser,
+            name: "ChooseUser",
         },
         {
-            path: "/swapAddress",
-            component: swapAddress,
-            name: "swapAddress",
+            path: "/SwapAddress",
+            component: SwapAddress,
+            name: "SwapAddress",
         },
         {
-            path: "/addNewAddress",
-            component: addNewAddress,
-            name: "addNewAddress",
+            path: "/AddNewAddress",
+            component: AddNewAddress,
+            name: "AddNewAddress",
         },
         {
-            path: "/addNewProduct",
-            component: addNewProduct,
-            name: "addNewProduct",
+            path: "/AddNewProduct",
+            component: AddNewProduct,
+            name: "AddNewProduct",
         },
         {
-            path: "/addProduct",
-            component: addProduct,
-            name: "addProduct",
+            path: "/AddProduct",
+            component: AddProduct,
+            name: "AddProduct",
         },
         {
-            path: "/item1Modal",
-            component: item1Modal,
-            name: "item1Modal",
+            path: "/Item1Modal",
+            component: Item1Modal,
+            name: "Item1Modal",
         },
         {
-            path: "/detailVoucher",
-            component: detailVoucher,
-            name: "detailVoucher",
+            path: "/DetailVoucher",
+            component: DetailVoucher,
+            name: "DetailVoucher",
         },
         {
             path: "/test",
-            component: exPage,
-            name: "exPage",
+            component: ExPage,
+            name: "ExPage",
         },
     ],
 });

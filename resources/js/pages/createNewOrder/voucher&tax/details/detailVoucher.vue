@@ -112,9 +112,9 @@ import {
     AnOutlinedArrowLeft,
     AkChevronRightSmall,
 } from "@kalimahapps/vue-icons";
-import modalCode from "./modalCode.vue";
-import modalDiscount from "./modalDiscount.vue";
-import modalPromotion from "./modalPromotion.vue";
+import ModalCode from "./ModalCode.vue";
+import ModalDiscount from "./ModalDiscount.vue";
+import ModalPromotion from "./ModalPromotion.vue";
 import { ref, onMounted } from "vue";
 import eventBus from "../../../../eventBus";
 

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\tag_title;
+use App\Models\TagTitle;
 
 return new class extends Migration
 {
@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tag_title', function (Blueprint $table) {
+        Schema::create('TagTitle', function (Blueprint $table) {
             $table->id();
             $table->string('title_name');
             $table->timestamps();
@@ -26,7 +26,7 @@ return new class extends Migration
         ];
 
         foreach ($data as $item) {
-            $tag_title = new tag_title();
+            $tag_title = new TagTitle();
             $tag_title->title_name = $item['title_name'];
             $tag_title->save();
         }
@@ -34,6 +34,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('tag_title');
+        Schema::dropIfExists('TagTitle');
     }
 };

@@ -35,8 +35,8 @@
 
 <script setup>
 import { ref, defineEmits } from "vue";
-import generalInfor from "./generalInfor.vue";
-import boomInfor from "./boomInfor.vue";
+import GeneralInfor from "./GeneralInfor.vue";
+import BoomInfor from "./BoomInfor.vue";
 const emit = defineEmits(["closeModal"]);
 
 const Cancel = () => {

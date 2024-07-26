@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inforUserOrder extends Model
+class InforUserOrder extends Model
 {
     use HasFactory;
     /**
@@ -36,6 +36,6 @@ class inforUserOrder extends Model
      * @return array<string, string>
      */
     public $timestamps = false;
-    protected $table = 'inforuserorder';
+    protected $table = 'InforUserOrder';
     protected $hidden = [];
 }

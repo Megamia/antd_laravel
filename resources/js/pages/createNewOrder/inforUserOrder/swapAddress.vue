@@ -12,7 +12,7 @@
                             <CaAddAlt />Thêm địa chỉ mới
                         </a-button>
                     </div>
-                    <modalSwapAddress
+                    <ModalSwapAddress
                         v-if="open"
                         @cancel="Cancel"
                         @apply="Apply"
@@ -80,7 +80,7 @@ import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../../eventBus";
-import modalSwapAddress from "./modalSwapAddress.vue";
+import ModalSwapAddress from "./ModalSwapAddress.vue";
 
 const a = ref(null);
 const router = useRouter();

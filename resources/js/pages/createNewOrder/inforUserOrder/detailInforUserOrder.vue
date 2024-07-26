@@ -35,7 +35,7 @@
                     Xem thêm
                 </span>
             </div>
-            <modalInforUserOrder
+            <ModalInforUserOrder
                 v-if="isShowModalInforUser"
                 @closeModal="closeModal"
             />
@@ -69,7 +69,7 @@
 </template>
 <script setup>
 import { ref, onMounted, defineEmits, computed } from "vue";
-import modalInforUserOrder from "./modalInforUserOrder.vue";
+import ModalInforUserOrder from "./ModalInforUserOrder.vue";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
 

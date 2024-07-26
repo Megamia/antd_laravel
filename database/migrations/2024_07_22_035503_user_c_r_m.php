@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\userCRM;
+use App\Models\UserCRM;
 
 return new class extends Migration
 {
@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userCRM', function (Blueprint $table) {
+        Schema::create('UserCRM', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('phoneNumber');
@@ -36,7 +36,7 @@ return new class extends Migration
             ],
         ];
         foreach ($data as $item) {
-            $userCRM = new userCRM();
+            $userCRM = new UserCRM();
             $userCRM->name = $item['name'];
             $userCRM->phoneNumber = $item['phoneNumber'];
             $userCRM->email = $item['email'];
@@ -49,6 +49,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('UserCRM');
     }
 };

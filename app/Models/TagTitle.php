@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class tag_title extends Model
+class TagTitle extends Model
 {
     use HasFactory;
     protected $fillable = [
         'title_name',
     ];
     public $timestamps = false;
-    protected $table = 'tag_title';
+    protected $table = 'TagTitle';
     protected $hidden = [];
 }

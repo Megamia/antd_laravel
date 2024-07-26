@@ -27,7 +27,7 @@
             </div>
         </div>
         <div v-else>
-            <detailInforUserOrder @fet="fet" />
+            <DetailInforUserOrder @fet="fet" />
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ import {
     AnOutlinedUserAdd,
     PhMagnifyingGlass,
 } from "@kalimahapps/vue-icons";
-import detailInforUserOrder from "./detailInforUserOrder.vue";
+import DetailInforUserOrder from "./DetailInforUserOrder.vue";
 import { ref, onMounted, defineEmits } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";

@@ -15,7 +15,7 @@
                 {{ valueShip ? valueShip : "0" }}đ <AkChevronRight
             /></span>
         </div>
-        <modalShip
+        <ModalShip
             v-if="isModalShip"
             @close-modal-ship="closeModalShip"
             @value-in-modal-ship="valueInModalShip"
@@ -27,7 +27,7 @@
                 {{ valueVAT ? valueVAT : "0" }}đ <AkChevronRight
             /></span>
         </div>
-        <modalVAT
+        <ModalVAT
             v-if="isModalVAT"
             @close-modal-VAT="closeModalVAT"
             @value-in-modal-VAT="valueInModalVAT"
@@ -36,8 +36,8 @@
 </template>
 <script setup>
 import { AkChevronRight } from "@kalimahapps/vue-icons";
-import modalShip from "./details/modalShip.vue";
-import modalVAT from "./details/modalVAT.vue";
+import ModalShip from "./Details/ModalShip.vue";
+import ModalVAT from "./Details/ModalVAT.vue";
 import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 

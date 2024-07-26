@@ -12,7 +12,7 @@
             </span>
         </div>
     </div>
-    <modalShippingMethod
+    <ModalShippingMethod
         v-if="isModalShipping"
         @close-modal-shipping="closeModalShipping"
         @value-in-modal-shipping="valueInModalShipping"
@@ -21,7 +21,7 @@
 
 <script setup>
 import { AkChevronRight } from "@kalimahapps/vue-icons";
-import modalShippingMethod from "./detail/modalShippingMethod.vue";
+import ModalShippingMethod from "./Detail/ModalShippingMethod.vue";
 import { ref } from "vue";
 
 //ModalShipping

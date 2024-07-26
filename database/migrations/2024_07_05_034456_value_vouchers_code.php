@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\value_voucher_code;
+use App\Models\VoucherCodeValue;
 
 return new class extends Migration
 {
@@ -12,12 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('value_voucher_code', function (Blueprint $table) {
+        Schema::create('VoucherCodeValue', function (Blueprint $table) {
             $table->id();
             $table->string('code');
             $table->string('value');
             $table->unsignedBigInteger('voucher_id');
-            $table->foreign('voucher_id')->references('id')->on('vouchers');
+            $table->foreign('voucher_id')->references('id')->on('Voucher');
             $table->timestamps();
         });
         $data = [
@@ -48,7 +48,7 @@ return new class extends Migration
             ],
         ];
         foreach ($data as $item) {
-            $value_voucher_code = new value_voucher_code();
+            $value_voucher_code = new VoucherCodeValue();
             $value_voucher_code->code = $item['code'];
             $value_voucher_code->value = $item['value'];
             $value_voucher_code->voucher_id = $item['voucher_id'];
@@ -61,6 +61,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('value_voucher_code');
+        Schema::dropIfExists('VoucherCodeValue');
     }
 };

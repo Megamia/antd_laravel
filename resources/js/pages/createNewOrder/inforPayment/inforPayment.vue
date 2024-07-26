@@ -16,7 +16,7 @@
                     <AkChevronRight v-if="!valuePayment" />
                 </span>
             </div>
-            <modalPayment
+            <ModalPayment
                 v-if="isModalPayment"
                 @close-modal-payment="closeModalPayment"
                 @value-in-modal-payment="valueInModalPayment"
@@ -36,7 +36,7 @@
 </template>
 <script setup>
 import { AkChevronRight } from "@kalimahapps/vue-icons";
-import modalPayment from "./detail/modalPayment.vue";
+import ModalPayment from "./Detail/ModalPayment.vue";
 import { ref } from "vue";
 
 const checked = ref(false);

@@ -17,7 +17,7 @@
                 <a-button class="buttonScan" @click="openModalScanQRCode">
                     <BxScan />Quét mã</a-button
                 >
-                <modalScanQRCode
+                <ModalScanQRCode
                     v-if="isModalScanQRCode"
                     @closeModalScanQrCode="closeModalScanQrCode"
                 />
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <modalCostOrder
+                <ModalCostOrder
                     v-if="isShowModalCostOrder"
                     @close-modal-cost-order="closeModalCostOrder"
                     :idProduct="idProduct"
@@ -170,8 +170,8 @@
     </div>
 </template>
 <script setup>
-import modalScanQRCode from "./modalScanQrCode.vue";
-import modalCostOrder from "./modalCostOrder.vue";
+import ModalScanQRCode from "./ModalScanQrCode.vue";
+import ModalCostOrder from "./ModalCostOrder.vue";
 import {
     AkChevronDownSmall,
     AkChevronUpSmall,
