@@ -66,16 +66,15 @@
                             <div class="changeQuantityOrder">
                                 <div class="buttonChangeQuantityOrder">
                                     <button
-                                        class="buttonAddOrder"
+                                        class="buttonDelOrder"
                                         @click="
-                                            buttonAddOrder(
+                                            buttonDelOrder(
                                                 dataProductSelectedItem.id
                                             )
                                         "
                                     >
-                                        +
+                                        -
                                     </button>
-
                                     <input
                                         class="inputQuantityOrder"
                                         v-model="
@@ -85,14 +84,14 @@
                                         required
                                     />
                                     <button
-                                        class="buttonDelOrder"
+                                        class="buttonAddOrder"
                                         @click="
-                                            buttonDelOrder(
+                                            buttonAddOrder(
                                                 dataProductSelectedItem.id
                                             )
                                         "
                                     >
-                                        -
+                                        +
                                     </button>
                                 </div>
                                 <div class="delOrderDiv">
@@ -267,9 +266,12 @@ const fetchTotalPrice = () => {
     let totalPriceNumber = 0;
 
     for (let i = 0; i < dataProductSelected.value.length; i++) {
-        let priceProduct = dataProductSelected.value[i].price.replace(/\./g, "");
-        priceProduct=priceProduct.replace(/\,/g, "")
-        
+        let priceProduct = dataProductSelected.value[i].price.replace(
+            /\./g,
+            ""
+        );
+        priceProduct = priceProduct.replace(/\,/g, "");
+
         // console.log(priceProduct);
         let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
         totalPriceNumber += priceProduct * numberSelectedProduct;
