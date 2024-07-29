@@ -362,7 +362,6 @@ const filter = computed(() => {
                                 display: flex;
                                 flex: 1;
                                 flex-direction: row;
-                                justify-content: space-between;
 
                                 .priceProduct {
                                     font-size: 14px;
@@ -379,17 +378,22 @@ const filter = computed(() => {
                                 .quantityProduct {
                                     font-size: 14px;
                                     font-weight: 600;
+                                    display: flex;
+                                    flex: 1;
+                                    justify-content: flex-end;
+                                    flex-direction: row;
+                                    align-items: center;
+                                    gap:5px;
 
                                     .labelQuantity {
+                                        display: flex;
                                         font-size: 12px;
                                         font-weight: 500;
                                         color: #00000073;
                                     }
                                     .textQuantity {
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        max-width: 10px;
+                                        display: flex;
+                                        
                                     }
                                 }
                             }
