@@ -56,8 +56,7 @@
             </div>
             <div class="detailAddress">
                 {{
-                    displayData.address
-                        ? `${displayData.address},${displayData.ward},${displayData.district},${displayData.city}`
+                    displayData.address ? `${displayData.address}, ${displayData.ward || "No data"}, ${displayData.district || "No data"},${displayData.city || "No data"}`
                         : "Chưa có thông tin"
                 }}
             </div>

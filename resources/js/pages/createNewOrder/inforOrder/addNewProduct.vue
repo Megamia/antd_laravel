@@ -63,7 +63,9 @@
                                             <span class="labelQuantity"
                                                 >Tồn kho:
                                             </span>
-                                            {{ product.quantity }}
+                                            <span class="textQuantity">
+                                                {{ product.quantity }}
+                                            </span>
                                         </span>
                                     </div>
                                 </div>
@@ -338,9 +340,16 @@ const filter = computed(() => {
                                 display: flex;
                                 flex: 1;
                                 flex-direction: column;
-
                                 .nameProduct {
                                     font-size: 14px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    max-width: 250px;
+                                    /* background-color: red; */
+                                }
+                                .nameProduct:hover {
+                                    overflow: visible;
                                 }
 
                                 .tagProduct {
@@ -358,6 +367,13 @@ const filter = computed(() => {
                                 .priceProduct {
                                     font-size: 14px;
                                     color: #f26722;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    max-width: 150px;
+                                }
+                                .priceProduct:hover {
+                                    overflow: visible;
                                 }
 
                                 .quantityProduct {
@@ -368,6 +384,12 @@ const filter = computed(() => {
                                         font-size: 12px;
                                         font-weight: 500;
                                         color: #00000073;
+                                    }
+                                    .textQuantity {
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        max-width: 10px;
                                     }
                                 }
                             }

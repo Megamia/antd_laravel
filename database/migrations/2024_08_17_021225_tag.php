@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')
                 ->references('id')
-                ->on('Tag')
+                ->on('TagTitle')
                 ->onDelete('set null');
             $table->unsignedBigInteger('id_item')->nullable();
             $table->foreign('id_item')
