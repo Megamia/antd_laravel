@@ -26,7 +26,14 @@
                     @tags="filterWithTag"
                 />
                 <div class="productInfor">
-                    <a-checkbox-group v-model:value="a" style="width: 100%">
+                    <a-checkbox-group
+                        v-model:value="a"
+                        style="
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                        "
+                    >
                         <div
                             class="productItems"
                             v-for="product in filter"
@@ -274,7 +281,7 @@ const filter = computed(() => {
     .content {
         display: flex;
         flex: 1;
-        overflow-y: scroll;
+        overflow-y: auto;
         padding-top: 20px;
         .details {
             display: flex;
@@ -383,7 +390,7 @@ const filter = computed(() => {
                                     justify-content: flex-end;
                                     flex-direction: row;
                                     align-items: center;
-                                    gap:5px;
+                                    gap: 5px;
 
                                     .labelQuantity {
                                         display: flex;
@@ -393,7 +400,6 @@ const filter = computed(() => {
                                     }
                                     .textQuantity {
                                         display: flex;
-                                        
                                     }
                                 }
                             }

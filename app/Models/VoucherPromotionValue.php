@@ -11,7 +11,6 @@ class VoucherPromotionValue extends Model
     protected $fillable = [
         'text',
         'value',
-        'voucher_id',
     ];
     public $timestamps = false;
     protected $table = 'VoucherPromotionValue';

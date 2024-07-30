@@ -14,17 +14,12 @@ return new class extends Migration
     {
         Schema::create('Tag', function (Blueprint $table) {
             $table->id();
+            
             $table->string('name');
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')
-                ->references('id')
-                ->on('TagTitle')
-                ->onDelete('set null');
-            $table->unsignedBigInteger('id_item')->nullable();
-            $table->foreign('id_item')
-                ->references('id')
-                ->on('TagTitle')
-                ->onDelete('set null');
+            $table->integer('parent_id')->nullable();
+            
+            $table->integer('id_item')->nullable();
+           
             $table->boolean('itemChil');
             $table->timestamps();
         });

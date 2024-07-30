@@ -17,12 +17,12 @@ class InforUserOrder extends Model
         'name',
         'phoneNumber',
         'email',
+        'isUserCRM',
         'text',
         'number',
         'date',
         'dropDown',
         'checkBox',
-        'address',
         'email2'
     ];
     /**

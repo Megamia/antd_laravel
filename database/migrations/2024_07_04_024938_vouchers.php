@@ -15,6 +15,16 @@ return new class extends Migration
         Schema::create('Voucher', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('idVoucherCodeValue')->default('1');
+            $table->foreign('idVoucherCodeValue')
+                ->references('id')
+                ->on('VoucherCodeValue')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('idVoucherPromotionValue')->default('1');
+            $table->foreign('idVoucherPromotionValue')
+                ->references('id')
+                ->on('VoucherPromotionValue')
+                ->onDelete('cascade');
             $table->timestamps();
         });
         $data = [

@@ -9,13 +9,9 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'tag_id',
-        'quantity',
-        'defaultPrice',
-        'price',
-        'numberSelected',
-        'img'
+        'idDetailProduct',
+        'idTagTitle',
+
     ];
     public $timestamps = false;
     protected $table = 'Product';
