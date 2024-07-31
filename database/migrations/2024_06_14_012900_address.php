@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('district');
             $table->string('ward');
             $table->string('address');
-            $table->unsignedBigInteger('idUser')->default('1');
+            $table->unsignedBigInteger('idUser')->default(1);
             $table->foreign('idUser')
                 ->references('id')
                 ->on('InforUserOrder')
@@ -51,6 +51,7 @@ return new class extends Migration
                 'district' => 'Thanh Xuân',
                 'ward' => 'Thanh Xuân Trung',
                 'address' => '85 Vũ Trọng Phụng',
+                'idUser' => 2,
             ],
         ];
         foreach ($data as $item) {
@@ -61,6 +62,9 @@ return new class extends Migration
             $address->district = $item['district'];
             $address->ward = $item['ward'];
             $address->address = $item['address'];
+            if (isset($item['idUser'])) {
+                $address->idUser = $item['idUser'];
+            }
             $address->save();
         }
     }

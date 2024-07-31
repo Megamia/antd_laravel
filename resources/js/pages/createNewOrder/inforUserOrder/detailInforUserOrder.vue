@@ -56,7 +56,12 @@
             </div>
             <div class="detailAddress">
                 {{
-                    displayData.address ? `${displayData.address}, ${displayData.ward || "No data"}, ${displayData.district || "No data"},${displayData.city || "No data"}`
+                    displayData.address
+                        ? `${displayData.address}, ${
+                              displayData.ward || "Ward"
+                          }, ${displayData.district || "District"}, ${
+                              displayData.city || "City"
+                          }`
                         : "Chưa có thông tin"
                 }}
             </div>
@@ -85,7 +90,10 @@ const displayData = computed(() => {
     return eventBus.id ? dataUserOrder.value.address : dataUserOrder.value;
 });
 const swapAddress = () => {
-    router.push("/swapAddress");
+    router.push({
+        name: "SwapAddress",
+        params: { id: dataUserOrder.value.id },
+    });
 };
 
 const showModalInforUser = async () => {
@@ -132,6 +140,7 @@ const fetchData = async () => {
             const response = await axios.get(
                 `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
             );
+            // console.log("Data: ", response.data);
             if (response.data.status === 1) {
                 if (response.data.dataUserOrder != "guest") {
                     dataUserOrder.value = response.data.dataUserOrder;

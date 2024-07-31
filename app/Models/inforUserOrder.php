@@ -23,6 +23,7 @@ class InforUserOrder extends Model
         'date',
         'dropDown',
         'checkBox',
+        'address',
         'email2'
     ];
     /**

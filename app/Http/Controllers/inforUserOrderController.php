@@ -62,7 +62,7 @@ class InforUserOrderController extends Controller
     }
 
 
-    public function addUserOder(Request $request)
+    public function addUserOrder(Request $request)
     {
         $data = $request->only([
             'username',
@@ -86,5 +86,22 @@ class InforUserOrderController extends Controller
             'status' => 1,
             'message' => 'User has been add to inforUserOrder', 'data' => $users
         ]);
+    }
+    public function inforUserCRM(Request $request)
+    {
+        $data = InforUserOrder::all();
+        $inforUserCRM = [];
+
+        foreach ($data as $record) {
+            if (isset($record->isUserCRM) && $record->isUserCRM === 1) {
+                $inforUserCRM[] = $record; 
+            }
+        }
+
+        if (!empty($inforUserCRM)) {
+            return response()->json(['status' => 1, 'inforUserCRM' => $inforUserCRM]);
+        } else {
+            return response()->json(['status' => 0, 'inforUserCRM' => "No inforUserCRM"]);
+        }
     }
 }

@@ -78,9 +78,12 @@
                                     <input
                                         class="inputQuantityOrder"
                                         v-model="
-                                            dataProductSelectedItem.numberSelected
+                                            numberSelected[
+                                                dataProductSelectedItem.id
+                                            ]
                                         "
                                         type="number"
+                                        min="1"
                                         required
                                     />
                                     <button
@@ -184,7 +187,7 @@ import eventBus from "../../../eventBus";
 import axios from "axios";
 
 const emit = defineEmits(["show", "showModal", "inforProduct", "fetchData"]);
-
+const numberSelected = ref({});
 //ModalCostOrder
 let idProduct = 0;
 const isShowModalCostOrder = ref(false);
@@ -236,30 +239,43 @@ const show = () => {
     showOrder.value = !showOrder.value;
     emit("show");
 };
+
+onMounted(async () => {
+    await fetchData();
+
+    dataProductSelected.value.forEach((item) => {
+        if (!(item.id in numberSelected.value)) {
+            numberSelected.value[item.id] = 1;
+        }
+    });
+});
+
 const buttonAddOrder = (id) => {
-    // console.log("id:", id);
     const product = dataProductSelected.value.find((item) => item.id === id);
-    if (product && product.numberSelected < product.quantity) {
-        product.numberSelected++;
-        // console.log(product.numberSelected, product.quantity);
-        fetchTotalPrice();
-    } else {
-        alert("Vượt quá số lượng tồn kho");
+    if (product) {
+        const currentQuantity = numberSelected.value[id] || 1;
+        if (currentQuantity < product.quantity) {
+            numberSelected.value[id] = currentQuantity + 1;
+            fetchTotalPrice();
+        } else {
+            alert("Vượt quá số lượng tồn kho");
+        }
     }
 };
 const buttonDelOrder = (id) => {
-    // console.log("id:", id);
     const product = dataProductSelected.value.find((item) => item.id === id);
-    if (product)
-        if (product.numberSelected <= 0) {
-            return (product.numberSelected = 0);
+    if (product) {
+        const currentQuantity = numberSelected.value[id] || 1;
+        if (currentQuantity > 0) {
+            numberSelected.value[id] = currentQuantity - 1;
         } else {
-            product.numberSelected--;
+            return (numberSelected.value[id] = 0);
         }
+    }
     fetchTotalPrice();
 };
 
-const dataProductSelected = ref("");
+const dataProductSelected = ref([]);
 const totalPrice = ref("");
 
 const fetchTotalPrice = () => {
@@ -273,7 +289,8 @@ const fetchTotalPrice = () => {
         priceProduct = priceProduct.replace(/\,/g, "");
 
         // console.log(priceProduct);
-        let numberSelectedProduct = dataProductSelected.value[i].numberSelected;
+        let numberSelectedProduct =
+            numberSelected.value[dataProductSelected.value[i].id];
         totalPriceNumber += priceProduct * numberSelectedProduct;
         priceProduct = parseFloat(priceProduct);
     }

@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('InforUserOrder', function (Blueprint $table) {
             $table->id();
-            
             $table->string('name');
             $table->string('phoneNumber');
             $table->string('email')->nullable()->default('example@gmail');
@@ -21,6 +20,7 @@ return new class extends Migration
             $table->timestamp('date')->useCurrent();
             $table->string('dropDown')->nullable();
             $table->string('checkBox')->nullable();
+            $table->string('address')->nullable();
             $table->string('email2')->nullable()->default('example2@gmail');
         });
 
@@ -34,6 +34,7 @@ return new class extends Migration
                 'number' => 200,
                 'dropDown' => 'Option 1',
                 'checkBox' => 'Checked',
+                'address' => 'askdjqlkwhb sadwq',
                 'email2' => 'jane2@example.com'
             ],
             [
@@ -45,6 +46,7 @@ return new class extends Migration
                 'number' => 150,
                 'dropDown' => 'Option 2',
                 'checkBox' => 'Unchecked',
+                'address' => 'askdjqlkwhb sadwq',
                 'email2' => 'bob2@example.com'
             ],
             [
@@ -56,6 +58,7 @@ return new class extends Migration
                 'number' => 75,
                 'dropDown' => 'Option 3',
                 'checkBox' => 'Checked',
+                'address' => 'askdjqlkwhb sadwq',
                 'email2' => 'alice2@example.com'
             ],
             [
@@ -67,6 +70,7 @@ return new class extends Migration
                 'number' => 300,
                 'dropDown' => 'Option 4',
                 'checkBox' => 'Unchecked',
+                'address' => 'askdjqlkwhb sadwq',
                 'email2' => 'tom2@example.com'
             ],
             [
@@ -78,6 +82,7 @@ return new class extends Migration
                 'number' => 125,
                 'dropDown' => 'Option 5',
                 'checkBox' => 'Checked',
+                'address' => 'askdjqlkwhb sadwq',
                 'email2' => 'sarah2@example.com'
             ]
         ];
@@ -92,6 +97,7 @@ return new class extends Migration
             $inforUserOrder->number = $item['number'];
             $inforUserOrder->dropDown = $item['dropDown'];
             $inforUserOrder->checkBox = $item['checkBox'];
+            $inforUserOrder->address = $item['address'];
             $inforUserOrder->email2 = $item['email2'];
             $inforUserOrder->save();
         }

@@ -123,7 +123,7 @@ const fetchData = async () => {
             `${import.meta.env.VITE_APP_URL_API}/inforUserCRM`
         );
         if (response.data.status === 1) {
-            // console.log(response.data.inforUserCRM);
+            console.log(response.data.inforUserCRM);
             dataUser.value = response.data.inforUserCRM;
         } else if (response.data.status === 0) {
             console.log(response.data.inforUserCRM);
@@ -133,8 +133,12 @@ const fetchData = async () => {
     }
 };
 
+// onMounted(() => {
+//     if (formState.value.phoneNumber) {
+//         fetchData();
+//     }
+// });
 onMounted(() => fetchData());
-
 const filter = computed(() => {
     if (formState.value.phoneNumber) {
         return dataUser.value.filter((data) => {

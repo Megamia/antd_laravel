@@ -95,7 +95,7 @@ const router = createRouter({
             name: "ChooseUser",
         },
         {
-            path: "/SwapAddress",
+            path: "/SwapAddress/:id",
             component: SwapAddress,
             name: "SwapAddress",
         },

@@ -218,8 +218,9 @@ const buttonSave = async () => {
             if (response.data.status === 1) {
                 // console.log(response.data.choosedProduct);
                 eventBus.product.idProduct = a.value.sort().toString();
-                // console.log("evB: ", eventBus.product.idProduct);
                 router.back();
+
+                // console.log("evB: ", eventBus.product.idProduct);
                 // emit("choosedProduct", response.data.choosedProduct);
             } else {
                 console.log("No choosedProduct");

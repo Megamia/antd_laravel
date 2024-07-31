@@ -58,6 +58,8 @@ class AddressController extends Controller
             'ward',
             'address'
         );
+        $idUserWithPhone = inforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
+
         if (is_null($data['username'])) {
             $data['username'] = 'user';
         }
@@ -68,11 +70,23 @@ class AddressController extends Controller
             'district' => $data['district'],
             'ward' => $data['ward'],
             'address' => $data['address'],
+            'idUser' => $idUserWithPhone['id'],
         ]);
 
         return response()->json([
             'status' => 1,
             'message' => 'Address has been add to database', 'newAddress' => $newAddress
         ]);
+    }
+    public function inforAddressWithIdUser(Request $request)
+    {
+        $data = $request->only('id');
+        $inforAddressWithIdUser = Address::where('idUser', $data['id'])->get();
+
+        if ($inforAddressWithIdUser->isNotEmpty()) {
+            return response()->json(['status' => 1, 'inforAddressWithIdUser' => $inforAddressWithIdUser]);
+        } else {
+            return response()->json(['status' => 0, 'inforAddressWithIdUser' => "No inforAddressWithIdUser"]);
+        }
     }
 }

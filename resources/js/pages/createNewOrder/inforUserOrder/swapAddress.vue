@@ -2,7 +2,7 @@
     <div class="mainSwapAddress">
         <div class="title">
             <AnOutlinedArrowLeft @click="back" />
-            <span> Đổi địa chỉ </span>
+            <span @click="test"> Đổi địa chỉ </span>
         </div>
         <div class="content">
             <div class="userInfor">
@@ -76,7 +76,7 @@ import {
     CaAddAlt,
     BxTrashAlt,
 } from "@kalimahapps/vue-icons";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../../eventBus";
@@ -84,12 +84,18 @@ import ModalSwapAddress from "./ModalSwapAddress.vue";
 
 const a = ref(null);
 const router = useRouter();
+const route = useRoute();
 const open = ref(false);
 let idUser = 0;
 // const showModal = () => {
 //     open.value = true;
 // };
 const address = ref("");
+
+const id = route.params.id;
+const test = () => {
+    console.log("ID: ", id);
+};
 
 const Cancel = () => {
     open.value = false;
@@ -136,11 +142,16 @@ const showModal = (id) => {
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/inforAddress`
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/inforAddressWithIdUser`,
+            {
+                id: id,
+            }
         );
+        // console.log("id: ", id);
         if (response.data.status === 1) {
-            address.value = response.data.inforAddress;
+            address.value = response.data.inforAddressWithIdUser;
+            // console.log("address.value: ", address.value);
         } else {
             return (address.value = null);
         }

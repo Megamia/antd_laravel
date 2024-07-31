@@ -114,8 +114,8 @@ const Apply = () => {
             font-size: 16px;
             padding: 10px;
         }
-        .buttonCancel {
-        }
+        /* .buttonCancel {
+        } */
         .buttonApply {
             span {
                 font-weight: bold;
