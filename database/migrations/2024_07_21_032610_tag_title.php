@@ -15,16 +15,20 @@ return new class extends Migration
         Schema::create('TagTitle', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('idTag')->default('1');
+            $table->unsignedBigInteger('idTag')->default(1);
             $table->foreign('idTag')
                 ->references('id')
                 ->on('Tag');
+            $table->unsignedBigInteger('idDetailProduct')->default(1);
+            $table->foreign('idDetailProduct')
+                ->references('id')
+                ->on('DetailProduct');
             $table->timestamps();
         });
 
         $data = [
-            ['name' => 'Lọc sản phẩm'],
-            ['name' => 'Thương hiệu'],
+            ['name' => 'Lọc sản phẩm', 'idDetailProduct' => 1],
+            ['name' => 'Thương hiệu', 'idDetailProduct' => 2],
             ['name' => 'Danh mục'],
             ['name' => 'Tags'],
         ];
@@ -32,6 +36,9 @@ return new class extends Migration
         foreach ($data as $item) {
             $tag_title = new TagTitle();
             $tag_title->name = $item['name'];
+            if (isset($item['idDetailProduct'])) {
+                $tag_title->idDetailProduct = $item['idDetailProduct'];
+            }
             $tag_title->save();
         }
     }

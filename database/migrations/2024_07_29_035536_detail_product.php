@@ -15,13 +15,16 @@ return new class extends Migration
     {
         Schema::create('DetailProduct', function (Blueprint $table) {
             $table->id();
-           
+
             $table->string('name');
-           
             $table->integer('quantity');
             $table->string('defaultPrice');
             $table->string('price');
             $table->string('img', 10000);
+            $table->unsignedBigInteger('idTagTitle')->default(1);
+            $table->foreign('idTagTitle')
+                ->references('id')
+                ->on('TagTitle');
         });
 
         $data = [
@@ -30,7 +33,8 @@ return new class extends Migration
                 'quantity' => '2',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
-                'img' => 'http://127.0.0.1:8000/uploads/b01a8548b32136d8258ebb5131b4b5b4.jfif'
+                'img' => 'http://127.0.0.1:8000/uploads/b01a8548b32136d8258ebb5131b4b5b4.jfif',
+                'idTagTitle' => 2,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -44,14 +48,16 @@ return new class extends Migration
                 'quantity' => '0',
                 'defaultPrice' => '1.249.000',
                 'price' => '1.249.000',
-                'img' => 'http://127.0.0.1:8000/uploads/a420b252cec7770c3d6e9d3dff2a3db4.jfif'
+                'img' => 'http://127.0.0.1:8000/uploads/a420b252cec7770c3d6e9d3dff2a3db4.jfif',
+                'idTagTitle' => 2,
             ],
             [
                 'name' => 'Tên của sản phẩm',
                 'quantity' => '29',
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
-                'img' => 'http://127.0.0.1:8000/uploads/0b936eb81d043d5545d8b6c5a271f7d6.jfif'
+                'img' => 'http://127.0.0.1:8000/uploads/0b936eb81d043d5545d8b6c5a271f7d6.jfif',
+                'idTagTitle' => 2,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -69,13 +75,16 @@ return new class extends Migration
             ],
         ];
         foreach ($data as $item) {
-            $address = new DetailProduct();
-            $address->name = $item['name'];
-            $address->quantity = $item['quantity'];
-            $address->defaultPrice = $item['defaultPrice'];
-            $address->price = $item['price'];
-            $address->img = $item['img'];
-            $address->save();
+            $DetailProduct = new DetailProduct();
+            $DetailProduct->name = $item['name'];
+            $DetailProduct->quantity = $item['quantity'];
+            $DetailProduct->defaultPrice = $item['defaultPrice'];
+            $DetailProduct->price = $item['price'];
+            $DetailProduct->img = $item['img'];
+            if (isset($item['idTagTitle'])) {
+                $DetailProduct->idTagTitle = $item['idTagTitle'];
+            }
+            $DetailProduct->save();
         }
     }
 
