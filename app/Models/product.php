@@ -11,7 +11,7 @@ class Product extends Model
     protected $fillable = [
         'idDetailProduct',
         'idTagTitle',
-
+        'numberSelected',
     ];
     public $timestamps = false;
     protected $table = 'Product';

@@ -22,6 +22,7 @@
                     @showModal="ClickShowModal"
                     @infor-product="inforProduct"
                     @fetch-data="click"
+                    @product-selected="productSelected"
                 />
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
@@ -42,11 +43,32 @@
             </div>
         </div>
         <div class="footer">
-            <div class="costOrder">
+            <!-- <div class="costOrder">
                 <CostOrder
                     :quantityProduct="quantityProduct"
                     :priceProductValue="priceProductValue"
+                    @console="Console"
                 />
+            </div> -->
+            <div class="mainCostOrder">
+                <div class="costDiv">
+                    <div class="titleCostOrder">
+                        <span class="left">Tổng cộng </span>
+                        <span class="right"
+                            >({{ quantityProduct }} sản phẩm)</span
+                        >
+                    </div>
+                    <div class="cost">
+                        <span
+                            >{{
+                                priceProductValue ? priceProductValue : "0"
+                            }}đ</span
+                        >
+                    </div>
+                </div>
+                <div class="order">
+                    <button @click="createOrder">Tạo đơn hàng</button>
+                </div>
             </div>
         </div>
     </div>
@@ -60,11 +82,11 @@ import NoteOrder from "./Note/NoteOrder.vue";
 import InforPayment from "./InforPayment/InforPayment.vue";
 import ShippingMethod from "./ShippingMethod/ShippingMethod.vue";
 import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
-import CostOrder from "./CostOrder/CostOrder.vue";
 import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 
 import { ref, onMounted } from "vue";
+import axios from "axios";
 import eventBus from "../../eventBus";
 // import axios from "axios";
 const isLoyalty = ref(false);
@@ -117,17 +139,57 @@ const priceProductValue = ref("0");
 //InforOrder
 let quantityProduct = 0;
 const priceProduct = ref("0");
-const inforProduct = (data1, data2) => {
-    // console.log(data1, data2);
+const dataProduct = ref("");
+const inforProduct = (data1, data2, data3) => {
+    // console.log(data3);
+    dataProduct.value = data3;
     quantityProduct = data1;
     if (data2) {
         priceProduct.value = data2;
     }
 };
+
+const dataOrder = ref("");
+const productSelected = (data) => {
+    // idProductSelected.value = id;
+    // numberProductSelected.value = numberSelected;
+    dataOrder.value = data;
+    // console.log("dataOrder.value: ", dataOrder.value);
+};
+const product = ref("");
+const fetchDataOrder = async () => {
+    // console.log("dataOrder.valuee: ", dataOrder.value);
+    const plainData = JSON.parse(JSON.stringify(dataOrder.value));
+    // console.log("plainData: ", plainData);
+    try {
+        if (dataOrder.value !== "No choosedProduct" && dataOrder.value) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/productSelected`,
+                {
+                    data: plainData,
+                }
+            );
+            // console.log("data: ", data);
+            if (response.data.status === 1) {
+                product.value = response.data.productSelected;
+            } else {
+                console.log("No productSelected");
+            }
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+onMounted(() => fetchDataOrder());
 //InforOrder
 
 //CostOrder
+const createOrder = async () => {
+    await fetchDataOrder();
+    const Product = JSON.parse(JSON.stringify(product.value));
 
+    console.log("Product: ", Product);
+};
 //CostOrder
 </script>
 
@@ -182,10 +244,48 @@ const inforProduct = (data1, data2) => {
     }
     .footer {
         display: flex;
-        widows: 100%;
-        .costOrder {
+        flex: 1;
+        .mainCostOrder {
             display: flex;
             flex: 1;
+            background-color: white;
+            padding: 12px;
+            flex-direction: row;
+
+            .costDiv {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                .titleCostOrder {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 5px;
+                    span {
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .right {
+                        color: #00000073;
+                    }
+                }
+                .cost {
+                    font-size: 16px;
+                    color: #1890ff;
+                }
+            }
+            .order {
+                display: flex;
+                flex: 1;
+                justify-content: end;
+                button {
+                    background-color: #1890ff;
+                    color: white;
+                    border: 0;
+                    padding: 6px 15px 6px 15px;
+                    font-size: 16px;
+                }
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('idProduct');
             $table->dateTime('timeCreateOrder');
-            $table->integer('numberSelected')->default(0);
             $table->string('sale');
             $table->string('price');
         });

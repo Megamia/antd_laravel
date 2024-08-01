@@ -153,6 +153,7 @@ const filterWithTag = (data) => {
 const data = ref({});
 
 const fetchData = async () => {
+    // console.log(eventBus.product.idProduct);
     if (eventBus.product.idProduct) {
         let values = Object.values(eventBus.product.idProduct);
         eventBus.product.idProduct = values.join(",").split(",").map(Number);

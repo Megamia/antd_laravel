@@ -9,7 +9,7 @@ class TagTitle extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title_name',
+        'name',
     ];
     public $timestamps = false;
     protected $table = 'TagTitle';

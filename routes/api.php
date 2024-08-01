@@ -28,7 +28,7 @@ Route::post('addNewAddress', [AddressController::class, 'addNewAddress']);
 Route::post('inforAddressWithIdUser', [AddressController::class, 'inforAddressWithIdUser']);
 //Address
 
-// Product
+// DetailProduct
 Route::get('inforProduct', [DetailProductController::class, 'inforProduct']);
 Route::post('uploads', [DetailProductController::class, 'upload']);
 Route::get('showImg', [DetailProductController::class, 'showImg']);
@@ -36,8 +36,13 @@ Route::post('addNewProduct', [DetailProductController::class, 'addNewProduct']);
 Route::post('choosedProduct', [DetailProductController::class, 'choosedProduct']);
 Route::post('updatePriceProduct', [DetailProductController::class, 'updatePriceProduct']);
 Route::post('inforProductWithTag', [DetailProductController::class, 'inforProductWithTag']);
-// Product
+// DetailProduct
 
+//Product
+Route::post('productSelected', [ProductController::class, 'productSelected']);
+
+
+//Product
 //Tag
 Route::get('itemFilterWithTag', [TagController::class, 'itemFilterWithTag']);
 Route::post('titleFilterWithTag', [TagController::class, 'titleFilterWithTag']);

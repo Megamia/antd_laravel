@@ -186,7 +186,13 @@ import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../eventBus";
 import axios from "axios";
 
-const emit = defineEmits(["show", "showModal", "inforProduct", "fetchData"]);
+const emit = defineEmits([
+    "show",
+    "showModal",
+    "inforProduct",
+    "fetchData",
+    "productSelected",
+]);
 const numberSelected = ref({});
 //ModalCostOrder
 let idProduct = 0;
@@ -242,12 +248,17 @@ const show = () => {
 
 onMounted(async () => {
     await fetchData();
-
-    dataProductSelected.value.forEach((item) => {
-        if (!(item.id in numberSelected.value)) {
-            numberSelected.value[item.id] = 1;
-        }
-    });
+    // console.log(dataProductSelected.value);
+    if (
+        dataProductSelected.value &&
+        dataProductSelected.value != "No choosedProduct"
+    ) {
+        dataProductSelected.value.forEach((item) => {
+            if (!(item.id in numberSelected.value)) {
+                numberSelected.value[item.id] = 1;
+            }
+        });
+    }
 });
 
 const buttonAddOrder = (id) => {
@@ -332,7 +343,32 @@ const fetchData = async () => {
         dataProductSelected.value = "No choosedProduct";
     }
     // console.log(countProduct, totalPrice.value);
-    emit("inforProduct", countProduct, totalPrice.value);
+    if (
+        dataProductSelected.value &&
+        dataProductSelected.value != "No choosedProduct"
+    ) {
+        const productSelected = dataProductSelected.value.map((item) => {
+            if (
+                numberSelected.value[item.id] === undefined ||
+                numberSelected.value[item.id] === null
+            ) {
+                numberSelected.value[item.id] = 1;
+            }
+            return {
+                idDetailProduct: item.id,
+                numberSelected: numberSelected.value[item.id],
+            };
+        });
+        console.log("productSelected: ", productSelected);
+        emit("productSelected", productSelected);
+    }
+
+    emit(
+        "inforProduct",
+        countProduct,
+        totalPrice.value,
+        dataProductSelected.value
+    );
 };
 
 let countProduct = 0;

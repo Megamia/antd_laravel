@@ -8,7 +8,6 @@ import NoteOrder from "./pages/CreateNewOrder/Note/NoteOrder.vue";
 import InforPayment from "./pages/CreateNewOrder/InforPayment/InforPayment.vue";
 import ShippingMethod from "./pages/CreateNewOrder/ShippingMethod/ShippingMethod.vue";
 import AnotherInfor from "./pages/CreateNewOrder/AnotherInfor/AnotherInfor.vue";
-import CostOrder from "./pages/CreateNewOrder/CostOrder/CostOrder.vue";
 import ModalCostOrder from "./pages/CreateNewOrder/InforOrder/ModalCostOrder.vue";
 import CreateOrderSuccess from "./pages/CreateNewOrder/CreateOrderSuccess.vue";
 import AddNewUser from "./pages/CreateNewOrder/InforUserOrder/AddNewUser.vue";
@@ -73,11 +72,6 @@ const router = createRouter({
             path: "/AnotherInfor",
             component: AnotherInfor,
             name: "AnotherInfor",
-        },
-        {
-            path: "/CostOrder",
-            component: CostOrder,
-            name: "CostOrder",
         },
         {
             path: "/ModalCostOrder",

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('idDetailProduct')
                 ->references('id')
                 ->on('DetailProduct');
+            $table->integer('numberSelected')->default(0);
             $table->timestamps();
         });
     }
