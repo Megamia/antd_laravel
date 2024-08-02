@@ -13,7 +13,7 @@
         </div>
         <div class="content">
             <div class="userOrder">
-                <UserOrder />
+                <UserOrder @data-infor-user="dataInforUser" />
             </div>
 
             <div class="productOrderDiv">
@@ -136,6 +136,14 @@ const fetchData = () => {
 onMounted(() => fetchData());
 const priceProductValue = ref("0");
 
+//UserOrder
+const dataUser = ref("");
+const dataInforUser = (data) => {
+    dataUser.value = data;
+    // console.log("DataUser: ", data);
+};
+//UserOrder
+
 //InforOrder
 let quantityProduct = 0;
 const priceProduct = ref("0");
@@ -151,22 +159,24 @@ const inforProduct = (data1, data2, data3) => {
 
 const dataOrder = ref("");
 const productSelected = (data) => {
+    dataOrder.value = data;
     // idProductSelected.value = id;
     // numberProductSelected.value = numberSelected;
-    dataOrder.value = data;
+    // console.log("dataProduct: ", dataOrder.value);
     // console.log("dataOrder.value: ", dataOrder.value);
 };
 const product = ref("");
 const fetchDataOrder = async () => {
     // console.log("dataOrder.valuee: ", dataOrder.value);
-    const plainData = JSON.parse(JSON.stringify(dataOrder.value));
     // console.log("plainData: ", plainData);
+
+    // const plainData = JSON.parse(JSON.stringify(dataOrder.value));
     try {
         if (dataOrder.value !== "No choosedProduct" && dataOrder.value) {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/productSelected`,
                 {
-                    data: plainData,
+                    data: dataOrder.value,
                 }
             );
             // console.log("data: ", data);
@@ -186,9 +196,8 @@ onMounted(() => fetchDataOrder());
 //CostOrder
 const createOrder = async () => {
     await fetchDataOrder();
-    const Product = JSON.parse(JSON.stringify(product.value));
-
-    console.log("Product: ", Product);
+    // const Product = JSON.parse(JSON.stringify(product.value));
+    console.log("Order: ", dataUser.value, "\n", product.value);
 };
 //CostOrder
 </script>

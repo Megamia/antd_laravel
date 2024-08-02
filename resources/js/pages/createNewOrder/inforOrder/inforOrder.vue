@@ -272,6 +272,7 @@ const buttonAddOrder = (id) => {
             alert("Vượt quá số lượng tồn kho");
         }
     }
+    fetchData();
 };
 const buttonDelOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
@@ -284,6 +285,7 @@ const buttonDelOrder = (id) => {
         }
     }
     fetchTotalPrice();
+    fetchData();
 };
 
 const dataProductSelected = ref([]);
@@ -347,19 +349,22 @@ const fetchData = async () => {
         dataProductSelected.value &&
         dataProductSelected.value != "No choosedProduct"
     ) {
-        const productSelected = dataProductSelected.value.map((item) => {
+        const productSelected = {};
+
+        for (const item of dataProductSelected.value) {
             if (
                 numberSelected.value[item.id] === undefined ||
                 numberSelected.value[item.id] === null
             ) {
                 numberSelected.value[item.id] = 1;
             }
-            return {
+
+            productSelected[item.id] = {
                 idDetailProduct: item.id,
                 numberSelected: numberSelected.value[item.id],
             };
-        });
-        console.log("productSelected: ", productSelected);
+        }
+        // console.log("productSelected: ", productSelected);
         emit("productSelected", productSelected);
     }
 
@@ -372,7 +377,7 @@ const fetchData = async () => {
 };
 
 let countProduct = 0;
-onMounted(() => fetchData());
+// onMounted(() => fetchData());
 
 // let sum = 0;
 

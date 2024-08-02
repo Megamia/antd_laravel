@@ -9,7 +9,7 @@ use App\Http\Controllers\UserCRMController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
-//User
+//InforUser
 Route::get('dataUser', [InforUserOrderController::class, 'data']);
 Route::post('chooseUserOrder', [InforUserOrderController::class, 'chooseUserOrder']);
 Route::get('dataUserOrder', [InforUserOrderController::class, 'dataUserOrder']);
@@ -17,7 +17,7 @@ Route::get('deleteSession', [InforUserOrderController::class, 'deleteSession']);
 Route::post('addUserOrder', [InforUserOrderController::class, 'addUserOrder']);
 Route::post('newDataUserOrderAfterSwap', [AddressController::class, 'newDataUserOrderAfterSwap']);
 Route::get('inforUserCRM', [InforUserOrderController::class, 'inforUserCRM']);
-//User
+//InforUser
 
 //Address
 Route::get('inforAddress', [AddressController::class, 'inforAddress']);

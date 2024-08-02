@@ -10,7 +10,8 @@ class ProductController extends Controller
     public function productSelected(Request $request)
     {
         $data = $request->input('data');
-        $productSelected = [];
+        $productSelected = [];                      //array
+      //$productSelected = new \stdClass();           object
         if (!is_array($data)) {
             return response()->json([
                 'message' => 'Invalid data format ',

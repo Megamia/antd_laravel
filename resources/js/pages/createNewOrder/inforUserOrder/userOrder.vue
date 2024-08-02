@@ -27,7 +27,7 @@
             </div>
         </div>
         <div v-else>
-            <DetailInforUserOrder @fet="fet" />
+            <DetailInforUserOrder @fet="fet" @infor-user="InforUser" />
         </div>
     </div>
 </template>
@@ -43,7 +43,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
 
-const emit = defineEmits("fet");
+const emit = defineEmits(["dataInforUser"]);
 
 const showChoose = ref(true);
 const dataUserOrder = ref("");
@@ -86,10 +86,19 @@ const fetchData = async () => {
         console.log("Error: ", e);
     }
 };
+
 const fet = async () => {
     fetchData();
 };
 
+// const dataUser = ref("");
+const InforUser = (data) => {
+    // dataUser.value = data;
+    // console.log("data: ", dataUser.value);
+    emit("dataInforUser", data);
+
+    // console.log(data);
+};
 onMounted(() => fetchData());
 
 const router = useRouter();

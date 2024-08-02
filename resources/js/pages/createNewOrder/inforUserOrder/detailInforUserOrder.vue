@@ -2,19 +2,7 @@
     <div class="mainDetailInforUserOrder" v-if="isUser">
         <div class="detailInforUser">
             <div class="nameUser">
-                <span>
-                    {{
-                        dataUserOrder.name
-                            ? dataUserOrder.name
-                            : dataUserOrder.data.name
-                    }}
-                    |
-                    {{
-                        dataUserOrder.phoneNumber
-                            ? dataUserOrder.phoneNumber
-                            : dataUserOrder.data.phoneNumber
-                    }}</span
-                >
+                <span> {{ displayName }} | {{ displayPhoneNumber }}</span>
             </div>
             <div class="totalInforOrderUser">
                 <div class="order ordered">
@@ -55,15 +43,7 @@
                 </span>
             </div>
             <div class="detailAddress">
-                {{
-                    displayData.address
-                        ? `${displayData.address}, ${
-                              displayData.ward || "Ward"
-                          }, ${displayData.district || "District"}, ${
-                              displayData.city || "City"
-                          }`
-                        : "Chưa có thông tin"
-                }}
+                {{ formattedAddress }}
             </div>
         </div>
     </div>
@@ -71,13 +51,14 @@
         <span> Khách lẻ </span>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted, defineEmits, computed } from "vue";
 import ModalInforUserOrder from "./ModalInforUserOrder.vue";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
 
-const emit = defineEmits(["fet"]);
+const emit = defineEmits(["fet", "InforUser"]);
 
 const dataUserOrder = ref("");
 const isUser = ref(null);
@@ -89,10 +70,39 @@ const router = useRouter();
 const displayData = computed(() => {
     return eventBus.id ? dataUserOrder.value.address : dataUserOrder.value;
 });
+
+const formattedAddress = computed(() => {
+    const address = displayData.value?.address ?? "Chưa có thông tin";
+    const ward = displayData.value?.ward ?? "Ward";
+    const district = displayData.value?.district ?? "District";
+    const city = displayData.value?.city ?? "City";
+
+    return address !== "Chưa có thông tin"
+        ? `${address}, ${ward}, ${district}, ${city}`
+        : "Chưa có thông tin";
+});
+
+const displayName = computed(() => {
+    return dataUserOrder.value.name || dataUserOrder.value.data.name;
+});
+
+const displayPhoneNumber = computed(() => {
+    return (
+        dataUserOrder.value.phoneNumber || dataUserOrder.value.data.phoneNumber
+    );
+});
+
 const swapAddress = () => {
+    let id;
+    if (dataUserOrder.value.data && dataUserOrder.value.data.id) {
+        id = dataUserOrder.value.data.id;
+    } else if (dataUserOrder.value && dataUserOrder.value.id) {
+        id = dataUserOrder.value.id;
+    }
+
     router.push({
         name: "SwapAddress",
-        params: { id: dataUserOrder.value.id },
+        params: { id },
     });
 };
 
@@ -114,52 +124,41 @@ const closeModal = () => {
 
 const fetchData = async () => {
     try {
+        let response;
+
         if (eventBus.id) {
-            const response = await axios.post(
+            response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-                {
-                    id: eventBus.id,
-                }
+                { id: eventBus.id }
             );
-            if (response.data.status === 1) {
-                if (response.data.dataUserOrder != "guest") {
-                    dataUserOrder.value = response.data.dataUserOrder;
-                    isGuest.value = false;
-                    isUser.value = true;
-                } else {
-                    dataUserOrder.value = response.data.dataUserOrder;
-                    isGuest.value = true;
-                    isUser.value = false;
-                }
-                checkShow.value = true;
-                // console.log(response.data.dataUserOrder);
-            } else if (response.data.status === 0) {
-                checkShow.value = false;
-            }
         } else {
-            const response = await axios.get(
+            response = await axios.get(
                 `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
             );
-            // console.log("Data: ", response.data);
-            if (response.data.status === 1) {
-                if (response.data.dataUserOrder != "guest") {
-                    dataUserOrder.value = response.data.dataUserOrder;
-                    isGuest.value = false;
-                    isUser.value = true;
-                } else {
-                    dataUserOrder.value = response.data.dataUserOrder;
-                    isGuest.value = true;
-                    isUser.value = false;
-                }
-                checkShow.value = true;
-            } else if (response.data.status === 0) {
-                checkShow.value = false;
-            }
-            return;
         }
+
+        handleResponseData(response.data);
     } catch (e) {
         console.log("Error: ", e);
     }
+};
+
+const handleResponseData = (data) => {
+    if (data.status === 1) {
+        dataUserOrder.value = data.dataUserOrder;
+        if (data.dataUserOrder != "guest") {
+            isGuest.value = false;
+            isUser.value = true;
+        } else {
+            isGuest.value = true;
+            isUser.value = false;
+        }
+        checkShow.value = true;
+    } else {
+        checkShow.value = false;
+    }
+    // console.log("data: ", dataUserOrder.value);
+    emit("InforUser", dataUserOrder.value);
 };
 
 onMounted(() => fetchData());
