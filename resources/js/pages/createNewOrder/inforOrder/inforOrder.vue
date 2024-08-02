@@ -112,6 +112,7 @@
                     @close-modal-cost-order="closeModalCostOrder"
                     :idProduct="idProduct"
                     @newCost="newCostProduct"
+                    @fet="fet"
                 />
                 <!-- <div class="product">
                     <div class="imgDiv">
@@ -192,6 +193,7 @@ const emit = defineEmits([
     "inforProduct",
     "fetchData",
     "productSelected",
+    "fet",
 ]);
 const numberSelected = ref({});
 //ModalCostOrder
@@ -213,6 +215,12 @@ const newCostProduct = (data) => {
     fetchData();
     // newCost.value = data;
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
+};
+
+const fet = () => {
+    fetchData();
+    fetchTotalPrice();
+    emit("fet");
 };
 //ModalCostOrder
 
@@ -303,7 +311,7 @@ const fetchTotalPrice = () => {
 
         // console.log(priceProduct);
         let numberSelectedProduct =
-            numberSelected.value[dataProductSelected.value[i].id];
+            numberSelected.value[dataProductSelected.value[i].id] || 1;
         totalPriceNumber += priceProduct * numberSelectedProduct;
         priceProduct = parseFloat(priceProduct);
     }

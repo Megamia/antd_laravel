@@ -23,6 +23,7 @@
                     @infor-product="inforProduct"
                     @fetch-data="click"
                     @product-selected="productSelected"
+                    @fet="fet"
                 />
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
@@ -102,16 +103,19 @@ const test = () => {
     console.log(eventBus.voucher.isLoyalty);
 };
 
+let giamgia = 0;
+const voucher = ref("");
 const click = () => {
     // console.log("priceProduc: " + eventBus.product.priceProduct);
     // console.log("Voucher: " + eventBus.voucher.valueVoucher);
     // console.log("Ship: " + eventBus.voucher.valueShip);
     // console.log("VAT: " + eventBus.voucher.valueVAT);
-    let giamgia = 0;
     giamgia =
         parseFloat(eventBus.voucher.valueVoucher) +
         parseFloat(eventBus.voucher.valueShip) +
         parseFloat(eventBus.voucher.valueVAT);
+    voucher.value = giamgia.toString();
+    voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // console.log("Tổng giảm: " + giamgia);
     priceProductValue.value = eventBus.product.priceProduct - giamgia;
     priceProductValue.value = priceProductValue.value.toString();
@@ -119,6 +123,7 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
+    // console.log(giamgia);
     // inforProduct();
     // console.log(priceProductValue.value);
     // priceProduct.value = priceProductValue.toString();
@@ -165,6 +170,9 @@ const productSelected = (data) => {
     // console.log("dataProduct: ", dataOrder.value);
     // console.log("dataOrder.value: ", dataOrder.value);
 };
+const fet = () => {
+    fetchDataOrder();
+};
 const product = ref("");
 const fetchDataOrder = async () => {
     // console.log("dataOrder.valuee: ", dataOrder.value);
@@ -186,6 +194,9 @@ const fetchDataOrder = async () => {
                 console.log("No productSelected");
             }
         }
+        click();
+        dataInforUser();
+        inforProduct();
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -197,7 +208,20 @@ onMounted(() => fetchDataOrder());
 const createOrder = async () => {
     await fetchDataOrder();
     // const Product = JSON.parse(JSON.stringify(product.value));
-    console.log("Order: ", dataUser.value, "\n", product.value);
+    console.log(
+        "Order: ",
+        "Thông tin người dùng: ",
+        dataUser.value,
+        "\n",
+        "Thông tin sản phẩm: ",
+        product.value,
+        "\n",
+        "Voucher:",
+        voucher.value,
+        "\n",
+        "Tổng tiền: ",
+        priceProductValue.value
+    );
 };
 //CostOrder
 </script>

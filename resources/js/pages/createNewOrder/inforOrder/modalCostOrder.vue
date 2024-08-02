@@ -86,7 +86,12 @@ import { AkPercentage } from "@kalimahapps/vue-icons";
 import { ref, defineEmits, defineProps, onMounted } from "vue";
 import axios from "axios";
 
-const emit = defineEmits(["showModal", "closeModalCostOrder", "newCost"]);
+const emit = defineEmits([
+    "showModal",
+    "closeModalCostOrder",
+    "newCost",
+    "fet",
+]);
 
 const props = defineProps({
     idProduct: Number,
@@ -181,18 +186,6 @@ const formatValue = () => {
 };
 const Apply = async () => {
     try {
-        // console.log(
-        //     "upNumberPercent: " + upNumberPercent,
-        //     "\n",
-        //     "downNumberPercent: " + downNumberPercent,
-        //     "\n",
-        //     "price: " + priceProduct.value
-        // );
-        //     priceProduct.value = priceProduct.value.replace(/\./g, "");
-        // priceProduct.value = priceProduct.value.replace(
-        //     /\B(?=(\d{3})+(?!\d))/g,
-        //     ","
-        // );
         if (currentChange.value !== "direct") {
             priceProduct.value = priceProduct.value.replace(/\,/g, "");
             priceProduct.value = priceProduct.value.replace(/\./g, "");
@@ -236,6 +229,7 @@ const Apply = async () => {
             console.log("Không thay đổi giá");
         }
         formatValue();
+        emit("fet");
     } catch (e) {
         console.log("Error: ", e);
     }

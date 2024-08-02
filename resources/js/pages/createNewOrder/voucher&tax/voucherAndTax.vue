@@ -64,6 +64,7 @@ const valueInModalShip = (data1) => {
     valueShip.value = valueShip.value.toString();
     // console.log(eventBus.voucher.valueShip);
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // fetchData();
     emit("fetchData");
 };
 //ModalShip
@@ -99,6 +100,7 @@ const valueInModalVAT = (data1) => {
     // );
     // eventBus.voucher.valueVAT =
     //     (eventBus.product.priceProduct * data1.value) / 100;
+    // fetchData();
     emit("fetchData");
 };
 //ModalVAT
