@@ -28,7 +28,11 @@
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
             <div class="voucherAndTax">
-                <VoucherAndTax @fetch-data="click" />
+                <VoucherAndTax
+                    @fetch-data="click"
+                    :VATvalue="VATvalue"
+                    ref="updateVoucher"
+                />
             </div>
             <div class="noteOrder">
                 <NoteOrder />
@@ -105,15 +109,31 @@ const test = () => {
 
 let giamgia = 0;
 const voucher = ref("");
+let VATvalue = 0;
+const updateVoucher = ref(null);
 const click = () => {
-    // console.log("priceProduc: " + eventBus.product.priceProduct);
+    if (updateVoucher.value) {
+        updateVoucher.value.fetchData();
+    }
+    if (!eventBus.voucher.valueVAT) {
+        eventBus.voucher.valueVAT = 0;
+    }
+    VATvalue =
+        (eventBus.product.priceProduct * eventBus.voucher.valueVAT) / 100;
+    // if (updateVoucher.value) {
+    //     updateVoucher.value.test2();
+    // }
+    // VATvalue = data1;
+    // console.log("data1: ", data1);
+    console.log("priceProduc: " + eventBus.product.priceProduct);
     // console.log("Voucher: " + eventBus.voucher.valueVoucher);
     // console.log("Ship: " + eventBus.voucher.valueShip);
-    // console.log("VAT: " + eventBus.voucher.valueVAT);
+
+    console.log("VATvalue: ", VATvalue);
     giamgia =
         parseFloat(eventBus.voucher.valueVoucher) +
         parseFloat(eventBus.voucher.valueShip) +
-        parseFloat(eventBus.voucher.valueVAT);
+        VATvalue;
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // console.log("Tổng giảm: " + giamgia);
@@ -123,7 +143,7 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
-    // console.log(giamgia);
+
     // inforProduct();
     // console.log(priceProductValue.value);
     // priceProduct.value = priceProductValue.toString();
@@ -136,6 +156,9 @@ onMounted(() => click());
 //     );
 // }
 const fetchData = () => {
+    if (updateVoucher.value) {
+        updateVoucher.value.fetchData();
+    }
     isLoyalty.value = eventBus.voucher.isLoyalty;
 };
 onMounted(() => fetchData());
@@ -164,6 +187,7 @@ const inforProduct = (data1, data2, data3) => {
 
 const dataOrder = ref("");
 const productSelected = (data) => {
+    click();
     dataOrder.value = data;
     // idProductSelected.value = id;
     // numberProductSelected.value = numberSelected;

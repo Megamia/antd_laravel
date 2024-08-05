@@ -65,6 +65,10 @@ const apply = async () => {
             // valueShip = valueShip.toString();
             // console.log(typeof valueShip);
             // valueShip = valueShip.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            if (valueShip === 0) {
+                valueShip = "0";
+            }
+            // console.log(valueShip);
             emit("valueInModalShip", valueShip);
             emit("fetchDataModal");
         } else {
