@@ -272,7 +272,7 @@ onMounted(async () => {
 const buttonAddOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product) {
-        const currentQuantity = numberSelected.value[id] || 1;
+        const currentQuantity = numberSelected.value[id] ?? 1;
         if (currentQuantity < product.quantity) {
             numberSelected.value[id] = currentQuantity + 1;
             fetchTotalPrice();
@@ -285,14 +285,14 @@ const buttonAddOrder = (id) => {
 const buttonDelOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product) {
-        const currentQuantity = numberSelected.value[id] || 1;
+        const currentQuantity = numberSelected.value[id] ?? 1;
         if (currentQuantity > 0) {
             numberSelected.value[id] = currentQuantity - 1;
         } else {
             return (numberSelected.value[id] = 0);
         }
+        fetchTotalPrice();
     }
-    fetchTotalPrice();
     fetchData();
 };
 
@@ -311,7 +311,7 @@ const fetchTotalPrice = () => {
 
         // console.log(priceProduct);
         let numberSelectedProduct =
-            numberSelected.value[dataProductSelected.value[i].id] || 1;
+            numberSelected.value[dataProductSelected.value[i].id] ?? 1;
         totalPriceNumber += priceProduct * numberSelectedProduct;
         priceProduct = parseFloat(priceProduct);
     }

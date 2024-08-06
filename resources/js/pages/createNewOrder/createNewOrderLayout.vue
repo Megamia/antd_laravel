@@ -29,7 +29,7 @@
             </div>
             <div class="voucherAndTax">
                 <VoucherAndTax
-                    @fetch-data="click"
+                    @fetch-data-VAT="fetchDataVoucher"
                     :VATvalue="VATvalue"
                     ref="updateVoucher"
                 />
@@ -132,6 +132,9 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
+};
+const fetchDataVoucher = () => {
+    click();
 };
 onMounted(() => click());
 

@@ -1,6 +1,5 @@
 <template>
     <div class="mainVoucherAndTax">
-        <!-- <div class="voucher" @click="nothing"> -->
         <RouterLink to="/detailVoucher" class="voucher">
             <span class="name">Giảm giá</span>
             <span class="cost">
@@ -8,7 +7,6 @@
                 <AkChevronRight
             /></span>
         </RouterLink>
-        <!-- </div> -->
         <div class="ship" @click="closeModalShip">
             <span class="name">Phí ship</span>
             <span class="cost">
@@ -22,7 +20,7 @@
             @fetch-data-modal="fetchDataModal"
         />
         <div class="VAT" @click="closeModalVAT">
-            <span class="name" >Thuế VAT (10%)</span>
+            <span class="name" @click="test">Thuế VAT (10%)</span>
             <span class="cost">
                 {{ valueVAT ? valueVAT : "0" }}đ <AkChevronRight
             /></span>
@@ -41,17 +39,10 @@ import ModalVAT from "./Details/ModalVAT.vue";
 import { ref, defineEmits, onMounted, defineProps, defineExpose } from "vue";
 import eventBus from "../../../eventBus";
 
-const emit = defineEmits(["closeModalShip", "fetchData"]);
+const emit = defineEmits(["closeModalShip", "fetchData", "fetchDataVAT"]);
 const props = defineProps({
     VATvalue: Number,
 });
-
-// const test2 = () => {
-//     console.log("Hello");
-// };
-// defineExpose({
-//     test2,
-// });
 
 const valueVoucher = ref("0");
 valueVoucher.value = eventBus.voucher.valueVoucher.toString();
@@ -72,9 +63,7 @@ const valueInModalShip = (data1) => {
     valueShip.value = parseFloat(valueShip.value);
     eventBus.voucher.valueShip = valueShip.value;
     valueShip.value = valueShip.value.toString();
-    // console.log(eventBus.voucher.valueShip);
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // fetchData();
     emit("fetchData");
 };
 //ModalShip
@@ -82,24 +71,27 @@ const valueInModalShip = (data1) => {
 //ModalVAT
 const isModalVAT = ref(false);
 const valueVAT = ref("0");
-// const valueVATFinal = ref("0");
 const closeModalVAT = () => {
     isModalVAT.value = !isModalVAT.value;
-    
 };
-const valueInModalVAT = () => {
+const valueInModalVAT = async () => {
     isModalVAT.value = !isModalVAT.value;
-    emit("fetchData");
+    console.log(props.VATvalue);
+    emit("fetchDataVAT");
+};
+
+const test = () => {
+    console.log(props.VATvalue);
 };
 //ModalVAT
 
 const fetchDataModal = () => {
     emit("fetchData");
 };
-const VATvalue = () => {};
 
-const fetchData = () => {
+const fetchData = async () => {
     if (props.VATvalue) {
+        console.log(props.VATvalue);
         valueVAT.value = props.VATvalue.toString();
         valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         console.log("valueVAT: ", valueVAT.value);
@@ -109,15 +101,9 @@ const fetchData = () => {
         valueShip.value = valueShip.value.toString();
         valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    // if (eventBus.voucher.valueVAT) {
-    //     valueVAT.value = eventBus.voucher.valueVAT.toString();
-    //     valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    // }
 };
 onMounted(() => fetchData());
-const nothing = () => {
-    alert("Chưa xử lý sự kiện này");
-};
+
 defineExpose({
     fetchData,
 });

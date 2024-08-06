@@ -1,0 +1,11 @@
+-tạo file .env theo mẫu .env.example
+-tạo user mysql và cấp quyền
+-npm i
+-npm i vite
+-composer install
+-php artisan migrate
+-php artisan key:generate
+-đổi tên tất cả file trong folder js thành chữ cái đầu viết hoa
+-mở 2 terminal
+    -npm run dev
+    -php artisan serve
