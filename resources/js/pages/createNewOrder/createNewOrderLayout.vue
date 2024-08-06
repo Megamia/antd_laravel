@@ -120,42 +120,23 @@ const click = () => {
     }
     VATvalue =
         (eventBus.product.priceProduct * eventBus.voucher.valueVAT) / 100;
-    // if (updateVoucher.value) {
-    //     updateVoucher.value.test2();
-    // }
-    // VATvalue = data1;
-    // console.log("data1: ", data1);
-    console.log("priceProduc: " + eventBus.product.priceProduct);
-    // console.log("Voucher: " + eventBus.voucher.valueVoucher);
-    // console.log("Ship: " + eventBus.voucher.valueShip);
-
-    console.log("VATvalue: ", VATvalue);
     giamgia =
         parseFloat(eventBus.voucher.valueVoucher) +
         parseFloat(eventBus.voucher.valueShip) +
         VATvalue;
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // console.log("Tổng giảm: " + giamgia);
     priceProductValue.value = eventBus.product.priceProduct - giamgia;
     priceProductValue.value = priceProductValue.value.toString();
     priceProductValue.value = priceProductValue.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
-
-    // inforProduct();
-    // console.log(priceProductValue.value);
-    // priceProduct.value = priceProductValue.toString();
 };
 onMounted(() => click());
-// if (priceProduct.value !== 0) {
-//     priceProduct.value = priceProduct.value.replace(
-//         /\B(?=(\d{3})+(?!\d))/g,
-//         "."
-//     );
-// }
+
 const fetchData = () => {
+    click();
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
     }
@@ -168,7 +149,6 @@ const priceProductValue = ref("0");
 const dataUser = ref("");
 const dataInforUser = (data) => {
     dataUser.value = data;
-    // console.log("DataUser: ", data);
 };
 //UserOrder
 
@@ -177,7 +157,6 @@ let quantityProduct = 0;
 const priceProduct = ref("0");
 const dataProduct = ref("");
 const inforProduct = (data1, data2, data3) => {
-    // console.log(data3);
     dataProduct.value = data3;
     quantityProduct = data1;
     if (data2) {
@@ -189,20 +168,12 @@ const dataOrder = ref("");
 const productSelected = (data) => {
     click();
     dataOrder.value = data;
-    // idProductSelected.value = id;
-    // numberProductSelected.value = numberSelected;
-    // console.log("dataProduct: ", dataOrder.value);
-    // console.log("dataOrder.value: ", dataOrder.value);
 };
 const fet = () => {
     fetchDataOrder();
 };
 const product = ref("");
 const fetchDataOrder = async () => {
-    // console.log("dataOrder.valuee: ", dataOrder.value);
-    // console.log("plainData: ", plainData);
-
-    // const plainData = JSON.parse(JSON.stringify(dataOrder.value));
     try {
         if (dataOrder.value !== "No choosedProduct" && dataOrder.value) {
             const response = await axios.post(
@@ -211,7 +182,6 @@ const fetchDataOrder = async () => {
                     data: dataOrder.value,
                 }
             );
-            // console.log("data: ", data);
             if (response.data.status === 1) {
                 product.value = response.data.productSelected;
             } else {
@@ -231,7 +201,6 @@ onMounted(() => fetchDataOrder());
 //CostOrder
 const createOrder = async () => {
     await fetchDataOrder();
-    // const Product = JSON.parse(JSON.stringify(product.value));
     console.log(
         "Order: ",
         "Thông tin người dùng: ",
@@ -256,7 +225,6 @@ const createOrder = async () => {
     height: 100vh;
     flex-direction: column;
     background-color: #f0f2f5;
-    /* gap: 20px; */
     .title {
         display: flex;
         max-height: 100px;

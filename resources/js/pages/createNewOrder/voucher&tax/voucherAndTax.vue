@@ -22,7 +22,7 @@
             @fetch-data-modal="fetchDataModal"
         />
         <div class="VAT" @click="closeModalVAT">
-            <span class="name" @click="test">Thuế VAT (10%)</span>
+            <span class="name" >Thuế VAT (10%)</span>
             <span class="cost">
                 {{ valueVAT ? valueVAT : "0" }}đ <AkChevronRight
             /></span>
@@ -89,22 +89,6 @@ const closeModalVAT = () => {
 };
 const valueInModalVAT = () => {
     isModalVAT.value = !isModalVAT.value;
-    console.log("valueVAT: ", valueVAT.value);
-    // console.log("DAta1: ", data1);
-    // if (props.VATvalue) {
-    // console.log(
-    //     "eventBus.product.priceProduct: ",
-    //     eventBus.product.priceProduct
-    // );
-    // eventBus.voucher.valueVAT = parseFloat(props.VATvalue);
-    // valueVAT.value =
-    //     (eventBus.product.priceProduct * eventBus.voucher.valueVAT) / 100;
-
-    // valueVAT.value = valueVAT.value.toString();
-    // valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // }
-    // console.log("valueVAT11: ", parseFloat(data1));
-
     emit("fetchData");
 };
 //ModalVAT
@@ -113,11 +97,7 @@ const fetchDataModal = () => {
     emit("fetchData");
 };
 const VATvalue = () => {};
-const test = () => {
-    console.log("valueVAT: ", valueVAT.value);
-    console.log("props: ", props.VATvalue);
-    console.log("price: ", eventBus.product.priceProduct);
-};
+
 const fetchData = () => {
     if (props.VATvalue) {
         valueVAT.value = props.VATvalue.toString();
