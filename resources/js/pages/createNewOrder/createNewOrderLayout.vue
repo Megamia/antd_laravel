@@ -30,8 +30,7 @@
             <div class="voucherAndTax">
                 <VoucherAndTax
                     @fetch-data-VAT="fetchDataVoucher"
-                    :VATvalue="VATvalue"
-                    ref="updateVoucher"
+                    ref="updateVAT"
                 />
             </div>
             <div class="noteOrder">
@@ -66,7 +65,9 @@
                     <div class="cost">
                         <span
                             >{{
-                                priceProductValue ? priceProductValue : "0"
+                                priceProductValueText
+                                    ? priceProductValueText
+                                    : "0"
                             }}đ</span
                         >
                     </div>
@@ -111,30 +112,35 @@ let giamgia = 0;
 const voucher = ref("");
 let VATvalue = 0;
 const updateVoucher = ref(null);
+const updateVAT = ref(null);
+const priceProductValueText = ref("0");
 const click = () => {
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
     }
-    if (!eventBus.voucher.valueVAT) {
-        eventBus.voucher.valueVAT = 0;
-    }
-    VATvalue =
-        (eventBus.product.priceProduct * eventBus.voucher.valueVAT) / 100;
     giamgia =
         parseFloat(eventBus.voucher.valueVoucher) +
         parseFloat(eventBus.voucher.valueShip) +
         VATvalue;
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    priceProductValue.value = eventBus.product.priceProduct - giamgia;
-    priceProductValue.value = priceProductValue.value.toString();
-    priceProductValue.value = priceProductValue.value.replace(
+    priceProductValue = eventBus.product.priceProduct - giamgia;
+    console.log("priceProductValue: ", priceProductValue);
+    priceProductValueText.value = priceProductValue;
+    priceProductValueText.value = priceProductValueText.value.toString();
+    priceProductValueText.value = priceProductValueText.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
 };
-const fetchDataVoucher = () => {
-    click();
+const fetchDataVoucher = (data) => {
+    // click();
+    if (data) {
+        VATvalue = data;
+        VATvalue = VATvalue.replace(/\,/g, "");
+        VATvalue = parseFloat(VATvalue);
+    }
+    console.log("data: ", VATvalue);
 };
 onMounted(() => click());
 
@@ -146,7 +152,7 @@ const fetchData = () => {
     isLoyalty.value = eventBus.voucher.isLoyalty;
 };
 onMounted(() => fetchData());
-const priceProductValue = ref("0");
+let priceProductValue = 0;
 
 //UserOrder
 const dataUser = ref("");
@@ -169,8 +175,16 @@ const inforProduct = (data1, data2, data3) => {
 
 const dataOrder = ref("");
 const productSelected = (data) => {
-    click();
-    dataOrder.value = data;
+    try {
+        click();
+        if (updateVAT.value) {
+            updateVAT.value.valueInModalVAT();
+        }
+        dataOrder.value = data;
+        fetchDataVoucher();
+    } catch (e) {
+        console.log("Error: ", e);
+    }
 };
 const fet = () => {
     fetchDataOrder();
@@ -216,7 +230,10 @@ const createOrder = async () => {
         voucher.value,
         "\n",
         "Tổng tiền: ",
-        priceProductValue.value
+        eventBus.product.priceProduct,
+        "\n",
+        "Tổng tiền sau giảm giá: ",
+        priceProductValue
     );
 };
 //CostOrder

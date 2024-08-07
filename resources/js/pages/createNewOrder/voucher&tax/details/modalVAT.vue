@@ -43,7 +43,6 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 import eventBus from "../../../../eventBus";
-// import axios from "axios";
 
 const emit = defineEmits(["closeModalVAT", "valueInModalVAT"]);
 
@@ -55,9 +54,10 @@ const valueVAT = ref("0");
 const valueReason = ref("");
 const apply = async () => {
     try {
-        console.log("VAT: ", valueVAT.value);
+        // console.log("VAT: ", valueVAT.value);
         eventBus.voucher.valueVAT = valueVAT.value;
         emit("valueInModalVAT");
+        emit("closeModalVAT");
     } catch (e) {
         console.log("Error: ", e);
     }

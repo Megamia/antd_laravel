@@ -21,9 +21,7 @@
         />
         <div class="VAT" @click="closeModalVAT">
             <span class="name" @click="test">Thuế VAT (10%)</span>
-            <span class="cost">
-                {{ valueVAT ? valueVAT : "0" }}đ <AkChevronRight
-            /></span>
+            <span class="cost"> {{ VATvalue }}đ <AkChevronRight /></span>
         </div>
         <ModalVAT
             v-if="isModalVAT"
@@ -36,13 +34,10 @@
 import { AkChevronRight } from "@kalimahapps/vue-icons";
 import ModalShip from "./Details/ModalShip.vue";
 import ModalVAT from "./Details/ModalVAT.vue";
-import { ref, defineEmits, onMounted, defineProps, defineExpose } from "vue";
+import { ref, defineEmits, onMounted, defineExpose } from "vue";
 import eventBus from "../../../eventBus";
 
 const emit = defineEmits(["closeModalShip", "fetchData", "fetchDataVAT"]);
-const props = defineProps({
-    VATvalue: Number,
-});
 
 const valueVoucher = ref("0");
 valueVoucher.value = eventBus.voucher.valueVoucher.toString();
@@ -70,19 +65,29 @@ const valueInModalShip = (data1) => {
 
 //ModalVAT
 const isModalVAT = ref(false);
-const valueVAT = ref("0");
 const closeModalVAT = () => {
     isModalVAT.value = !isModalVAT.value;
 };
-const valueInModalVAT = async () => {
-    isModalVAT.value = !isModalVAT.value;
-    console.log(props.VATvalue);
-    emit("fetchDataVAT");
+const VATvalue = ref("0");
+const valueInModalVAT = () => {
+    console.log("eventBus.voucher.valueVAT: ", eventBus.voucher.valueVAT);
+    console.log(
+        "eventBus.product.priceProduct: ",
+        eventBus.product.priceProduct
+    );
+    VATvalue.value = parseFloat(
+        (eventBus.product.priceProduct *
+            parseFloat(eventBus.voucher.valueVAT)) /
+            100
+    );
+
+    VATvalue.value = VATvalue.value.toString();
+    VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    console.log("VATvalue: ", VATvalue.value);
+    emit("fetchDataVAT", VATvalue.value);
 };
 
-const test = () => {
-    console.log(props.VATvalue);
-};
+const test = () => {};
 //ModalVAT
 
 const fetchDataModal = () => {
@@ -90,12 +95,6 @@ const fetchDataModal = () => {
 };
 
 const fetchData = async () => {
-    if (props.VATvalue) {
-        console.log(props.VATvalue);
-        valueVAT.value = props.VATvalue.toString();
-        valueVAT.value = valueVAT.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        console.log("valueVAT: ", valueVAT.value);
-    }
     if (eventBus.voucher.valueShip) {
         valueShip.value = eventBus.voucher.valueShip;
         valueShip.value = valueShip.value.toString();
@@ -106,6 +105,7 @@ onMounted(() => fetchData());
 
 defineExpose({
     fetchData,
+    valueInModalVAT,
 });
 </script>
 
