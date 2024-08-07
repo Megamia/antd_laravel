@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserCRMController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\DetailOrderController;
 use Illuminate\Support\Facades\Route;
 
 //InforUser
@@ -40,9 +41,8 @@ Route::post('inforProductWithTag', [DetailProductController::class, 'inforProduc
 
 //Product
 Route::post('productSelected', [ProductController::class, 'productSelected']);
-
-
 //Product
+
 //Tag
 Route::get('itemFilterWithTag', [TagController::class, 'itemFilterWithTag']);
 Route::post('titleFilterWithTag', [TagController::class, 'titleFilterWithTag']);
@@ -60,5 +60,7 @@ Route::get('dataValueVoucherCode', [VoucherController::class, 'dataValueVoucherC
 Route::post('chooseVoucherCode', [VoucherController::class, 'chooseVoucherCode']);
 //VoucherCode
 
-//UserCRM
-//UserCRM
+//DetailOrder
+Route::post('addDetailOrder', [DetailOrderController::class, 'addDetailOrder']);
+
+//DetailOrder

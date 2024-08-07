@@ -104,9 +104,9 @@ const showOrHidden = () => {
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
 };
-const test = () => {
-    console.log(eventBus.voucher.isLoyalty);
-};
+// const test = () => {
+    // console.log(dataUser.value);
+// };
 
 let giamgia = 0;
 const voucher = ref("");
@@ -125,7 +125,6 @@ const click = () => {
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     priceProductValue = eventBus.product.priceProduct - giamgia;
-    console.log("priceProductValue: ", priceProductValue);
     priceProductValueText.value = priceProductValue;
     priceProductValueText.value = priceProductValueText.value.toString();
     priceProductValueText.value = priceProductValueText.value.replace(
@@ -140,7 +139,6 @@ const fetchDataVoucher = (data) => {
         VATvalue = VATvalue.replace(/\,/g, "");
         VATvalue = parseFloat(VATvalue);
     }
-    console.log("data: ", VATvalue);
 };
 onMounted(() => click());
 
@@ -159,6 +157,7 @@ const dataUser = ref("");
 const dataInforUser = (data) => {
     dataUser.value = data;
 };
+onMounted(() => dataInforUser());
 //UserOrder
 
 //InforOrder
@@ -190,6 +189,7 @@ const fet = () => {
     fetchDataOrder();
 };
 const product = ref("");
+const idProduct = ref("");
 const fetchDataOrder = async () => {
     try {
         if (dataOrder.value !== "No choosedProduct" && dataOrder.value) {
@@ -201,12 +201,12 @@ const fetchDataOrder = async () => {
             );
             if (response.data.status === 1) {
                 product.value = response.data.productSelected;
+                idProduct.value = product.value.map((item) => item.id);
             } else {
                 console.log("No productSelected");
             }
         }
         click();
-        dataInforUser();
         inforProduct();
     } catch (e) {
         console.log("Error: ", e);
@@ -218,25 +218,48 @@ onMounted(() => fetchDataOrder());
 //CostOrder
 const createOrder = async () => {
     await fetchDataOrder();
-    console.log(
-        "Order: ",
-        "Thông tin người dùng: ",
-        dataUser.value,
-        "\n",
-        "Thông tin sản phẩm: ",
-        product.value,
-        "\n",
-        "Voucher:",
-        voucher.value,
-        "\n",
-        "Tổng tiền: ",
-        eventBus.product.priceProduct,
-        "\n",
-        "Tổng tiền sau giảm giá: ",
-        priceProductValue
-    );
+
+    if (!dataUser.value) {
+        alert("Chọn user");
+        return;
+    } else {
+        console.log(
+            "Order: ",
+            "Thông tin người dùng: ",
+            dataUser.value,
+            "\n",
+            "Thông tin sản phẩm: ",
+            product.value,
+            "\n",
+            "Voucher:",
+            voucher.value,
+            "\n",
+            "Tổng tiền: ",
+            eventBus.product.priceProduct,
+            "\n",
+            "Tổng tiền sau giảm giá: ",
+            priceProductValue,
+            "\n",
+            idProduct.value
+        );
+    }
 };
 //CostOrder
+
+const test = async () => {
+    try {
+        const response = await axios.post(`${import.meta.env}/addDetailOrder`, {
+            idProduct: idProduct.value,
+        });
+        if (response.data.status === 1) {
+            console.log(response.data.data);
+        } else {
+            console.log(response.data.data);
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
 </script>
 
 <style scoped>

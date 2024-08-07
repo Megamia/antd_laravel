@@ -55,8 +55,8 @@ const Esc = async () => {
         );
         if (response.data.status === 1) {
             eventBus.clear();
-        } else {
-        }
+            emit("dataInforUser", null);
+        } 
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -96,7 +96,6 @@ const InforUser = (data) => {
     // dataUser.value = data;
     // console.log("data: ", dataUser.value);
     emit("dataInforUser", data);
-
     // console.log(data);
 };
 onMounted(() => fetchData());
