@@ -3,13 +3,13 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\InforUserOrder;
+use App\Models\DetailInforUserOrder;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('InforUserOrder', function (Blueprint $table) {
+        Schema::create('DetailInforUserOrder', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('phoneNumber');
@@ -88,23 +88,23 @@ return new class extends Migration
         ];
 
         foreach ($data as $item) {
-            $inforUserOrder = new InforUserOrder();
-            $inforUserOrder->name = $item['name'];
-            $inforUserOrder->phoneNumber = $item['phoneNumber'];
-            $inforUserOrder->email = $item['email'];
-            $inforUserOrder->isUserCRM = $item['isUserCRM'];
-            $inforUserOrder->text = $item['text'];
-            $inforUserOrder->number = $item['number'];
-            $inforUserOrder->dropDown = $item['dropDown'];
-            $inforUserOrder->checkBox = $item['checkBox'];
-            $inforUserOrder->address = $item['address'];
-            $inforUserOrder->email2 = $item['email2'];
-            $inforUserOrder->save();
+            $DetailInforUserOrder = new DetailInforUserOrder();
+            $DetailInforUserOrder->name = $item['name'];
+            $DetailInforUserOrder->phoneNumber = $item['phoneNumber'];
+            $DetailInforUserOrder->email = $item['email'];
+            $DetailInforUserOrder->isUserCRM = $item['isUserCRM'];
+            $DetailInforUserOrder->text = $item['text'];
+            $DetailInforUserOrder->number = $item['number'];
+            $DetailInforUserOrder->dropDown = $item['dropDown'];
+            $DetailInforUserOrder->checkBox = $item['checkBox'];
+            $DetailInforUserOrder->address = $item['address'];
+            $DetailInforUserOrder->email2 = $item['email2'];
+            $DetailInforUserOrder->save();
         }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('InforUserOrder');
+        Schema::dropIfExists('DetailInforUserOrder');
     }
 };

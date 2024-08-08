@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DetailInforUserOrderController;
 use App\Http\Controllers\DetailProductController;
-use App\Http\Controllers\InforUserOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserCRMController;
@@ -11,13 +11,13 @@ use App\Http\Controllers\DetailOrderController;
 use Illuminate\Support\Facades\Route;
 
 //InforUser
-Route::get('dataUser', [InforUserOrderController::class, 'data']);
-Route::post('chooseUserOrder', [InforUserOrderController::class, 'chooseUserOrder']);
-Route::get('dataUserOrder', [InforUserOrderController::class, 'dataUserOrder']);
-Route::get('deleteSession', [InforUserOrderController::class, 'deleteSession']);
-Route::post('addUserOrder', [InforUserOrderController::class, 'addUserOrder']);
+Route::get('dataUser', [DetailInforUserOrderController::class, 'data']);
+Route::post('chooseUserOrder', [DetailInforUserOrderController::class, 'chooseUserOrder']);
+Route::get('dataUserOrder', [DetailInforUserOrderController::class, 'dataUserOrder']);
+Route::get('deleteSession', [DetailInforUserOrderController::class, 'deleteSession']);
+Route::post('addUserOrder', [DetailInforUserOrderController::class, 'addUserOrder']);
 Route::post('newDataUserOrderAfterSwap', [AddressController::class, 'newDataUserOrderAfterSwap']);
-Route::get('inforUserCRM', [InforUserOrderController::class, 'inforUserCRM']);
+Route::get('inforUserCRM', [DetailInforUserOrderController::class, 'inforUserCRM']);
 //InforUser
 
 //Address

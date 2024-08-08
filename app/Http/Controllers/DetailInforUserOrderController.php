@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InforUserOrder;
+use App\Models\DetailInforUserOrder;
 use Illuminate\Http\Request;
 
-class InforUserOrderController extends Controller
+class DetailInforUserOrderController extends Controller
 {
     public function data(Request $request)
     {
-        $users = InforUserOrder::all();
+        $users = DetailInforUserOrder::all();
         if ($users->isNotEmpty()) {
             return response()->json(['status' => 1, 'dataUser' => $users]);
         } else {
@@ -25,7 +25,7 @@ class InforUserOrderController extends Controller
             $request->session()->put('user_id_expires_at', now()->addHours(1)); //addSeconds, addMinutes
             return response()->json(['status' => 1, 'dataUserOrder' => 'Khách lẻ']);
         } else {
-            $dataUser = inforUserOrder::where('id', $data['id'])->first();
+            $dataUser = DetailInforUserOrder::where('id', $data['id'])->first();
             if ($dataUser) {
                 $request->session()->put('user_id', $data['id']);
                 $request->session()->put('user_id_expires_at', now()->addHours(1));
@@ -44,7 +44,7 @@ class InforUserOrderController extends Controller
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                $dataUser = inforUserOrder::where('id', $user_id)->first();
+                $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
                 return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
             }
         } else {
@@ -72,11 +72,11 @@ class InforUserOrderController extends Controller
         if (is_null($data['email'])) {
             $data['email'] = 'example@gmail.com';
         }
-        $existingUser = inforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
+        $existingUser = DetailInforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
         if ($existingUser) {
             return response()->json(['status' => 0, 'message' => 'User already exists']);
         }
-        $users = inforUserOrder::create([
+        $users = DetailInforUserOrder::create([
             'name' => $data['username'],
             'phoneNumber' => $data['phoneNumber'],
             'email' => $data['email'],
@@ -89,7 +89,7 @@ class InforUserOrderController extends Controller
     }
     public function inforUserCRM(Request $request)
     {
-        $data = InforUserOrder::all();
+        $data = DetailInforUserOrder::all();
         $inforUserCRM = [];
 
         foreach ($data as $record) {
