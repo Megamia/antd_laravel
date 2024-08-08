@@ -16,11 +16,6 @@ return new class extends Migration
             $table->id();
             $table->integer('idProduct');
             $table->dateTime('timeCreateOrder')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->unsignedBigInteger('idVoucher');
-            $table->foreign('idVoucher')
-                ->references('id')
-                ->on('Voucher')
-                ->onDelete('cascade');
             $table->string('sale')->default(0);
             $table->string('price');
         });

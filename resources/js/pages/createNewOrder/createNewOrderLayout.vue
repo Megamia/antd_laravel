@@ -104,9 +104,10 @@ const showOrHidden = () => {
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
 };
-// const test = () => {
-    // console.log(dataUser.value);
-// };
+const test = () => {
+    console.log(detailOrderProduct.value);
+    console.log(dataUser.value);
+};
 
 let giamgia = 0;
 const voucher = ref("");
@@ -190,6 +191,7 @@ const fet = () => {
 };
 const product = ref("");
 const idProduct = ref("");
+const idDetailProduct = ref("");
 const fetchDataOrder = async () => {
     try {
         if (dataOrder.value !== "No choosedProduct" && dataOrder.value) {
@@ -202,6 +204,9 @@ const fetchDataOrder = async () => {
             if (response.data.status === 1) {
                 product.value = response.data.productSelected;
                 idProduct.value = product.value.map((item) => item.id);
+                idDetailProduct.value = product.value.map(
+                    (item) => item.idDetailProduct
+                );
             } else {
                 console.log("No productSelected");
             }
@@ -218,7 +223,7 @@ onMounted(() => fetchDataOrder());
 //CostOrder
 const createOrder = async () => {
     await fetchDataOrder();
-
+    await fetchDataIdAndPriceProduct();
     if (!dataUser.value) {
         alert("Chọn user");
         return;
@@ -246,16 +251,33 @@ const createOrder = async () => {
 };
 //CostOrder
 
-const test = async () => {
+const productId = ref([]);
+const detailOrderProduct = ref("");
+const fetchDataIdAndPriceProduct = async () => {
+    await fetchDataOrder();
+    productId.value = Array.isArray(idProduct.value)
+        ? Array.from(idProduct.value)
+        : [];
+
+    // console.log(
+    //     "Type of productId.value:",
+    //     Array.isArray(productId.value) ? "array" : typeof productId.value
+    // );
+    // console.log("productId.value:", productId.value);
+
     try {
-        const response = await axios.post(`${import.meta.env}/addDetailOrder`, {
-            idProduct: idProduct.value,
-        });
-        if (response.data.status === 1) {
-            console.log(response.data.data);
-        } else {
-            console.log(response.data.data);
-        }
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/addDetailOrder`,
+            {
+                idProducts: productId.value,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        detailOrderProduct.value = response.data.addDetailOrders;
     } catch (e) {
         console.log("Error: ", e);
     }

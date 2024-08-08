@@ -11,7 +11,6 @@ class DetailOrder extends Model
     protected $fillable = [
         'idProduct',
         'timeCreateOrder',
-        'idVoucher',
         'sale',
         'price',
     ];

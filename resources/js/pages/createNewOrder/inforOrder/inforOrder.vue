@@ -399,6 +399,7 @@ const del = (id) => {
 
     countProduct = eventBus.product.idProduct.replace(/\,/g, "");
     countProduct = countProduct.length;
+    fetchData();
     fetchTotalPrice();
     emit("fetchData");
     emit("inforProduct", countProduct, totalPrice.value);

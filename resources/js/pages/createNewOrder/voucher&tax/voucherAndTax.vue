@@ -70,11 +70,11 @@ const closeModalVAT = () => {
 };
 const VATvalue = ref("0");
 const valueInModalVAT = () => {
-    console.log("eventBus.voucher.valueVAT: ", eventBus.voucher.valueVAT);
-    console.log(
-        "eventBus.product.priceProduct: ",
-        eventBus.product.priceProduct
-    );
+    // console.log("eventBus.voucher.valueVAT: ", eventBus.voucher.valueVAT);
+    // console.log(
+    //     "eventBus.product.priceProduct: ",
+    //     eventBus.product.priceProduct
+    // );
     VATvalue.value = parseFloat(
         (eventBus.product.priceProduct *
             parseFloat(eventBus.voucher.valueVAT)) /
@@ -83,7 +83,7 @@ const valueInModalVAT = () => {
 
     VATvalue.value = VATvalue.value.toString();
     VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    console.log("VATvalue: ", VATvalue.value);
+    // console.log("VATvalue: ", VATvalue.value);
     emit("fetchDataVAT", VATvalue.value);
 };
 
