@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idUser')->default(1);
             $table->foreign('idUser')
                 ->references('id')
-                ->on('InforUserOrder')
+                ->on('DetailInforUserOrder')
                 ->onDelete('cascade');
         });
 
