@@ -2,7 +2,7 @@
     <div class="mainSwapAddress">
         <div class="title">
             <AnOutlinedArrowLeft @click="back" />
-            <span @click="test"> Đổi địa chỉ </span>
+            <span > Đổi địa chỉ </span>
         </div>
         <div class="content">
             <div class="userInfor">
@@ -93,9 +93,7 @@ let idUser = 0;
 const address = ref("");
 
 const id = route.params.id;
-const test = () => {
-    console.log("ID: ", id);
-};
+
 
 const Cancel = () => {
     open.value = false;
@@ -143,16 +141,19 @@ const showModal = (id) => {
 const fetchData = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/inforAddressWithIdUser`,
+            `${import.meta.env.VITE_APP_URL_API}/AddressUserWithId`,
             {
                 id: id,
             }
         );
         // console.log("id: ", id);
         if (response.data.status === 1) {
-            address.value = response.data.inforAddressWithIdUser;
+            // console.log("data: ", response.data.DetailAddress);
+            address.value = response.data.DetailAddress;
             // console.log("address.value: ", address.value);
         } else {
+            // console.log(response.data.DetailAddress);
+            // console.log(response.data.AddressUserWithId);
             return (address.value = null);
         }
     } catch (e) {
@@ -166,7 +167,11 @@ const back = () => {
 };
 
 const addNewAddress = () => {
-    router.push("/addNewAddress");
+    // console.log(id);
+    router.push({
+        name: "AddNewAddress",
+        params: { id },
+    });
     // console.log(address.value);
 };
 
@@ -174,9 +179,25 @@ const buttonSave = async () => {
     try {
         if (a.value) {
             eventBus.id = a.value;
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
+                    {
+                        idUser: id,
+                        idAddress: a.value,
+                    }
+                );
+                if (response.data.status === 1) {
+                    // console.log(response.data.AddNewInforUser);
+                } else {
+                    // console.log(response.data.InforUser);
+                }
+            } catch (e) {
+                console.log("Error: ", e);
+            }
             router.back();
         } else {
-            console.log("No evb");
+            alert("Chưa chọn địa chỉ mới");
         }
     } catch (e) {
         console.log("Lỗi: " + e);

@@ -5,12 +5,12 @@ use App\Http\Controllers\DetailInforUserOrderController;
 use App\Http\Controllers\DetailProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserCRMController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DetailOrderController;
+use App\Http\Controllers\InforUserController;
 use Illuminate\Support\Facades\Route;
 
-//InforUser
+//DetailInforUserOrder
 Route::get('dataUser', [DetailInforUserOrderController::class, 'data']);
 Route::post('chooseUserOrder', [DetailInforUserOrderController::class, 'chooseUserOrder']);
 Route::get('dataUserOrder', [DetailInforUserOrderController::class, 'dataUserOrder']);
@@ -18,7 +18,7 @@ Route::get('deleteSession', [DetailInforUserOrderController::class, 'deleteSessi
 Route::post('addUserOrder', [DetailInforUserOrderController::class, 'addUserOrder']);
 Route::post('newDataUserOrderAfterSwap', [AddressController::class, 'newDataUserOrderAfterSwap']);
 Route::get('inforUserCRM', [DetailInforUserOrderController::class, 'inforUserCRM']);
-//InforUser
+//DetailInforUserOrder
 
 //Address
 Route::get('inforAddress', [AddressController::class, 'inforAddress']);
@@ -26,8 +26,13 @@ Route::post('swapAnotherAddress', [AddressController::class, 'swapAnotherAddress
 Route::delete('deleteAddress/{id}', [AddressController::class, 'deleteAddress']);
 Route::get('dataAfterSwap', [AddressController::class, 'dataAfterSwap']);
 Route::post('addNewAddress', [AddressController::class, 'addNewAddress']);
-Route::post('inforAddressWithIdUser', [AddressController::class, 'inforAddressWithIdUser']);
+Route::post('DetailAddressWithIdUser', [AddressController::class, 'DetailAddressWithIdUser']);
 //Address
+
+//InforUser
+Route::post('AddressUserWithId', [InforUserController::class, 'AddressUserWithId']);
+Route::post('AddNewInforUser', [InforUserController::class, 'AddNewInforUser']);
+//InforUser
 
 // DetailProduct
 Route::get('inforProduct', [DetailProductController::class, 'inforProduct']);

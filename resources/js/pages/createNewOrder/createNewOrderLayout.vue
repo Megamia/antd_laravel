@@ -224,8 +224,8 @@ onMounted(() => fetchDataOrder());
 const createOrder = async () => {
     await fetchDataOrder();
     await fetchDataIdAndPriceProduct();
-    if (!dataUser.value) {
-        alert("Chọn user");
+    if (!dataUser.value || !product.value) {
+        alert("Chọn đầy đủ thông tin");
         return;
     } else {
         console.log(
@@ -258,28 +258,37 @@ const fetchDataIdAndPriceProduct = async () => {
     productId.value = Array.isArray(idProduct.value)
         ? Array.from(idProduct.value)
         : [];
-
+    // console.log(productId.value && product.value.length > 0);
     // console.log(
     //     "Type of productId.value:",
     //     Array.isArray(productId.value) ? "array" : typeof productId.value
     // );
     // console.log("productId.value:", productId.value);
-
-    try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/addDetailOrder`,
-            {
-                idProducts: productId.value,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
+    if (productId.value && product.value.length > 0) {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/addDetailOrder`,
+                {
+                    idProducts: productId.value,
                 },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.data.status === 1) {
+                detailOrderProduct.value = response.data.addDetailOrders;
+                alert("Tạo mới đơn hàng thành công");
+            } else {
+                alert("Có lỗi khi khởi tạo đơn hàng");
+                return;
             }
-        );
-        detailOrderProduct.value = response.data.addDetailOrders;
-    } catch (e) {
-        console.log("Error: ", e);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    } else {
+        return;
     }
 };
 </script>

@@ -134,17 +134,19 @@
                     >
                 </a-form-item>
             </div>
-            <div style="height: 1000px" />
         </a-form>
     </div>
 </template>
 <script setup>
 import { AnOutlinedArrowLeft } from "@kalimahapps/vue-icons";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
+// import eventBus from "../../../eventBus";
 
 const router = useRouter();
+const route = useRoute();
+const id = route.params.id;
 
 const options1 = [
     { label: "Lucy1", value: "Lucy1" },
@@ -168,6 +170,7 @@ const filterOption = (input, option) => {
     return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 
+let idAddress = 0;
 const onFinish = async () => {
     try {
         const payload = {
@@ -183,10 +186,33 @@ const onFinish = async () => {
             payload
         );
         if (response.data.status === 1) {
+            console.log(response.data.newAddress.id);
+            idAddress = response.data.newAddress.id;
             alert("Thêm địa chỉ mới thành công");
+            await addInforUser();
             router.back();
         } else {
             alert("Thêm địa chỉ mới thất bại");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
+const addInforUser = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
+            {
+                idUser: id,
+                idAddress: idAddress,
+            }
+        );
+        if (response.data.status === 1) {
+            // console.log(response.data.AddNewInforUser);
+        } else {
+            // console.log(response.data.InforUser);
+            // return;
         }
     } catch (e) {
         console.log("Error: ", e);

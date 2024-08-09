@@ -92,7 +92,7 @@ const displayPhoneNumber = computed(() => {
     );
 });
 
-const swapAddress = () => {
+const swapAddress = async () => {
     let id;
     if (dataUserOrder.value.data && dataUserOrder.value.data.id) {
         id = dataUserOrder.value.data.id;

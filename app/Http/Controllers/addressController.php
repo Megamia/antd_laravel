@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\DetailInforUserOrder;
 use Illuminate\Http\Request;
 use App\Models\InforUserOrder;
 
@@ -31,7 +32,7 @@ class AddressController extends Controller
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                $dataUser = InforUserOrder::where('id', $user_id)->first();
+                $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
                 $newDataAddress = Address::where('id', $newAddress['id'])->first();
                 return response()->json(['status' => 1, 'dataUserOrder' => ['data' => $dataUser, 'address' => $newDataAddress]]);
             }
@@ -58,7 +59,7 @@ class AddressController extends Controller
             'ward',
             'address'
         );
-        $idUserWithPhone = inforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
+        $idUserWithPhone = DetailInforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
 
         if (is_null($data['username'])) {
             $data['username'] = 'user';
@@ -70,7 +71,6 @@ class AddressController extends Controller
             'district' => $data['district'],
             'ward' => $data['ward'],
             'address' => $data['address'],
-            'idUser' => $idUserWithPhone['id'],
         ]);
 
         return response()->json([
@@ -78,15 +78,15 @@ class AddressController extends Controller
             'message' => 'Address has been add to database', 'newAddress' => $newAddress
         ]);
     }
-    public function inforAddressWithIdUser(Request $request)
+    public function DetailAddressWithIdUser(Request $request)
     {
         $data = $request->only('id');
-        $inforAddressWithIdUser = Address::where('idUser', $data['id'])->get();
+        $DetailAddressWithIdUser = Address::where('idUser', $data['id'])->get();
 
-        if ($inforAddressWithIdUser->isNotEmpty()) {
-            return response()->json(['status' => 1, 'inforAddressWithIdUser' => $inforAddressWithIdUser]);
+        if ($DetailAddressWithIdUser->isNotEmpty()) {
+            return response()->json(['status' => 1, 'DetailAddressWithIdUser' => $DetailAddressWithIdUser]);
         } else {
-            return response()->json(['status' => 0, 'inforAddressWithIdUser' => "No inforAddressWithIdUser"]);
+            return response()->json(['status' => 0, 'DetailAddressWithIdUser' => "No DetailAddressWithIdUser"]);
         }
     }
 }

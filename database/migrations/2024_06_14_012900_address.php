@@ -20,11 +20,6 @@ return new class extends Migration
             $table->string('district');
             $table->string('ward');
             $table->string('address');
-            $table->unsignedBigInteger('idUser')->default(1);
-            $table->foreign('idUser')
-                ->references('id')
-                ->on('DetailInforUserOrder')
-                ->onDelete('cascade');
         });
 
         $data = [
@@ -62,9 +57,6 @@ return new class extends Migration
             $address->district = $item['district'];
             $address->ward = $item['ward'];
             $address->address = $item['address'];
-            if (isset($item['idUser'])) {
-                $address->idUser = $item['idUser'];
-            }
             $address->save();
         }
     }
