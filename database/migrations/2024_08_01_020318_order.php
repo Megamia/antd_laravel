@@ -15,15 +15,15 @@ return new class extends Migration
                 ->references('id')
                 ->on('DetailOrder')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('idVoucher');
-            $table->foreign('idVoucher')
+            // $table->unsignedBigInteger('idVoucher');
+            // $table->foreign('idVoucher')
+            //     ->references('id')
+            //     ->on('Voucher')
+            //     ->onDelete('cascade');
+            $table->unsignedBigInteger('idInforUser');
+            $table->foreign('idInforUser')
                 ->references('id')
-                ->on('Voucher')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('idAddress');
-            $table->foreign('idAddress')
-                ->references('id')
-                ->on('Address')
+                ->on('InforUser')
                 ->onDelete('cascade');
             $table->timestamps();
         });

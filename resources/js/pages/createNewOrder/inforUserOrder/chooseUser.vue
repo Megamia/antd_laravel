@@ -189,8 +189,8 @@ const isFiltering = computed(() => {
         background-color: white;
         overflow-y: scroll;
         padding-block: 20px;
-    background-color: #f0f2f5;
-        
+        background-color: #f0f2f5;
+
         .search {
             padding: 10px 12px 10px 12px;
             border-bottom: 1px solid #d9d9dd;

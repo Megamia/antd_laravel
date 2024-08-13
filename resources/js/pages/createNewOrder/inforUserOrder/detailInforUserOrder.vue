@@ -39,11 +39,15 @@
             </div>
             <div class="nameUser">
                 <span>
-                    {{ displayData.name }} | {{ displayData.phoneNumber }}
+                    {{
+                        displayData
+                            ? displayData.name + " | " + displayData.phoneNumber
+                            : "Chưa có thông tin người nhận"
+                    }}
                 </span>
             </div>
             <div class="detailAddress">
-                {{ formattedAddress }}
+                {{ displayData ? formattedAddress : "Chưa có thông tin địa chỉ" }}
             </div>
         </div>
     </div>
@@ -68,7 +72,11 @@ const checkShow = ref(false);
 const router = useRouter();
 
 const displayData = computed(() => {
-    return eventBus.id ? dataUserOrder.value.address : dataUserOrder.value;
+    if (dataUserOrder.value.address) {
+        return dataUserOrder.value.address;
+    } else {
+        return null;
+    }
 });
 
 const formattedAddress = computed(() => {
@@ -83,21 +91,17 @@ const formattedAddress = computed(() => {
 });
 
 const displayName = computed(() => {
-    return dataUserOrder.value.name || dataUserOrder.value.data.name;
+    return dataUserOrder.value.dataUser.name;
 });
 
 const displayPhoneNumber = computed(() => {
-    return (
-        dataUserOrder.value.phoneNumber || dataUserOrder.value.data.phoneNumber
-    );
+    return dataUserOrder.value.dataUser.phoneNumber;
 });
 
 const swapAddress = async () => {
     let id;
-    if (dataUserOrder.value.data && dataUserOrder.value.data.id) {
-        id = dataUserOrder.value.data.id;
-    } else if (dataUserOrder.value && dataUserOrder.value.id) {
-        id = dataUserOrder.value.id;
+    if (dataUserOrder.value.dataUser && dataUserOrder.value.dataUser.id) {
+        id = dataUserOrder.value.dataUser.id;
     }
 
     router.push({
@@ -129,12 +133,20 @@ const fetchData = async () => {
         if (eventBus.id) {
             response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-                { id: eventBus.id }
+                { idAddress: eventBus.id }
             );
         } else {
-            response = await axios.get(
-                `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+            response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
+                { idAddress: null }
             );
+            // response = await axios.post(
+            //     `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
+            //     {
+            //         idUser: dataUserOrder.value.data.id,
+            //         idAddress: 1,
+            //     }
+            // );
         }
 
         handleResponseData(response.data);
@@ -145,8 +157,9 @@ const fetchData = async () => {
 
 const handleResponseData = (data) => {
     if (data.status === 1) {
+        // console.log(data);
         dataUserOrder.value = data.dataUserOrder;
-        if (data.dataUserOrder != "guest") {
+        if (data.dataUser != "guest") {
             isGuest.value = false;
             isUser.value = true;
         } else {

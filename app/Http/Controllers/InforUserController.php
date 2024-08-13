@@ -8,6 +8,22 @@ use Illuminate\Http\Request;
 
 class InforUserController extends Controller
 {
+
+    public function InforUser(Request $request)
+    {
+        $data = $request->only('idUser', 'idAddress');
+
+        $InforUser = InforUser::where('idUser', $data['idUser'])
+            ->where('idAddress', $data['idAddress'])
+            ->first();
+
+        if ($InforUser) {
+            return response()->json(['status' => 1, 'InforUser' => $InforUser]);
+        }
+
+        return response()->json(['status' => 0, 'message' => 'No matching records found']);
+    }
+
     public function AddressUserWithId(Request $request)
     {
         $data = $request->only('id');
@@ -31,9 +47,10 @@ class InforUserController extends Controller
     public function AddNewInforUser(Request $request)
     {
         $data = $request->only('idUser', 'idAddress');
-        $exsitId = InforUser::where('idUser', $data['idUser'])->first();
-        $exsitAddress = InforUser::where('idAddress', $data['idAddress'])->first();
-        if ($exsitId && $exsitAddress) {
+        $exsitInforUser = InforUser::where('idUser', $data['idUser'])
+            ->where('idAddress', $data['idAddress'])
+            ->first();
+        if ($exsitInforUser) {
             $InforUser = InforUser::where('idUser', $data['idUser'] && 'idAddress', $data['idAddress'])->first();
             return response()->json(['status' => 0, 'InforUser' => $InforUser]);
         } else {

@@ -8,6 +8,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DetailOrderController;
 use App\Http\Controllers\InforUserController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 //DetailInforUserOrder
@@ -67,5 +68,8 @@ Route::post('chooseVoucherCode', [VoucherController::class, 'chooseVoucherCode']
 
 //DetailOrder
 Route::post('addDetailOrder', [DetailOrderController::class, 'addDetailOrder']);
-
 //DetailOrder
+
+//Order
+Route::post('createOrder', [OrderController::class, 'createOrder']);
+//Order

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\DetailInforUserOrder;
+use App\Models\InforUser;
 use Illuminate\Http\Request;
 use App\Models\InforUserOrder;
 
@@ -18,30 +19,51 @@ class AddressController extends Controller
             return response()->json(['status' => 0, 'message' => 'No data address']);
         }
     }
-
+    //Cần update
     public function newDataUserOrderAfterSwap(Request $request)
     {
-        $newAddress = $request->only([
-            'id'
-        ]);
-
+        $newAddress = $request->only(['idAddress']);
         $user_id = $request->session()->get('user_id');
         $user_id_expires_at = $request->session()->get('user_id_expires_at');
 
-        if ($user_id && $user_id_expires_at && $newAddress['id'] && now()->lessThanOrEqualTo($user_id_expires_at)) {
+        if ($user_id && $user_id_expires_at && now()->lessThanOrEqualTo($user_id_expires_at)) {
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
+                if (is_null($newAddress['idAddress'])) {
+                    $inforUser = InforUser::where('idUser', $user_id)
+                        ->orderBy('idAddress')
+                        ->first();
+
+                    if ($inforUser && $inforUser->idAddress) {
+                        $newAddress['idAddress'] = $inforUser->idAddress;
+                    }
+                }
+
                 $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
-                $newDataAddress = Address::where('id', $newAddress['id'])->first();
-                return response()->json(['status' => 1, 'dataUserOrder' => ['data' => $dataUser, 'address' => $newDataAddress]]);
+
+                if ($dataUser) {
+                    if (!is_null($newAddress['idAddress'])) {
+                        $address = Address::where('id', $newAddress['idAddress'])->first();
+                        if ($address) {
+                            return response()->json(['status' => 1, 'dataUserOrder' => ['dataUser' => $dataUser, 'address' => $address]]);
+                        } else {
+                            return response()->json(['status' => 0, 'message' => 'Address not found']);
+                        }
+                    } else {
+                        return response()->json(['status' => 1, 'dataUserOrder' => ['dataUser' => $dataUser]]);
+                    }
+                } else {
+                    return response()->json(['status' => 0, 'message' => 'User not found']);
+                }
             }
         } else {
             $request->session()->forget('user_id');
             $request->session()->forget('user_id_expires_at');
-            return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
+            return response()->json(['status' => 0, 'message' => 'No data user or session expired']);
         }
     }
+    //Cần update
     public function deleteAddress(Request $request, $id)
     {
         $address = Address::findOrFail($id);
@@ -75,7 +97,8 @@ class AddressController extends Controller
 
         return response()->json([
             'status' => 1,
-            'message' => 'Address has been add to database', 'newAddress' => $newAddress
+            'message' => 'Address has been add to database',
+            'newAddress' => $newAddress
         ]);
     }
     public function DetailAddressWithIdUser(Request $request)

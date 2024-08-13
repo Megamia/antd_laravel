@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\InforUser;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +25,26 @@ return new class extends Migration
                 ->on('Address')
                 ->onDelete('cascade');
         });
+        $data = [
+            [
+                'idUser' => '1',
+                'idAddress' => '1',
+            ],
+            [
+                'idUser' => '1',
+                'idAddress' => '2',
+            ],
+            [
+                'idUser' => '2',
+                'idAddress' => '3',
+            ],
+        ];
+        foreach ($data as $item) {
+            $InforUser = new InforUser();
+            $InforUser->idUser = $item['idUser'];
+            $InforUser->idAddress = $item['idAddress'];
+            $InforUser->save();
+        }
     }
 
     /**

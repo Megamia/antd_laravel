@@ -56,7 +56,7 @@ const Esc = async () => {
         if (response.data.status === 1) {
             eventBus.clear();
             emit("dataInforUser", null);
-        } 
+        }
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -71,7 +71,7 @@ const fetchData = async () => {
         if (response.data.status === 1) {
             if (response.data.dataUserOrder != "guest") {
                 dataUserOrder.value = response.data.dataUserOrder.name;
-                // console.log(dataUserOrder.value);
+                //  console.log(dataUserOrder.value);
             } else {
                 dataUserOrder.value = response.data.dataUserOrder;
 
@@ -92,10 +92,12 @@ const fet = async () => {
 };
 
 // const dataUser = ref("");
-const InforUser = (data) => {
+const InforUser = async (data) => {
+    // console.log(data);
+    //
+    emit("dataInforUser", data);
     // dataUser.value = data;
     // console.log("data: ", dataUser.value);
-    emit("dataInforUser", data);
     // console.log(data);
 };
 onMounted(() => fetchData());

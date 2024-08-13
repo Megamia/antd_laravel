@@ -2,7 +2,7 @@
     <div class="mainCreateNewOrderLayout">
         <div class="title">
             <div class="h1">
-                <h1 @click="test">Tạo mới đơn hàng</h1>
+                <h1>Tạo mới đơn hàng</h1>
             </div>
             <div class="loyalty" v-if="isLoyalty">
                 <span
@@ -103,10 +103,6 @@ const showOrHidden = () => {
 };
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
-};
-const test = () => {
-    console.log(detailOrderProduct.value);
-    console.log(dataUser.value);
 };
 
 let giamgia = 0;
@@ -227,27 +223,28 @@ const createOrder = async () => {
     if (!dataUser.value || !product.value) {
         alert("Chọn đầy đủ thông tin");
         return;
-    } else {
-        console.log(
-            "Order: ",
-            "Thông tin người dùng: ",
-            dataUser.value,
-            "\n",
-            "Thông tin sản phẩm: ",
-            product.value,
-            "\n",
-            "Voucher:",
-            voucher.value,
-            "\n",
-            "Tổng tiền: ",
-            eventBus.product.priceProduct,
-            "\n",
-            "Tổng tiền sau giảm giá: ",
-            priceProductValue,
-            "\n",
-            idProduct.value
-        );
     }
+    // else {
+    //     console.log(
+    //         "Order: ",
+    //         "Thông tin người dùng: ",
+    //         dataUser.value,
+    //         "\n",
+    //         "Thông tin sản phẩm: ",
+    //         product.value,
+    //         "\n",
+    //         "Voucher:",
+    //         voucher.value,
+    //         "\n",
+    //         "Tổng tiền: ",
+    //         eventBus.product.priceProduct,
+    //         "\n",
+    //         "Tổng tiền sau giảm giá: ",
+    //         priceProductValue,
+    //         "\n",
+    //         idProduct.value
+    //     );
+    // }
 };
 //CostOrder
 
@@ -279,7 +276,9 @@ const fetchDataIdAndPriceProduct = async () => {
             );
             if (response.data.status === 1) {
                 detailOrderProduct.value = response.data.addDetailOrders;
-                alert("Tạo mới đơn hàng thành công");
+                const a = detailOrderProduct.value.map((b) => b.id);
+                // console.log("a: ", a);
+                await completeCreateOrder(a);
             } else {
                 alert("Có lỗi khi khởi tạo đơn hàng");
                 return;
@@ -290,6 +289,46 @@ const fetchDataIdAndPriceProduct = async () => {
     } else {
         return;
     }
+};
+
+const completeCreateOrder = async (a) => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/createOrder`,
+            {
+                idDetailOrder: a,
+                idUser: dataUser.value.dataUser.id,
+                idAddress: dataUser.value.address.id,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        if (response.data.status === 1) {
+            // console.log("Success: ", response.data.createdOrders);
+            alert("Tạo mới đơn hàng thành công");
+        } else {
+            // console.log( response.data.createOrder);
+            alert("Tạo mới đơn hàng thất bại");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+    // console.log(
+    //     "IdProduct: ",
+    //     idProduct.value,
+    //     "\n",
+    //     "IdUser: ",
+    //     dataUser.value.dataUser.id,
+    //     "\n",
+    //     "IdAddress: ",
+    //     dataUser.value.address.id,
+    //     "\n",
+    //     "a: ",
+    //     a
+    // );
 };
 </script>
 

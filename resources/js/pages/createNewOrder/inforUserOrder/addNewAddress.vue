@@ -186,7 +186,7 @@ const onFinish = async () => {
             payload
         );
         if (response.data.status === 1) {
-            console.log(response.data.newAddress.id);
+            // console.log(response.data.newAddress.id);
             idAddress = response.data.newAddress.id;
             alert("Thêm địa chỉ mới thành công");
             await addInforUser();
