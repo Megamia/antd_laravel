@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <link rel="stylesheet" href="https://static-00.iconduck.com/assets.00/vue-icon-512x442-j09z7tua.png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
