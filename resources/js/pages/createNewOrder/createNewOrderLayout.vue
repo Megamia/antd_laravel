@@ -150,22 +150,22 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
-    console.log(
-        "valueVoucher: ",
-        eventBus.voucher.valueVoucher,
-        "\n",
-        "valueShip: ",
-        eventBus.voucher.valueShip,
-        "\n",
-        "VATvalue: ",
-        VATvalue,
-        "\n",
-        "eventBus.product.priceProduct: ",
-        eventBus.product.priceProduct,
-        "\n",
-        "Giamgia: ",
-        giamgia
-    );
+    // console.log(
+    //     "valueVoucher: ",
+    //     eventBus.voucher.valueVoucher,
+    //     "\n",
+    //     "valueShip: ",
+    //     eventBus.voucher.valueShip,
+    //     "\n",
+    //     "VATvalue: ",
+    //     VATvalue,
+    //     "\n",
+    //     "eventBus.product.priceProduct: ",
+    //     eventBus.product.priceProduct,
+    //     "\n",
+    //     "Giamgia: ",
+    //     giamgia
+    // );
 };
 const fetchDataVoucher = (data) => {
     // click();

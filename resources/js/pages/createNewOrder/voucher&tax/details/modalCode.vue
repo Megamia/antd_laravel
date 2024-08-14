@@ -4,7 +4,7 @@
             <div class="modal-wrapper" @click.self="Cancel">
                 <div class="modal-container">
                     <div class="title">
-                        <span> Mã ưu đãi/ Coupon </span>
+                        <span @click="test"> Mã ưu đãi/ Coupon </span>
                     </div>
                     <div class="content">
                         <span>Nhập mã</span>
@@ -49,15 +49,28 @@ const apply = async () => {
                 code: inputCodeText.value,
             }
         );
+        let a = 0;
         if (respone.data.status === 1) {
             valueCode.value = respone.data.chooseVoucherCode;
+            a = valueCode.value.map((item) => item.id);
         } else if (respone.data.status === 0) {
             valueCode.value = respone.data.chooseVoucherCode;
         }
-        respone.data.chooseVoucherCode.forEach((data) => {
-            // console.log("Input: ", data.value);
-            emit("valueInModalCode", data.value);
-        });
+        if (inputCodeText.value.trim() !== "") {
+            // console.log(inputCodeText.value);
+            // console.log(valueCode.value);
+            if (a && a !== 0) {
+                respone.data.chooseVoucherCode.forEach((data) => {
+                    emit("valueInModalCode", data.value, a);
+                });
+            } else {
+                alert("Mã không hợp lệ");
+                return;
+                // emit("valueInModalCode", data.value);
+            }
+        } else {
+            alert("Nhập code");
+        }
     } catch (e) {
         console.log("Error: ", e);
     }

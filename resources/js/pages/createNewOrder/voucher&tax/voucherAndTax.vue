@@ -36,9 +36,10 @@ import ModalShip from "./Details/ModalShip.vue";
 import ModalVAT from "./Details/ModalVAT.vue";
 import { ref, defineEmits, onMounted, defineExpose } from "vue";
 import eventBus from "../../../eventBus";
+import { useRoute } from "vue-router";
 
 const emit = defineEmits(["closeModalShip", "fetchData", "fetchDataVAT"]);
-
+const route = useRoute();
 const valueVoucher = ref("0");
 valueVoucher.value = eventBus.voucher.valueVoucher.toString();
 valueVoucher.value = valueVoucher.value.replace(/\./g, "");
@@ -100,7 +101,7 @@ const fetchData = async () => {
         valueShip.value = valueShip.value.toString();
         valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    console.log(eventBus.voucher.valueVAT);
+    // console.log(eventBus.voucher.valueVAT);
 };
 onMounted(() => fetchData());
 
