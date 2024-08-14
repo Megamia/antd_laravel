@@ -2,7 +2,7 @@
     <div class="mainCreateNewOrderLayout">
         <div class="title">
             <div class="h1">
-                <h1>Tạo mới đơn hàng</h1>
+                <h1 @click="test">Tạo mới đơn hàng</h1>
             </div>
             <div class="loyalty" v-if="isLoyalty">
                 <span
@@ -105,6 +105,27 @@ const ClickShowModal = () => {
     showModal.value = !showModal.value;
 };
 
+const test = () => {
+    giamgia =
+        eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
+    console.log(
+        "valueVoucher: ",
+        eventBus.voucher.valueVoucher,
+        "\n",
+        "valueShip: ",
+        eventBus.voucher.valueShip,
+        "\n",
+        "VATvalue: ",
+        VATvalue,
+        "\n",
+        "eventBus.product.priceProduct: ",
+        eventBus.product.priceProduct,
+        "\n",
+        "Giamgia: ",
+        giamgia
+    );
+};
+
 let giamgia = 0;
 const voucher = ref("");
 let VATvalue = 0;
@@ -115,10 +136,11 @@ const click = () => {
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
     }
+    if (updateVAT.value) {
+        updateVAT.value.valueInModalVAT();
+    }
     giamgia =
-        parseFloat(eventBus.voucher.valueVoucher) +
-        parseFloat(eventBus.voucher.valueShip) +
-        VATvalue;
+        eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     priceProductValue = eventBus.product.priceProduct - giamgia;
@@ -127,6 +149,22 @@ const click = () => {
     priceProductValueText.value = priceProductValueText.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         ","
+    );
+    console.log(
+        "valueVoucher: ",
+        eventBus.voucher.valueVoucher,
+        "\n",
+        "valueShip: ",
+        eventBus.voucher.valueShip,
+        "\n",
+        "VATvalue: ",
+        VATvalue,
+        "\n",
+        "eventBus.product.priceProduct: ",
+        eventBus.product.priceProduct,
+        "\n",
+        "Giamgia: ",
+        giamgia
     );
 };
 const fetchDataVoucher = (data) => {
