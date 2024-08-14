@@ -31,6 +31,7 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 import axios from "axios";
+import eventBus from "../../../../eventBus";
 
 const emit = defineEmits(["closeModalCode", "valueInModalCode"]);
 
@@ -52,21 +53,21 @@ const apply = async () => {
         let a = 0;
         if (respone.data.status === 1) {
             valueCode.value = respone.data.chooseVoucherCode;
-            a = valueCode.value.map((item) => item.id);
+            // a = valueCode.value.map((item) => item.id);
+            a = valueCode.value[0].id;
+            eventBus.voucher.idVoucherCode = a;
+            console.log(eventBus.voucher.idVoucherCode);
         } else if (respone.data.status === 0) {
             valueCode.value = respone.data.chooseVoucherCode;
         }
         if (inputCodeText.value.trim() !== "") {
-            // console.log(inputCodeText.value);
-            // console.log(valueCode.value);
             if (a && a !== 0) {
                 respone.data.chooseVoucherCode.forEach((data) => {
-                    emit("valueInModalCode", data.value, a);
+                    emit("valueInModalCode", data.value);
                 });
             } else {
                 alert("Mã không hợp lệ");
                 return;
-                // emit("valueInModalCode", data.value);
             }
         } else {
             alert("Nhập code");

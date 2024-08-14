@@ -11,6 +11,7 @@ class Order extends Model
     protected $fillable = [
         'idDetailOrder',
         'idInforUser',
+        'idVoucher'
     ];
     public $timestamps = false;
     protected $table = 'Order';

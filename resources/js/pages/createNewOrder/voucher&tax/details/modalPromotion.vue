@@ -65,6 +65,7 @@
 <script setup>
 import { ref, defineEmits, onMounted, defineProps } from "vue";
 import axios from "axios";
+import eventBus from "../../../../eventBus";
 
 const emit = defineEmits(["closeModalPromotion", "valueInModalPromotion"]);
 const currentSelection = ref("order");
@@ -143,7 +144,7 @@ const apply = async () => {
         //     "id các item đã chọn: ",
         //     slt.value
         // );
-
+        eventBus.voucher.idVoucherPromotion = slt.value;
         emit("valueInModalPromotion", total.toFixed(3), slt.value);
         // console.log(response.data.dataVouchersPromotion);
         // emit("closeModalPromotion");

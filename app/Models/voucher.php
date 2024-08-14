@@ -9,7 +9,6 @@ class Voucher extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
         'idVoucherCodeValue',
         'idVoucherPromotionValue',
     ];

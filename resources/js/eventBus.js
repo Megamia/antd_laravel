@@ -13,6 +13,9 @@ const eventBus = reactive({
         priceProduct: 0,
     },
     voucher: {
+        idVoucherCode: 0,
+        idVoucherPromotion: [],
+
         valueVoucher: 0,
         isLoyalty: false,
         clearValueVoucher() {

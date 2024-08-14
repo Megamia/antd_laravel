@@ -14,35 +14,18 @@ return new class extends Migration
     {
         Schema::create('Voucher', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('idVoucherCodeValue')->default('1');
+            $table->unsignedBigInteger('idVoucherCodeValue');
             $table->foreign('idVoucherCodeValue')
                 ->references('id')
                 ->on('VoucherCodeValue')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('idVoucherPromotionValue')->default('1');
+            $table->unsignedBigInteger('idVoucherPromotionValue');
             $table->foreign('idVoucherPromotionValue')
                 ->references('id')
                 ->on('VoucherPromotionValue')
                 ->onDelete('cascade');
             $table->timestamps();
         });
-        $data = [
-            [
-                'name' => 'code',
-            ],
-            [
-                'name' => 'discount',
-            ],
-            [
-                'name' => 'promotion',
-            ],
-        ];
-        foreach ($data as $item) {
-            $voucher = new Voucher();
-            $voucher->name = $item['name'];
-            $voucher->save();
-        }
     }
 
     public function down(): void

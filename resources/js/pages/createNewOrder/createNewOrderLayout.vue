@@ -106,23 +106,27 @@ const ClickShowModal = () => {
 };
 
 const test = () => {
-    giamgia =
-        eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
+    // giamgia =
+    //     eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
+    // console.log(
+    //     "valueVoucher: ",
+    //     eventBus.voucher.valueVoucher,
+    //     "\n",
+    //     "valueShip: ",
+    //     eventBus.voucher.valueShip,
+    //     "\n",
+    //     "VATvalue: ",
+    //     VATvalue,
+    //     "\n",
+    //     "eventBus.product.priceProduct: ",
+    //     eventBus.product.priceProduct,
+    //     "\n",
+    //     "Giamgia: ",
+    //     giamgia
+    // );
     console.log(
-        "valueVoucher: ",
-        eventBus.voucher.valueVoucher,
-        "\n",
-        "valueShip: ",
-        eventBus.voucher.valueShip,
-        "\n",
-        "VATvalue: ",
-        VATvalue,
-        "\n",
-        "eventBus.product.priceProduct: ",
-        eventBus.product.priceProduct,
-        "\n",
-        "Giamgia: ",
-        giamgia
+        eventBus.voucher.idVoucherCode,
+        eventBus.voucher.idVoucherPromotion
     );
 };
 
@@ -316,7 +320,7 @@ const fetchDataIdAndPriceProduct = async () => {
                 detailOrderProduct.value = response.data.addDetailOrders;
                 const a = detailOrderProduct.value.map((b) => b.id);
                 // console.log("a: ", a);
-                await completeCreateOrder(a);
+                await createVoucher(a);
             } else {
                 alert("Có lỗi khi khởi tạo đơn hàng");
                 return;
@@ -326,6 +330,38 @@ const fetchDataIdAndPriceProduct = async () => {
         }
     } else {
         return;
+    }
+};
+const data = ref("");
+const createVoucher = async (a) => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/createVoucher`,
+            {
+                idVoucherCode: eventBus.voucher.idVoucherCode,
+                idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
+            }
+        );
+
+        //UPDATE THÊM
+        if (response.data.status === 1) {
+            data.value = response.data.createVoucher.map(item=>item.id);
+            console.log(data.value);
+            // data = data.map((b) => b.id);
+            // console.log(data);
+            // const data = response.data.createVoucher;
+            // for (let i = 0; i < response.data.createVoucher.length; i++) {
+            //     console.log(data.value[i].id);
+            // }
+            await completeCreateOrder(a);
+        }
+        //UPDATE THÊM
+        else {
+            alert("Có lỗi khi thêm voucher");
+            return;
+        }
+    } catch (e) {
+        console.log("Error: ", e);
     }
 };
 

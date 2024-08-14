@@ -66,6 +66,10 @@ Route::get('dataValueVoucherCode', [VoucherController::class, 'dataValueVoucherC
 Route::post('chooseVoucherCode', [VoucherController::class, 'chooseVoucherCode']);
 //VoucherCode
 
+//Voucher
+Route::post('createVoucher', [VoucherController::class, 'createVoucher']);
+//Voucher
+
 //DetailOrder
 Route::post('addDetailOrder', [DetailOrderController::class, 'addDetailOrder']);
 //DetailOrder
