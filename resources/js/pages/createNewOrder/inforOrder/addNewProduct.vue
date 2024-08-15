@@ -80,7 +80,6 @@
                         </div>
                         <div style="height: 1000px; width: 100%" />
                     </a-checkbox-group>
-                    
                 </div>
             </div>
         </div>
@@ -322,7 +321,7 @@ const filter = computed(() => {
                                     white-space: nowrap;
                                     text-overflow: ellipsis;
                                     overflow: hidden;
-                                    max-width: 250px;
+                                    max-width: 235px;
                                     /* background-color: red; */
                                 }
                                 .nameProduct:hover {
@@ -369,6 +368,9 @@ const filter = computed(() => {
                                         color: #00000073;
                                     }
                                     .textQuantity {
+                                        /* white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden; */
                                         display: flex;
                                     }
                                 }
