@@ -44,7 +44,6 @@
 <script setup>
 import { ref, defineEmits, onMounted } from "vue";
 import eventBus from "../../../../eventBus";
-// import axios from "axios";
 
 const emit = defineEmits([
     "closeModalShip",
@@ -60,21 +59,15 @@ const Cancel = () => {
 const valueReason = ref("");
 const apply = async () => {
     try {
-        // console.log(valueShip, valueReason.value);
         if (valueShip <= eventBus.product.priceProduct) {
-            // valueShip = valueShip.toString();
-            // console.log(typeof valueShip);
-            // valueShip = valueShip.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             if (valueShip === 0) {
                 valueShip = "0";
             }
-            // console.log(valueShip);
             emit("valueInModalShip", valueShip);
             emit("fetchDataModal");
         } else {
             console.log("Tiền ship không thể cao hơn giá trị sản phẩm");
         }
-        // });
     } catch (e) {
         console.log("Error: ", e);
     }

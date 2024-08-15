@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../../../eventBus";
 
@@ -42,6 +42,7 @@ const Cancel = () => {
 };
 
 const valueCode = ref("");
+let a = 0;
 const apply = async () => {
     try {
         const respone = await axios.post(
@@ -50,13 +51,10 @@ const apply = async () => {
                 code: inputCodeText.value,
             }
         );
-        let a = 0;
         if (respone.data.status === 1) {
             valueCode.value = respone.data.chooseVoucherCode;
-            // a = valueCode.value.map((item) => item.id);
             a = valueCode.value[0].id;
             eventBus.voucher.idVoucherCode = a;
-            console.log(eventBus.voucher.idVoucherCode);
         } else if (respone.data.status === 0) {
             valueCode.value = respone.data.chooseVoucherCode;
         }

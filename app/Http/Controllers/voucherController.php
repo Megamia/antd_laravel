@@ -66,22 +66,52 @@ class voucherController extends Controller
             return response()->json(['status' => 0, 'message' => 'idVoucherPromotion phải là một mảng']);
         }
 
-        $exsitVoucher = Voucher::where('idVoucherCodeValue', $idVoucherCode)
+        $existingVouchers = Voucher::where('idVoucherCodeValue', $idVoucherCode)
             ->whereIn('idVoucherPromotionValue', $idVoucherPromotions)
             ->get();
 
-        if ($exsitVoucher) {
-            return response()->json(['status' => 1, 'createVoucher' => $exsitVoucher, 'message' => 'Đã tồn tại']);
-        } else {
-            $createVouchers = [];
-            foreach ($idVoucherPromotions as $idVoucherPromotion) {
+        $existingVoucherPromotions = $existingVouchers->pluck('idVoucherPromotionValue')->toArray();
+
+        $newVoucherPromotions = array_diff($idVoucherPromotions, $existingVoucherPromotions);
+
+        $createVouchers = [];
+        $failedOrders = [];
+
+        if (empty($newVoucherPromotions)) {
+            return response()->json([
+                'status' => 1,
+                'createVoucher' => $existingVouchers,
+                'message' => 'Tất cả voucher đã tồn tại'
+            ]);
+        }
+
+        foreach ($newVoucherPromotions as $idVoucherPromotion) {
+            try {
                 $createVoucher = Voucher::create([
                     'idVoucherCodeValue' => $idVoucherCode,
                     'idVoucherPromotionValue' => $idVoucherPromotion,
                 ]);
                 $createVouchers[] = $createVoucher;
+            } catch (\Exception $e) {
+                $failedOrders[] = [
+                    'idVoucherPromotion' => $idVoucherPromotion,
+                    'error' => $e->getMessage()
+                ];
             }
-            return response()->json(['status' => 1, 'createVoucher' => $createVouchers]);
         }
+
+        if (count($failedOrders) > 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Một số voucher không thể được tạo',
+                'failedOrders' => $failedOrders
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'createVoucher' => array_merge($existingVouchers->toArray(), $createVouchers),
+            'message' => 'Voucher đã được tạo thành công'
+        ]);
     }
 }

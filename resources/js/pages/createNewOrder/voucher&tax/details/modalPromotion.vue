@@ -74,6 +74,9 @@ const props = defineProps({
     sltedId: Object,
 });
 const fetchData = async () => {
+    if (eventBus.voucher.idVoucherPromotion) {
+        slt.value = eventBus.voucher.idVoucherPromotion;
+    }
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/dataValueVoucherPromotion`
@@ -81,29 +84,12 @@ const fetchData = async () => {
         listPromotion.value = response.data.dataValueVoucherPromotion;
         if (props.sltedId && Object.keys(props.sltedId).length > 0) {
             slt.value = props.sltedId;
-            // console.log("slt.value: ", slt.value);
-            // console.log("props.sltedId: ", props.sltedId);
-        } else {
-            // console.log("no props");
         }
-        // console.log(Object.keys(props.sltedId).length);
-        // const a = ref([]);
-        // for (
-        //     let i = 0;
-        //     i < Object.keys(response.data.dataValueVoucherPromotion).length;
-        //     i++
-        // ) {
-        //     a.value.push(response.data.dataValueVoucherPromotion[i].id);
-        //     console.log("listPromotion:", response.data.dataValueVoucherPromotion[i].id);
-        // }
-        // console.log("a: ", a.value.toString());
-        // slt.value = a.value;
+        // if (response.data.status === 1) {
 
-        if (response.data.status === 1) {
-            // console.log("listPromotion: ", listPromotion.value);
-        } else if (response.data.status === 0) {
-            // console.log("listPromotion: ", listPromotion.value);
-        }
+        // } else if (response.data.status === 0) {
+
+        // }
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -129,25 +115,17 @@ const apply = async () => {
             }
         );
 
-        if (response.data.status === 1) {
-            // console.log("dataVouchersPromotion: ", response.data.dataVouchersPromotion);
-        } else {
-            // console.log("dataVouchersPromotion: ", response.data.dataVouchersPromotion);
-        }
+        // if (response.data.status === 1) {
+
+        // } else {
+
+        // }
         let total = 0;
         for (let i = 0; i < response.data.chooseVoucherPromotion.length; i++) {
             total += parseFloat(response.data.chooseVoucherPromotion[i].value);
         }
-        // console.log(
-        //     "total: " + total,
-        //     "\n",
-        //     "id các item đã chọn: ",
-        //     slt.value
-        // );
         eventBus.voucher.idVoucherPromotion = slt.value;
         emit("valueInModalPromotion", total.toFixed(3), slt.value);
-        // console.log(response.data.dataVouchersPromotion);
-        // emit("closeModalPromotion");
     } catch (e) {
         console.log("Error: ", e);
     }

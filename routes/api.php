@@ -31,6 +31,7 @@ Route::post('DetailAddressWithIdUser', [AddressController::class, 'DetailAddress
 //Address
 
 //InforUser
+Route::post('InforUser', [InforUserController::class, 'InforUser']);
 Route::post('AddressUserWithId', [InforUserController::class, 'AddressUserWithId']);
 Route::post('AddNewInforUser', [InforUserController::class, 'AddNewInforUser']);
 //InforUser

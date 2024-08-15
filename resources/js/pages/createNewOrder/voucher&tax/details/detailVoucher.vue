@@ -225,6 +225,7 @@ const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
     totalPro = datavalueInModalPromotion;
     totalProString.value = datavalueInModalPromotion;
     totalPro = totalPro.replace(/\./g, "");
+    totalProString.value = totalProString.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // console.log("Giá được giảm từ modal Promotion: ", totalPro);
 
     selectedInModalPromotion.value.sltId = slt;

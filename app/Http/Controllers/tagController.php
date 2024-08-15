@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\TagTitle;
 
-class TagController extends Controller
+class tagController extends Controller
 {
     public function itemFilterWithTag(Request $request)
     {

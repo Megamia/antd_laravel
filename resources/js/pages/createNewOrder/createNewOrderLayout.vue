@@ -90,11 +90,14 @@ import ShippingMethod from "./ShippingMethod/ShippingMethod.vue";
 import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
 import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
-
+import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../eventBus";
 // import axios from "axios";
+
+const router = useRouter();
+
 const isLoyalty = ref(false);
 const isOpen = ref(true);
 const showModal = ref(false);
@@ -106,28 +109,7 @@ const ClickShowModal = () => {
 };
 
 const test = () => {
-    // giamgia =
-    //     eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
-    // console.log(
-    //     "valueVoucher: ",
-    //     eventBus.voucher.valueVoucher,
-    //     "\n",
-    //     "valueShip: ",
-    //     eventBus.voucher.valueShip,
-    //     "\n",
-    //     "VATvalue: ",
-    //     VATvalue,
-    //     "\n",
-    //     "eventBus.product.priceProduct: ",
-    //     eventBus.product.priceProduct,
-    //     "\n",
-    //     "Giamgia: ",
-    //     giamgia
-    // );
-    console.log(
-        eventBus.voucher.idVoucherCode,
-        eventBus.voucher.idVoucherPromotion
-    );
+    
 };
 
 let giamgia = 0;
@@ -154,22 +136,6 @@ const click = () => {
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
-    // console.log(
-    //     "valueVoucher: ",
-    //     eventBus.voucher.valueVoucher,
-    //     "\n",
-    //     "valueShip: ",
-    //     eventBus.voucher.valueShip,
-    //     "\n",
-    //     "VATvalue: ",
-    //     VATvalue,
-    //     "\n",
-    //     "eventBus.product.priceProduct: ",
-    //     eventBus.product.priceProduct,
-    //     "\n",
-    //     "Giamgia: ",
-    //     giamgia
-    // );
 };
 const fetchDataVoucher = (data) => {
     // click();
@@ -266,27 +232,6 @@ const createOrder = async () => {
         alert("Chọn đầy đủ thông tin");
         return;
     }
-    // else {
-    //     console.log(
-    //         "Order: ",
-    //         "Thông tin người dùng: ",
-    //         dataUser.value,
-    //         "\n",
-    //         "Thông tin sản phẩm: ",
-    //         product.value,
-    //         "\n",
-    //         "Voucher:",
-    //         voucher.value,
-    //         "\n",
-    //         "Tổng tiền: ",
-    //         eventBus.product.priceProduct,
-    //         "\n",
-    //         "Tổng tiền sau giảm giá: ",
-    //         priceProductValue,
-    //         "\n",
-    //         idProduct.value
-    //     );
-    // }
 };
 //CostOrder
 
@@ -297,30 +242,18 @@ const fetchDataIdAndPriceProduct = async () => {
     productId.value = Array.isArray(idProduct.value)
         ? Array.from(idProduct.value)
         : [];
-    // console.log(productId.value && product.value.length > 0);
-    // console.log(
-    //     "Type of productId.value:",
-    //     Array.isArray(productId.value) ? "array" : typeof productId.value
-    // );
-    // console.log("productId.value:", productId.value);
-    if (productId.value && product.value.length > 0) {
+    if (productId.value.length > 0 && product.value.length > 0) {
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/addDetailOrder`,
                 {
                     idProducts: productId.value,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
                 }
             );
             if (response.data.status === 1) {
                 detailOrderProduct.value = response.data.addDetailOrders;
-                const a = detailOrderProduct.value.map((b) => b.id);
-                // console.log("a: ", a);
-                await createVoucher(a);
+                const idDetailOrder = detailOrderProduct.value.map((b) => b.id);
+                await createVoucher(idDetailOrder);
             } else {
                 alert("Có lỗi khi khởi tạo đơn hàng");
                 return;
@@ -332,8 +265,8 @@ const fetchDataIdAndPriceProduct = async () => {
         return;
     }
 };
-const data = ref("");
-const createVoucher = async (a) => {
+const data = ref([]);
+const createVoucher = async (idDetailOrder) => {
     try {
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createVoucher`,
@@ -342,21 +275,11 @@ const createVoucher = async (a) => {
                 idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
             }
         );
-
-        //UPDATE THÊM
         if (response.data.status === 1) {
-            data.value = response.data.createVoucher.map(item=>item.id);
-            console.log(data.value);
-            // data = data.map((b) => b.id);
-            // console.log(data);
-            // const data = response.data.createVoucher;
-            // for (let i = 0; i < response.data.createVoucher.length; i++) {
-            //     console.log(data.value[i].id);
-            // }
-            await completeCreateOrder(a);
-        }
-        //UPDATE THÊM
-        else {
+            data.value = response.data.createVoucher;
+            const idVoucher = data.value.map((item) => item.id);
+            await fetchDataInforUser(idDetailOrder, idVoucher);
+        } else {
             alert("Có lỗi khi thêm voucher");
             return;
         }
@@ -365,44 +288,44 @@ const createVoucher = async (a) => {
     }
 };
 
-const completeCreateOrder = async (a) => {
+const fetchDataInforUser = async (idDetailOrder, idVoucher) => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/InforUser`,
+            {
+                idUser: dataUser.value.dataUser.id,
+                idAddress: dataUser.value.address.id,
+            }
+        );
+        if (response.data.status === 1) {
+            const idInforUser = response.data.InforUser.id;
+            await completeCreateOrder(idDetailOrder, idInforUser, idVoucher);
+        } else {
+            console.log("Faile");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
+const completeCreateOrder = async (idDetailOrder, idInforUser, idVoucher) => {
     try {
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createOrder`,
             {
-                idDetailOrder: a,
-                idUser: dataUser.value.dataUser.id,
-                idAddress: dataUser.value.address.id,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                idDetailOrder: idDetailOrder,
+                idInforUser: idInforUser,
+                idVoucher: idVoucher,
             }
         );
         if (response.data.status === 1) {
-            // console.log("Success: ", response.data.createdOrders);
-            alert("Tạo mới đơn hàng thành công");
+            router.push("/CreateOrderSuccess");
         } else {
-            // console.log( response.data.createOrder);
             alert("Tạo mới đơn hàng thất bại");
         }
     } catch (e) {
         console.log("Error: ", e);
     }
-    // console.log(
-    //     "IdProduct: ",
-    //     idProduct.value,
-    //     "\n",
-    //     "IdUser: ",
-    //     dataUser.value.dataUser.id,
-    //     "\n",
-    //     "IdAddress: ",
-    //     dataUser.value.address.id,
-    //     "\n",
-    //     "a: ",
-    //     a
-    // );
 };
 </script>
 

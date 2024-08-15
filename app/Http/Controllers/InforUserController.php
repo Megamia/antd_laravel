@@ -61,4 +61,5 @@ class InforUserController extends Controller
             return response()->json(['status' => 1, 'AddNewInforUser' => $AddNewInforUser]);
         }
     }
+    
 }

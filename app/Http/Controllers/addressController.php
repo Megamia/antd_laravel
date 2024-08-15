@@ -8,7 +8,7 @@ use App\Models\InforUser;
 use Illuminate\Http\Request;
 use App\Models\InforUserOrder;
 
-class AddressController extends Controller
+class addressController extends Controller
 {
     public function inforAddress(Request $request)
     {

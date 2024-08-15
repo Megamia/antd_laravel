@@ -39,6 +39,10 @@ return new class extends Migration
                 "code" => "BANTUMLUM",
                 "value" => "5.000",
             ],
+            [
+                "code" => "a",
+                "value" => "10.000",
+            ],
         ];
         foreach ($data as $item) {
             $value_voucher_code = new VoucherCodeValue();
