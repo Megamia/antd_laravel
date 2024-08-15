@@ -58,7 +58,6 @@ const filterOption = (input, option) => {
 
 const userSelected = ref("");
 const handleChange = (value) => {
-    // console.log(`selected ${value}`);
     userSelected.value = value;
 };
 //Selection
@@ -76,21 +75,7 @@ const apply = async () => {
         } else if (selection.value === 3) {
             selectionText.value = "Đối tác vận chuyển";
         }
-        // const respone = await axios.post(
-        //     `${import.meta.env.VITE_APP_URL_API}/chooseVoucherCode`,
-        //     {
-        //         code: inputCodeText.value,
-        //     }
-        // );
-        // if (respone.data.status === 1) {
-        //     valueCode.value = respone.data.chooseVoucherCode;
-        // } else if (respone.data.status === 0) {
-        //     valueCode.value = respone.data.chooseVoucherCode;
-        // }
-        // respone.data.chooseVoucherCode.forEach((data) => {
-        //     // console.log("Input: ", data.value);
         emit("valueInModalShipping", selectionText.value, userSelected.value);
-        // });
     } catch (e) {
         console.log("Error: ", e);
     }

@@ -36,20 +36,8 @@
                                             v-if="dataParent.itemChil === 1"
                                         />
                                     </span>
-                                    <!-- <span v-else @click="show(dataParent.id_item, dataParent.parent_id)">
-                                    {{ dataParent.name }}
-                                </span> -->
+                                   
                                 </div>
-
-                                <!-- <div class="contentSelection" >
-                                <span @click="
-                                    handleCurrentSelectionChange(
-                                        dataParent.id_item
-                                    )
-                                    ">{{ dataParent.id_item }}
-                                    <AkChevronRightSmall v-if="dataParent.itemChil" />
-                                </span>
-                            </div> -->
                             </div>
                         </div>
                     </div>
@@ -67,9 +55,7 @@ import {
 import { useRouter } from "vue-router";
 import { ref, defineEmits, onMounted } from "vue";
 import axios from "axios";
-// const show = () => {
-//     console.log("flattenedData: ",flattenedData.value);
-// };
+
 const router = useRouter();
 const emit = defineEmits(["showModal", "tags"]);
 
@@ -85,12 +71,10 @@ const test = () => {
     console.log(titleId);
 };
 
-const show = (data1, data2) => {
-    console.log(data1, data2);
-};
+// const show = (data1, data2) => {
+//     console.log(data1, data2);
+// };
 
-let currentItemId = 1;
-let iconback = 0;
 const itemChoosed = ref("");
 
 const showAll = async () => {
@@ -99,10 +83,8 @@ const showAll = async () => {
             `${import.meta.env.VITE_APP_URL_API}/itemFilterWithTag`
         );
         if (response.data.status === 1) {
-            // console.log("All: ", response.data.inforProduct)
             itemChoosed.value = response.data.itemFilterWithTag;
             let ids = itemChoosed.value.map((item) => item.id).join(",");
-            // console.log("IDs: ", ids);
             emit("tags", ids);
         } else if (response.data.status === 0) {
             console.log(response.data.itemFilterWithTag);
@@ -115,30 +97,20 @@ const showAll = async () => {
 const choosed = ref("");
 let level = 0;
 const handleCurrentSelectionChange = (id_item, parent_id, id) => {
-    // console.log(id_item, parent_id, id);
     fetchDataItem(id_item, parent_id);
     choosed.value = dataParentDefault.value.filter((item) => item.id === id);
     for (let i = 0; i < choosed.value.length; i++) {
         level = choosed.value[i].parent_id;
         choosed.value = choosed.value[i].id;
-        // console.log("level:", level)
     }
-    // console.log("choosed.value: ", choosed.value);
-    // console.log("Level: ", level)
     if (level === 3) {
         emit("tags", choosed.value);
     }
-
-    // for(let i=0;i<dataParentDefault.value.length;i++){
-    //     itemChoosed.value=dataParentDefault.value[i].find(item=>item.)
-    // }
-    // console.log('itemChoosed.value: ', itemChoosed.value)
 };
 
 const fetchDataItem = async (id_item, parent_id) => {
     parent_id = parent_id + 1;
     try {
-        // console.log(parent_id, id_item)
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/dataTagItem`,
             {
@@ -147,11 +119,8 @@ const fetchDataItem = async (id_item, parent_id) => {
             }
         );
         if (response.data.status === 1) {
-            // console.log(response.data.dataTagItem)
             dataParentDefault.value = response.data.dataTagItem;
-            // console.log(dataParentDefault.value)
         } else if (response.data.status === 0) {
-            // console.log(response.data.dataTagItem)
         }
         fetchDataTitle(id_item);
     } catch (e) {
@@ -177,11 +146,9 @@ const fetchDataTitle = async (id_item) => {
             }
         );
         if (response.data.status === 1) {
-            // console.log(response.data.titleFilterWithTag);
             titleFilterWithTagValue.value =
                 response.data.titleFilterWithTag.title_name;
         } else if (response.data.status === 0) {
-            // console.log(response.data.titleFilterWithTag);
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -201,7 +168,6 @@ const fetchData = async () => {
         if (response.data.status === 1) {
             dataParentDefault.value = response.data.choosedTag;
         } else if (response.data.status === 0) {
-            // console.log(dataParentDefault.value);
         }
         fetchDataTitle();
     } catch (e) {
@@ -212,7 +178,6 @@ onMounted(async () => {
     try {
         await Promise.all([
             fetchData(),
-            // , fetchDataTitle()
         ]);
     } catch (error) {
         console.error("Error fetching data:", error);

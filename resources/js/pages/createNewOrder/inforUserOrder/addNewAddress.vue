@@ -142,7 +142,6 @@ import { AnOutlinedArrowLeft } from "@kalimahapps/vue-icons";
 import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-// import eventBus from "../../../eventBus";
 
 const router = useRouter();
 const route = useRoute();
@@ -163,7 +162,6 @@ const formState = ref({
 });
 
 const handleChange = (value) => {
-    // console.log(`selected ${value}`);
 };
 
 const filterOption = (input, option) => {
@@ -186,7 +184,6 @@ const onFinish = async () => {
             payload
         );
         if (response.data.status === 1) {
-            // console.log(response.data.newAddress.id);
             idAddress = response.data.newAddress.id;
             alert("Thêm địa chỉ mới thành công");
             await addInforUser();
@@ -208,12 +205,11 @@ const addInforUser = async () => {
                 idAddress: idAddress,
             }
         );
-        if (response.data.status === 1) {
-            // console.log(response.data.AddNewInforUser);
-        } else {
-            // console.log(response.data.InforUser);
-            // return;
-        }
+        // if (response.data.status === 1) {
+
+        // } else {
+
+        // }
     } catch (e) {
         console.log("Error: ", e);
     }

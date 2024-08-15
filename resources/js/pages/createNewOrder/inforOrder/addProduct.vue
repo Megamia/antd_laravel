@@ -149,7 +149,6 @@ const handleUploadChange = (file) => {
         formState.value.img = `${import.meta.env.VITE_APP_URL}/uploads/${
             file.name
         }`;
-        // console.log(formState.value.img);
         return true;
     } else {
         return false;
@@ -204,7 +203,6 @@ const showProduct = async () => {
         );
         if (response.data.status === 1) {
             inforProduct.value = response.data.inforProduct;
-            // console.log("Data: ", inforProduct.value);
         } else {
             console.log("No data");
         }
@@ -234,18 +232,15 @@ const handleFinish = async () => {
             }
         );
         if (response.data.status === 1) {
-            // console.log("Add product success: ", response.data.inforProduct);
             alert(
                 `Thêm sản phẩm ${response.data.inforProduct.name} thành công`
             );
         } else {
-            // console.log("Add product faile: ", response.data.inforProduct);
             alert(`Thêm sản phẩm ${response.data.inforProduct.name} thất bại`);
         }
     } catch (e) {
         console.log("Error: ", e);
     }
-    // console.log(formState)
 };
 const handleFinishFailed = (errors) => {
     console.log(errors);
@@ -257,9 +252,6 @@ const headers = {
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content"),
 };
-// const uploadData = {
-//     name: "file",
-// };
 
 const del = (image, index) => {
     if (confirm("Chắc chắn muốn xóa?")) {

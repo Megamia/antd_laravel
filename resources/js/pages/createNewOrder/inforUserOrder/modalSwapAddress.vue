@@ -27,7 +27,6 @@
 </template>
 
 <script setup>
-// import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import { ref, defineEmits, defineProps } from "vue";
 
 const open = ref(false);
@@ -36,7 +35,6 @@ const props = defineProps({
     idUser: Number,
 });
 const Cancel = () => {
-    // open.value = false;
     emit("cancel");
 };
 

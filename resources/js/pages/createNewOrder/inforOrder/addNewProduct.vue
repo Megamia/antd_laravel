@@ -80,12 +80,7 @@
                         </div>
                         <div style="height: 1000px; width: 100%" />
                     </a-checkbox-group>
-                    <!-- <a-radio-group v-model:value="a">
-                    <a-button type="text" @click="addNewUser">
-                        <CaAddAlt />Thêm mới sản phẩm
-                    </a-button>
-
-                </a-radio-group> -->
+                    
                 </div>
             </div>
         </div>
@@ -114,13 +109,7 @@ const emit = defineEmits(["choosedProduct", "fetchData"]);
 
 const tag = ref("");
 const a = ref([1]);
-// if (eventBus.product.idProduct) {
-//     for (let i = 0; i < eventBus.product.idProduct.length; i++) {
-//         console.log(eventBus.product.idProduct[i].value);
-//     }
-// }
-// a.value = eventBus.product.idProduct.split(",").map((item) => item.trim());
-// const selectedUser = ref("");
+
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
 
@@ -132,28 +121,13 @@ const showModalFilterWithSelection = () => {
 const filterWithTag = (data) => {
     isShowModalFilterWithSelection.value =
         !isShowModalFilterWithSelection.value;
-    // console.log("filterWithTag:", data);
     tag.value = data;
-    // console.log("tag.value:", tag.value);
     fetchData();
 };
-// const click = () => {
-//     if (a.value === "guest") {
-//         console.log("Đã chọn khách lẻ");
-//     } else {
-//         selectedUser.value = data.value.find((user) => user.id === a.value);
-//         if (selectedUser.value) {
-//             console.log("Đã chọn user: ", selectedUser.value.name);
-//         } else {
-//             console.log(a.value);
-//         }
-//     }
-// };
 
 const data = ref({});
 
 const fetchData = async () => {
-    // console.log(eventBus.product.idProduct);
     if (eventBus.product.idProduct) {
         let values = Object.values(eventBus.product.idProduct);
         eventBus.product.idProduct = values.join(",").split(",").map(Number);
@@ -162,7 +136,6 @@ const fetchData = async () => {
 
     try {
         if (tag.value) {
-            // console.log(tag.value);
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
                 {
@@ -171,7 +144,6 @@ const fetchData = async () => {
             );
             if (response.data.status === 1) {
                 data.value = response.data.inforProductWithTag;
-                // console.log(data.value);
                 return data.value;
             } else {
                 console.log("Faile");
@@ -198,17 +170,15 @@ const back = () => {
     buttonSave();
 };
 
-const addNewUser = () => {
-    router.push("/addProduct");
-};
+// const addNewUser = () => {
+//     router.push("/addProduct");
+// };
 
 const buttonSave = async () => {
     if (!a.value || a.value.length <= 0) {
         alert("Hãy chọn ít nhất 1 sản phẩm");
         a.value = [1];
     } else {
-        // console.log(a.value.sort().toString());
-        // console.log(a.value);
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
@@ -217,11 +187,9 @@ const buttonSave = async () => {
                 }
             );
             if (response.data.status === 1) {
-                // console.log(response.data.choosedProduct);
                 eventBus.product.idProduct = a.value.sort().toString();
                 router.back();
 
-                // console.log("evB: ", eventBus.product.idProduct);
                 // emit("choosedProduct", response.data.choosedProduct);
             } else {
                 console.log("No choosedProduct");

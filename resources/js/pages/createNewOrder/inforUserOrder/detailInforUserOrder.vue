@@ -140,15 +140,7 @@ const fetchData = async () => {
                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
                 { idAddress: null }
             );
-            // response = await axios.post(
-            //     `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
-            //     {
-            //         idUser: dataUserOrder.value.data.id,
-            //         idAddress: 1,
-            //     }
-            // );
         }
-
         handleResponseData(response.data);
     } catch (e) {
         console.log("Error: ", e);
@@ -157,7 +149,6 @@ const fetchData = async () => {
 
 const handleResponseData = (data) => {
     if (data.status === 1) {
-        // console.log(data);
         dataUserOrder.value = data.dataUserOrder;
         if (data.dataUser != "guest") {
             isGuest.value = false;
@@ -170,7 +161,6 @@ const handleResponseData = (data) => {
     } else {
         checkShow.value = false;
     }
-    // console.log("data: ", dataUserOrder.value);
     emit("InforUser", dataUserOrder.value);
 };
 

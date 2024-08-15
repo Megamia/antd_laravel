@@ -133,11 +133,6 @@ const fetchData = async () => {
     }
 };
 
-// onMounted(() => {
-//     if (formState.value.phoneNumber) {
-//         fetchData();
-//     }
-// });
 onMounted(() => fetchData());
 const filter = computed(() => {
     if (formState.value.phoneNumber) {
@@ -154,7 +149,6 @@ const filter = computed(() => {
 
 const b = ref([]);
 const inforUserSelected = (a) => {
-    // console.log(a);
     show.value = !show.value;
     b.value = dataUser.value.filter((item) => item.id === a);
     formState.value.username = b.value[0].name;
@@ -173,7 +167,6 @@ const onFinish = async () => {
             payload
         );
         if (response.data.status === 1) {
-            // console.log("Success: ", formState.value);
             alert(`Thêm mới người dùng ${formState.value.username} thành công`);
             router.back();
         } else {

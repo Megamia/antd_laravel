@@ -93,7 +93,6 @@ const percentValueNumberInput = () => {
             percentValue.value.percentText = "0";
         } else {
             percentValue.value.percentText = inputPercentValue;
-            // console.log(inputPercentValue);
         }
     }
 };
@@ -123,16 +122,10 @@ const apply = () => {
         alert("Chưa nhập đủ");
     } else {
         if (option.value === 1) {
-            // console.log("percentValue: ", percentValue.value);
-            // console.log(
-            //     percentValue.value.percentText,
-            //     typeof percentValue.value.percentText
-            // );
             emit("valueInModalDiscount", percentValue.value.percentText, {
                 message: "percent",
             });
         } else if (option.value === 2) {
-            // console.log("moneyValue: ", moneyValue.value);
             if (
                 moneyValue.value.moneyText > eventBus.product.priceProduct &&
                 eventBus.product.priceProduct
@@ -140,11 +133,6 @@ const apply = () => {
                 alert("Không thể giảm giá cao hơn giá sản phẩm");
                 return;
             } else {
-                // console.log(
-                //     moneyValue.value.moneyText ,
-                //     typeof moneyValue.value.moneyText,
-                //     eventBus.product.priceProduct
-                // );
                 emit("valueInModalDiscount", moneyValue.value.moneyText, {
                     message: "money",
                 });

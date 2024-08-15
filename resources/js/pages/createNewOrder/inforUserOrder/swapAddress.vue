@@ -87,9 +87,7 @@ const router = useRouter();
 const route = useRoute();
 const open = ref(false);
 let idUser = 0;
-// const showModal = () => {
-//     open.value = true;
-// };
+
 const address = ref("");
 
 const id = route.params.id;
@@ -114,7 +112,6 @@ const Apply = async (id) => {
     } catch (e) {
         console.log("Error: ", e);
     }
-    // deleteAddress();
 };
 
 const showModal = (id) => {
@@ -122,21 +119,6 @@ const showModal = (id) => {
     idUser = id;
 };
 
-// const deleteAddress = async (id) => {
-//     try {
-//         const response = await axios.delete(
-//             `${import.meta.env.VITE_APP_URL_API}/deleteAddress/${id}`
-//         );
-//         if (response.data.status === 1) {
-//             console.log("Delete address success");
-//             await fetchData();
-//         } else {
-//             console.log("Faile to delete address");
-//         }
-//     } catch (e) {
-//         console.log("Error: ", e);
-//     }
-// };
 
 const fetchData = async () => {
     try {
@@ -146,14 +128,9 @@ const fetchData = async () => {
                 id: id,
             }
         );
-        // console.log("id: ", id);
         if (response.data.status === 1) {
-            // console.log("data: ", response.data.DetailAddress);
             address.value = response.data.DetailAddress;
-            // console.log("address.value: ", address.value);
         } else {
-            // console.log(response.data.DetailAddress);
-            // console.log(response.data.AddressUserWithId);
             return (address.value = null);
         }
     } catch (e) {
@@ -167,12 +144,10 @@ const back = () => {
 };
 
 const addNewAddress = () => {
-    // console.log(id);
     router.push({
         name: "AddNewAddress",
         params: { id },
     });
-    // console.log(address.value);
 };
 
 const buttonSave = async () => {
@@ -187,11 +162,11 @@ const buttonSave = async () => {
                         idAddress: a.value,
                     }
                 );
-                if (response.data.status === 1) {
-                    // console.log(response.data.AddNewInforUser);
-                } else {
-                    // console.log(response.data.InforUser);
-                }
+                // if (response.data.status === 1) {
+
+                // } else {
+
+                // }
             } catch (e) {
                 console.log("Error: ", e);
             }

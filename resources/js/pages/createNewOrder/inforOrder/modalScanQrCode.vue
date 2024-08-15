@@ -13,11 +13,9 @@
                         </div>
                         <div class="physicalCode" @click="showScan">
                             <span class="name">Mã vật lý</span>
-                            <!-- <StreamBarcodeReader v-if="open" /> -->
                         </div>
                         <div class="IMEICode" @click="showScan">
                             <span class="name">Mã định danh imei/serial</span>
-                            <!-- <StreamBarcodeReader v-if="open" /> -->
                         </div>
                     </div>
                     <div class="buttonChange">
@@ -32,7 +30,6 @@
 </template>
 
 <script setup>
-// import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import { ref, defineEmits } from "vue";
 
@@ -43,7 +40,6 @@ const showScan = () => {
     open.value = true;
 };
 const Cancel = () => {
-    // open.value = false;
     emit("closeModalScanQrCode");
 };
 </script>

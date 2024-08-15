@@ -98,15 +98,11 @@ const props = defineProps({
 });
 const priceProduct = ref("");
 const defaultPrice = ref("");
-// onMounted(() => {
-//     console.log("props.costProduct: " + props.costProduct);
-// });
 
 let upNumberPercent = 0;
 let downNumberPercent = 0;
 const selectOptions = ref(1);
 
-// const cost = ref("249.000");
 const newCost = ref("");
 const currentChange = ref("direct");
 
@@ -137,7 +133,6 @@ const refresh = async () => {
                 }
             }
         } else if (response.data.status === 0) {
-            // console.log(response.data.choosedProduct);
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -148,10 +143,6 @@ const Cancel = () => {
     emit("closeModalCostOrder");
 };
 
-// priceProduct.value = priceProduct.value.replace(
-//             /\B(?=(\d{3})+(?!\d))/g,
-//             "."
-//         );
 const fetchData = async () => {
     try {
         const response = await axios.post(
@@ -162,7 +153,6 @@ const fetchData = async () => {
         );
         if (response.data.status === 1) {
             for (let i = 0; i < response.data.choosedProduct.length; i++) {
-                // console.log(response.data.choosedProduct[i].price);
                 priceProduct.value = response.data.choosedProduct[i].price;
                 formatValue();
             }
@@ -223,7 +213,6 @@ const Apply = async () => {
         if (response.data.status === 1) {
             priceProduct.value = response.data.newCost;
             formatValue();
-            // console.log("Cost: " + priceProduct.value);
             emit("newCost", priceProduct.value);
         } else {
             console.log("Không thay đổi giá");

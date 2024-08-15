@@ -56,22 +56,8 @@ import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 
 const a = ref(null);
-// const selectedUser = ref("");
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
-
-// const click = () => {
-//     if (a.value === "guest") {
-//         console.log("Đã chọn khách lẻ");
-//     } else {
-//         selectedUser.value = data.value.find((user) => user.id === a.value);
-//         if (selectedUser.value) {
-//             console.log("Đã chọn user: ", selectedUser.value.name);
-//         } else {
-//             console.log(a.value);
-//         }
-//     }
-// };
 
 const data = ref({});
 
@@ -103,15 +89,6 @@ const addNewUser = () => {
 
 const buttonSave = async () => {
     try {
-        // if (a.value === "guest") {
-        //     console.log("Đã chọn khách lẻ");
-        // } else if (a.value && a.value != "guest") {
-        //     selectedUser.value = data.value.find((user) => user.id === a.value);
-        //     console.log("Đã chọn user: ", selectedUser.value);
-        // }
-
-        // router.back();
-
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
             {
@@ -119,14 +96,7 @@ const buttonSave = async () => {
             }
         );
         if (response.data.status === 1) {
-            // if (a.value === "guest") {
-            //     console.log("Đã chọn: ", response.data.dataUserOrder);
-            // } else {
-            //     console.log("Đã chọn: ", response.data.dataUserOrder.name);
-            // }
             router.back();
-        } else {
-            // console.log("Faile");
         }
     } catch (e) {
         console.log("Lỗi: " + e);

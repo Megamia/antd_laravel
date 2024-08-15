@@ -71,11 +71,8 @@ const fetchData = async () => {
         if (response.data.status === 1) {
             if (response.data.dataUserOrder != "guest") {
                 dataUserOrder.value = response.data.dataUserOrder.name;
-                //  console.log(dataUserOrder.value);
             } else {
                 dataUserOrder.value = response.data.dataUserOrder;
-
-                // console.log(dataUserOrder.value);
             }
             showChoose.value = false;
         } else {
@@ -91,14 +88,8 @@ const fet = async () => {
     fetchData();
 };
 
-// const dataUser = ref("");
 const InforUser = async (data) => {
-    // console.log(data);
-    //
     emit("dataInforUser", data);
-    // dataUser.value = data;
-    // console.log("data: ", dataUser.value);
-    // console.log(data);
 };
 onMounted(() => fetchData());
 

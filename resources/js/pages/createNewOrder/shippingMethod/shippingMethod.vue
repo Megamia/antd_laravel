@@ -33,22 +33,10 @@ const closeModalShipping = () => {
 };
 const valueInModalShipping = (data1, data2) => {
     isModalShipping.value = !isModalShipping.value;
-    // valueShipping.value = data1.toLocaleString("de-DE", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    // });
-    // valueShipping.value = valueShipping.value.replace(
-    //     /\B(?=(\d{3})+(?!\d))/g,
-    //     "."
-    // );
     valueShipping.value = data1 + " " + data2;
-    // console.log(valueShipping.value);
 };
 //ModalShipping
 
-const nothing = () => {
-    alert("Chưa xử lý sự kiện này");
-};
 </script>
 
 <style scoped>

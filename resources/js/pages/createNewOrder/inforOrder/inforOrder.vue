@@ -202,7 +202,6 @@ const isShowModalCostOrder = ref(false);
 
 const showModalCostOrder = (data) => {
     idProduct = data;
-    // console.log("idProduct: ", idProduct);
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
 };
 
@@ -211,9 +210,7 @@ const closeModalCostOrder = () => {
 };
 
 const newCostProduct = (data) => {
-    // console.log(data);
     fetchData();
-    // newCost.value = data;
     isShowModalCostOrder.value = !isShowModalCostOrder.value;
 };
 
@@ -245,10 +242,6 @@ const closeModalScanQrCode = () => {
     isModalScanQRCode.value = false;
 };
 
-// const clickShowModal = () => {
-//     emit("showModal");
-// };
-
 const show = () => {
     showOrder.value = !showOrder.value;
     emit("show");
@@ -256,7 +249,6 @@ const show = () => {
 
 onMounted(async () => {
     await fetchData();
-    // console.log(dataProductSelected.value);
     if (
         dataProductSelected.value &&
         dataProductSelected.value != "No choosedProduct"
@@ -309,7 +301,6 @@ const fetchTotalPrice = () => {
         );
         priceProduct = priceProduct.replace(/\,/g, "");
 
-        // console.log(priceProduct);
         let numberSelectedProduct =
             numberSelected.value[dataProductSelected.value[i].id] ?? 1;
         totalPriceNumber += priceProduct * numberSelectedProduct;
@@ -318,12 +309,8 @@ const fetchTotalPrice = () => {
 
     totalPrice.value = totalPriceNumber.toString();
     totalPrice.value = totalPrice.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // .toLocaleString("de-DE", {
-    //     maximumFractionDigits: 2,
-    // });
     eventBus.product.priceProduct = totalPriceNumber;
     emit("fetchData");
-    // console.log("totalPrice: " + totalPrice, "type: ", typeof totalPrice.value);
 };
 
 const fetchData = async () => {
@@ -345,14 +332,12 @@ const fetchData = async () => {
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
-            // console.log(dataProductSelected.value);
         } catch (e) {
             console.log("Error: ", e);
         }
     } else {
         dataProductSelected.value = "No choosedProduct";
     }
-    // console.log(countProduct, totalPrice.value);
     if (
         dataProductSelected.value &&
         dataProductSelected.value != "No choosedProduct"
@@ -372,7 +357,6 @@ const fetchData = async () => {
                 numberSelected: numberSelected.value[item.id],
             };
         }
-        // console.log("productSelected: ", productSelected);
         emit("productSelected", productSelected);
     }
 
@@ -385,9 +369,6 @@ const fetchData = async () => {
 };
 
 let countProduct = 0;
-// onMounted(() => fetchData());
-
-// let sum = 0;
 
 const del = (id) => {
     dataProductSelected.value = dataProductSelected.value.filter(
@@ -395,7 +376,6 @@ const del = (id) => {
     );
 
     eventBus.product.idProduct = eventBus.product.idProduct.replace(id, "");
-    // console.log(eventBus.product.idProduct);
 
     countProduct = eventBus.product.idProduct.replace(/\,/g, "");
     countProduct = countProduct.length;

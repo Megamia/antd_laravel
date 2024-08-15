@@ -131,13 +131,8 @@ const back = () => {
 
 const fetchData = () => {
     checked.value = eventBus.voucher.isLoyalty;
-    // if (eventBus.voucher.isLoyalty) {
-    //     checked.value = eventBus.voucher.isLoyalty;
-    // }
-    // console.log(eventBus.voucher.isLoyalty);
     if (eventBus.product.priceProduct !== 0) {
-        // console.log("evBPrice: " + eventBus.product.priceProduct);
-        // console.log("discount: " + totalPrice, typeof totalPrice);
+        
     } else {
         console.log("Chưa chọn sản phẩm nào");
     }
@@ -148,7 +143,7 @@ onMounted(() => fetchData());
 // ModalCode
 
 const test = () => {
-    // console.log(checked.value);
+
 };
 const isShowModalCode = ref(false);
 
@@ -163,13 +158,11 @@ const valueInModalCode = (dataValueInModalCode) => {
     totalCode = dataValueInModalCode;
     totalCodeString.value = dataValueInModalCode;
     totalCode = totalCode.replace(/\./g, "");
-    // console.log("Giá được giảm từ modal Code: ", totalCode);
     fetchTotal();
 };
 // ModalCode
 
 // ModalDiscount
-
 const isShowModalDiscount = ref(false);
 
 const showModalDiscount = () => {
@@ -186,23 +179,17 @@ const valueInModalDiscount = (dataValueInModalDiscount, message) => {
     } else if (message.message === "money") {
         totalDiscount = parseFloat(dataValueInModalDiscount);
     }
-    // valueDiscount.value = totalDiscount.toLocaleString("de-DE", {
-    //     maximumFractionDigits: 2,
-    // });
     valueDiscount.value = totalDiscount.toString();
     valueDiscount.value = valueDiscount.value.replace(
         /\B(?=(\d{3})+(?!\d))/g,
         ","
     );
-    // console.log(valueDiscount.value);
-    // console.log("Phần trăm được giảm từ modal Discount: ", valueDiscount.value);
     fetchTotal();
 };
 
 // ModalDiscount
 
 //ModalPromotion
-
 const isShowModalPromotion = ref(false);
 const showModalPromotion = () => {
     isShowModalPromotion.value = !isShowModalPromotion.value;
@@ -213,38 +200,23 @@ const selectedInModalPromotion = ref({
     sltId: [],
 });
 const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
-    // const array=[];
     isShowModalPromotion.value = !isShowModalPromotion.value;
-    // console.log("data: ", data);
-    // for (let i = 0; i < Object.keys(data).length; i++) {
-    //     console.log("data: ", data[i]["id"]);
-    //     array.push(data[i]["id"]);
-
-    //     totalPro += array[i];
-    // }
     totalPro = datavalueInModalPromotion;
     totalProString.value = datavalueInModalPromotion;
     totalPro = totalPro.replace(/\./g, "");
     totalProString.value = totalProString.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // console.log("Giá được giảm từ modal Promotion: ", totalPro);
 
     selectedInModalPromotion.value.sltId = slt;
     fetchTotal();
-    // console.log(
-    //     "selectedInModalPromotion .value.sltId: ",
-    //     selectedIdInModalPromotion.value.sltId
-    // );
 };
 
 //ModalPromotion
 
-// let total = 0;
 const total = ref("0");
 const buttonSave = () => {
     if (total.value === "0") {
         eventBus.voucher.clearValueVoucher();
     }
-    // console.log(checked.value);
     eventBus.voucher.isLoyalty = checked.value;
     fetchData();
     router.back();
@@ -254,22 +226,11 @@ const fetchTotal = () => {
     let totalValue = 0;
 
     totalValue = parseFloat(totalCode) + parseFloat(totalPro) + totalDiscount;
-    // console.log(
-    //     "parseFloat(totalCode): " + parseFloat(totalCode),
-    //     "\n",
-    //     "totalDiscount: " + totalDiscount,
-    //     "\n",
-    //     "parseFloat(totalPro): " + parseFloat(totalPro)
-    // );
     if (checked.value === true) {
         totalValue = totalValue + 30000;
     }
-    // if(totalValue.toString().length>3)
-    // console.log(totalValue.toString().length);
-    // totalValue = totalValue.replace(/\./g, "");
     eventBus.voucher.valueVoucher = totalValue;
     totalValue = totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    // console.log("totalValue: " + totalValue);
     total.value = totalValue;
 };
 </script>
