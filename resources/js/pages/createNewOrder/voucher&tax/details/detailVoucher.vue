@@ -121,8 +121,6 @@ import eventBus from "../../../../eventBus";
 const router = useRouter();
 const checked = ref(null);
 const click = () => {
-    // console.log(checked.value);
-
     fetchTotal();
 };
 const back = () => {
@@ -134,13 +132,6 @@ const test=()=>{
 }
 
 const fetchData = () => {
-    console.log(
-        "Code: ",
-        totalCode,
-        "\n",
-        "Prom: ",
-        selectedInModalPromotion.value.sltId
-    );
     checked.value = eventBus.voucher.isLoyalty;
     if (eventBus.product.priceProduct !== 0) {
     } else {
