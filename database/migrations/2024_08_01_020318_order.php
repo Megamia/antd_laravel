@@ -15,7 +15,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('DetailOrder')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('idVoucher');
+            $table->unsignedBigInteger('idVoucher')->nullable();
             $table->foreign('idVoucher')
                 ->references('id')
                 ->on('Voucher')

@@ -7,6 +7,8 @@ use App\Models\VoucherPromotionValue;
 use App\Models\VoucherCodeValue;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isNull;
+
 class voucherController extends Controller
 {
     //VoucherCode
@@ -59,44 +61,84 @@ class voucherController extends Controller
     public function createVoucher(Request $request)
     {
         $data = $request->only('idVoucherCode', 'idVoucherPromotion');
-        $idVoucherCode = $data['idVoucherCode'];
-        $idVoucherPromotions = $data['idVoucherPromotion'];
+        $idVoucherCode = $data['idVoucherCode'] ?? null;
+        $idVoucherPromotions = $data['idVoucherPromotion'] ?? [];
 
-        if (!is_array($idVoucherPromotions)) {
-            return response()->json(['status' => 0, 'message' => 'idVoucherPromotion phải là một mảng']);
+        $existingVouchers = Voucher::where(function ($query) use ($idVoucherCode, $idVoucherPromotions) {
+            if (!is_null($idVoucherCode) && $idVoucherCode !== 0) {
+                $query->where('idVoucherCodeValue', $idVoucherCode);
+            }
+            if (!empty($idVoucherPromotions)) {
+                $query->whereIn('idVoucherPromotionValue', $idVoucherPromotions);
+            }
+        })->get();
+
+        if ($existingVouchers->isNotEmpty()) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'Voucher(s) already exists',
+                'existingVouchers' => $existingVouchers
+            ]);
         }
-
-        $existingVouchers = Voucher::where('idVoucherCodeValue', $idVoucherCode)
-            ->whereIn('idVoucherPromotionValue', $idVoucherPromotions)
-            ->get();
-
-        $existingVoucherPromotions = $existingVouchers->pluck('idVoucherPromotionValue')->toArray();
-
-        $newVoucherPromotions = array_diff($idVoucherPromotions, $existingVoucherPromotions);
 
         $createVouchers = [];
         $failedOrders = [];
 
-        if (empty($newVoucherPromotions)) {
-            return response()->json([
-                'status' => 1,
-                'createVoucher' => $existingVouchers,
-                'message' => 'Tất cả voucher đã tồn tại'
-            ]);
-        }
-
-        foreach ($newVoucherPromotions as $idVoucherPromotion) {
+        if (($idVoucherCode === 0 || is_null($idVoucherCode)) && empty($idVoucherPromotions)) {
             try {
                 $createVoucher = Voucher::create([
-                    'idVoucherCodeValue' => $idVoucherCode,
-                    'idVoucherPromotionValue' => $idVoucherPromotion,
+                    'idVoucherCodeValue' => null,
+                    'idVoucherPromotionValue' => null,
                 ]);
                 $createVouchers[] = $createVoucher;
             } catch (\Exception $e) {
-                $failedOrders[] = [
-                    'idVoucherPromotion' => $idVoucherPromotion,
-                    'error' => $e->getMessage()
-                ];
+                $failedOrders[] = ['error' => $e->getMessage()];
+            }
+        }
+
+        if ((is_null($idVoucherCode) || $idVoucherCode === 0) && !empty($idVoucherPromotions)) {
+            foreach ($idVoucherPromotions as $idVoucherPromotion) {
+                try {
+                    $createVoucher = Voucher::create([
+                        'idVoucherCodeValue' => null,
+                        'idVoucherPromotionValue' => $idVoucherPromotion,
+                    ]);
+                    $createVouchers[] = $createVoucher;
+                } catch (\Exception $e) {
+                    $failedOrders[] = [
+                        'idVoucherPromotion' => $idVoucherPromotion,
+                        'error' => $e->getMessage()
+                    ];
+                }
+            }
+        }
+
+        if (!is_null($idVoucherCode) && $idVoucherCode !== 0 && empty($idVoucherPromotions)) {
+            try {
+                $createVoucher = Voucher::create([
+                    'idVoucherCodeValue' => $idVoucherCode,
+                    'idVoucherPromotionValue' => null,
+                ]);
+                $createVouchers[] = $createVoucher;
+            } catch (\Exception $e) {
+                $failedOrders[] = ['error' => $e->getMessage()];
+            }
+        }
+
+        if (!is_null($idVoucherCode) && $idVoucherCode !== 0 && !empty($idVoucherPromotions)) {
+            foreach ($idVoucherPromotions as $idVoucherPromotion) {
+                try {
+                    $createVoucher = Voucher::create([
+                        'idVoucherCodeValue' => $idVoucherCode,
+                        'idVoucherPromotionValue' => $idVoucherPromotion,
+                    ]);
+                    $createVouchers[] = $createVoucher;
+                } catch (\Exception $e) {
+                    $failedOrders[] = [
+                        'idVoucherPromotion' => $idVoucherPromotion,
+                        'error' => $e->getMessage()
+                    ];
+                }
             }
         }
 
@@ -110,7 +152,7 @@ class voucherController extends Controller
 
         return response()->json([
             'status' => 1,
-            'createVoucher' => array_merge($existingVouchers->toArray(), $createVouchers),
+            'createVoucher' => $createVouchers,
             'message' => 'Voucher đã được tạo thành công'
         ]);
     }

@@ -108,9 +108,7 @@ const ClickShowModal = () => {
     showModal.value = !showModal.value;
 };
 
-const test = () => {
-    
-};
+const test = () => {};
 
 let giamgia = 0;
 const voucher = ref("");
@@ -275,10 +273,17 @@ const createVoucher = async (idDetailOrder) => {
                 idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
             }
         );
+        console.log("Log: ", response.data);
         if (response.data.status === 1) {
-            data.value = response.data.createVoucher;
-            const idVoucher = data.value.map((item) => item.id);
-            await fetchDataInforUser(idDetailOrder, idVoucher);
+            if (response.data.message !== "Voucher(s) already exists") {
+                console.log("1");
+                data.value = response.data.createVoucher;
+                const idVoucher = data.value.map((item) => item.id);
+                await fetchDataInforUser(idDetailOrder, idVoucher);
+            } else {
+                console.log("2");
+                await fetchDataInforUser(idDetailOrder, null);
+            }
         } else {
             alert("Có lỗi khi thêm voucher");
             return;

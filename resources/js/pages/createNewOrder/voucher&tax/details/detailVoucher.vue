@@ -129,10 +129,20 @@ const back = () => {
     router.back();
 };
 
+const test=()=>{
+    fetchData();
+}
+
 const fetchData = () => {
+    console.log(
+        "Code: ",
+        totalCode,
+        "\n",
+        "Prom: ",
+        selectedInModalPromotion.value.sltId
+    );
     checked.value = eventBus.voucher.isLoyalty;
     if (eventBus.product.priceProduct !== 0) {
-        
     } else {
         console.log("Chưa chọn sản phẩm nào");
     }
@@ -142,9 +152,6 @@ onMounted(() => fetchData());
 
 // ModalCode
 
-const test = () => {
-
-};
 const isShowModalCode = ref(false);
 
 const showModalCode = () => {
@@ -197,16 +204,23 @@ const showModalPromotion = () => {
 let totalPro = 0;
 const totalProString = ref("0");
 const selectedInModalPromotion = ref({
-    sltId: [],
+    sltId: [null],
 });
 const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
     isShowModalPromotion.value = !isShowModalPromotion.value;
     totalPro = datavalueInModalPromotion;
     totalProString.value = datavalueInModalPromotion;
     totalPro = totalPro.replace(/\./g, "");
-    totalProString.value = totalProString.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    totalProString.value = totalProString.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ","
+    );
 
-    selectedInModalPromotion.value.sltId = slt;
+    if (slt.length > 0) {
+        selectedInModalPromotion.value.sltId = slt;
+    } else {
+        selectedInModalPromotion.value.sltId = null;
+    }
     fetchTotal();
 };
 
