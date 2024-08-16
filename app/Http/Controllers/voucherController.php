@@ -64,14 +64,25 @@ class voucherController extends Controller
         $idVoucherCode = $data['idVoucherCode'] ?? null;
         $idVoucherPromotions = $data['idVoucherPromotion'] ?? [];
 
-        $existingVouchers = Voucher::where(function ($query) use ($idVoucherCode, $idVoucherPromotions) {
-            if (!is_null($idVoucherCode) && $idVoucherCode !== 0) {
+        $query = Voucher::query();
+
+        if (!is_null($idVoucherCode)) {
+            if ($idVoucherCode === 0) {
+                $query->whereNull('idVoucherCodeValue');
+            } else {
                 $query->where('idVoucherCodeValue', $idVoucherCode);
             }
-            if (!empty($idVoucherPromotions)) {
-                $query->whereIn('idVoucherPromotionValue', $idVoucherPromotions);
-            }
-        })->get();
+        } else {
+            $query->whereNull('idVoucherCodeValue');
+        }
+
+        if (!empty($idVoucherPromotions)) {
+            $query->whereIn('idVoucherPromotionValue', $idVoucherPromotions);
+        } else {
+            $query->whereNull('idVoucherPromotionValue');
+        }
+
+        $existingVouchers = $query->get();
 
         if ($existingVouchers->isNotEmpty()) {
             return response()->json([

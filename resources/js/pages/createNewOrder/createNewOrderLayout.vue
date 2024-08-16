@@ -273,16 +273,16 @@ const createVoucher = async (idDetailOrder) => {
                 idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
             }
         );
-        console.log("Log: ", response.data);
         if (response.data.status === 1) {
+            console.log(response.data);
             if (response.data.message !== "Voucher(s) already exists") {
-                console.log("1");
                 data.value = response.data.createVoucher;
                 const idVoucher = data.value.map((item) => item.id);
                 await fetchDataInforUser(idDetailOrder, idVoucher);
             } else {
-                console.log("2");
-                await fetchDataInforUser(idDetailOrder, null);
+                data.value = response.data.existingVouchers;
+                const idVoucher = data.value.map((item) => item.id);
+                await fetchDataInforUser(idDetailOrder, idVoucher);
             }
         } else {
             alert("Có lỗi khi thêm voucher");

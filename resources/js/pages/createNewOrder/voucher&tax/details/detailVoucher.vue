@@ -127,9 +127,9 @@ const back = () => {
     router.back();
 };
 
-const test=()=>{
+const test = () => {
     fetchData();
-}
+};
 
 const fetchData = () => {
     checked.value = eventBus.voucher.isLoyalty;

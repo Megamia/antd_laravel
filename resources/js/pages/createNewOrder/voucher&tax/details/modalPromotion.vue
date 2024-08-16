@@ -74,15 +74,14 @@ const props = defineProps({
     sltedId: Object,
 });
 const fetchData = async () => {
-    if (eventBus.voucher.idVoucherPromotion) {
-        slt.value = eventBus.voucher.idVoucherPromotion;
-    }
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_APP_URL_API}/dataValueVoucherPromotion`
         );
         listPromotion.value = response.data.dataValueVoucherPromotion;
-        if (props.sltedId && Object.keys(props.sltedId).length > 0) {
+        if (eventBus.voucher.idVoucherPromotion) {
+            slt.value = eventBus.voucher.idVoucherPromotion;
+        } else if (props.sltedId && Object.keys(props.sltedId).length > 0) {
             slt.value = props.sltedId;
         }
         // if (response.data.status === 1) {
