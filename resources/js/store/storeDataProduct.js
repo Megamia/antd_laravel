@@ -1,31 +1,31 @@
-const storeDataUser = {
+const storeDataProduct = {
     namespaced: true,
     state: {
-        dataUserOrder: null,
-        userExpiry: null,
+        price: null,
+        idDetailProduct: null,
     },
     mutations: {
-        setDataUserOrder(state, payload) {
-            state.dataUserOrder = payload.dataUserOrder;
-            state.userExpiry = payload.userExpiry;
+        setDataProduct(state, payload) {
+            state.price = payload.price;
+            state.idDetailProduct = payload.idDetailProduct;
         },
-        clearDataUserOrder(state) {
-            state.dataUserOrder = null;
-            state.userExpiry = null;
+        clearDataProduct(state) {
+            state.price = null;
+            state.idDetailProduct = null;
         },
     },
     actions: {
-        updateDataUserOrder({ commit }, data) {
-            commit("setDataUserOrder", data);
+        updateDataProduct({ commit }, data) {
+            commit("setDataProduct", data);
         },
-        clearDataUserOrder({ commit }) {
-            commit("clearDataUserOrder");
+        clearDataProduct({ commit }) {
+            commit("clearDataProduct");
         },
     },
     getters: {
-        getDataUserOrder: (state) => state.dataUserOrder,
-        getUserExpiry: (state) => state.userExpiry,
+        getPrice: (state) => state.price,
+        getIdDetailProduct: (state) => state.idDetailProduct,
     },
 };
 
-export default storeDataUser;
+export default storeDataProduct;
