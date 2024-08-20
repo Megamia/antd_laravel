@@ -177,7 +177,7 @@ const buttonSave = async () => {
             }
             router.back();
         } else {
-            alert("Chưa chọn địa chỉ mới");
+            alert("Chưa chọn địa chỉ");
         }
     } catch (e) {
         console.log("Lỗi: " + e);

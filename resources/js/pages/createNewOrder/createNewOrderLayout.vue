@@ -13,7 +13,7 @@
         </div>
         <div class="content">
             <div class="userOrder">
-                <UserOrder @data-infor-user="dataInforUser" />
+                <UserOrder />
             </div>
 
             <div class="productOrderDiv">
@@ -91,9 +91,10 @@ import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
 import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import axios from "axios";
 import eventBus from "../../eventBus";
+import store from "../../store";
 // import axios from "axios";
 
 const router = useRouter();
@@ -107,8 +108,6 @@ const showOrHidden = () => {
 const ClickShowModal = () => {
     showModal.value = !showModal.value;
 };
-
-const test = () => {};
 
 let giamgia = 0;
 const voucher = ref("");
@@ -156,11 +155,31 @@ onMounted(() => fetchData());
 let priceProductValue = 0;
 
 //UserOrder
-const dataUser = ref("");
-const dataInforUser = (data) => {
-    dataUser.value = data;
+
+const dataUser = reactive({
+    value: {
+        inforUser: "",
+        inforAddress: "",
+    },
+});
+
+const test = () => {
+    // if (store.state.user.dataUser && store.state.address.dataAddress) {
+    //     dataUser.value.inforUser = store.state.user.dataUser;
+    //     dataUser.value.inforAddress = store.state.address.dataAddress;
+    //     console.log("Ok");
+    // } else {
+    //     console.log("Not ok");
+
+    //     return;
+    // }
+    if (store.state.user && store.state.address) {
+        console.log("Ok");
+    } else {
+        console.log("Not ok");
+        return;
+    }
 };
-onMounted(() => dataInforUser());
 //UserOrder
 
 //InforOrder
@@ -224,6 +243,7 @@ onMounted(() => fetchDataOrder());
 
 //CostOrder
 const createOrder = async () => {
+    test();
     await fetchDataOrder();
     await fetchDataIdAndPriceProduct();
     if (!dataUser.value || !product.value) {
@@ -292,25 +312,25 @@ const createVoucher = async (idDetailOrder) => {
     }
 };
 
-const fetchDataInforUser = async (idDetailOrder, idVoucher) => {
-    try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/InforUser`,
-            {
-                idUser: dataUser.value.dataUser.id,
-                idAddress: dataUser.value.address.id,
-            }
-        );
-        if (response.data.status === 1) {
-            const idInforUser = response.data.InforUser.id;
-            await completeCreateOrder(idDetailOrder, idInforUser, idVoucher);
-        } else {
-            console.log("Faile");
-        }
-    } catch (e) {
-        console.log("Error: ", e);
-    }
-};
+// const fetchDataInforUser = async (idDetailOrder, idVoucher) => {
+//     try {
+//         const response = await axios.post(
+//             `${import.meta.env.VITE_APP_URL_API}/InforUser`,
+//             {
+//                 idUser: dataUser.value.inforUser.id,
+//                 idAddress: dataUser.value.inforAddress.id,
+//             }
+//         );
+//         if (response.data.status === 1) {
+//             const idInforUser = response.data.InforUser.id;
+//             await completeCreateOrder(idDetailOrder, idInforUser, idVoucher);
+//         } else {
+//             console.log("Faile");
+//         }
+//     } catch (e) {
+//         console.log("Error: ", e);
+//     }
+// };
 
 const completeCreateOrder = async (idDetailOrder, idInforUser, idVoucher) => {
     try {

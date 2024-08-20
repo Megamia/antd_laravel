@@ -102,7 +102,7 @@ const buttonSave = async () => {
                 dataUser: response.data.dataUserOrder,
                 userExpiry: response.data.userExpiry,
             });
-            console.log(store.state.user.dataUser, store.state.user.userExpiry);
+            // console.log(store.state.user.dataUser, store.state.user.userExpiry);
             router.back();
         }
     } catch (e) {

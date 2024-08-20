@@ -21,9 +21,11 @@
 <script setup>
 import { GlStatusSuccess, CaAddAlt } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
+import store from "../../store";
 const router = useRouter();
 
 const createNewOrder = () => {
+    store.commit("clearAllData");
     router.push("/");
 };
 </script>
