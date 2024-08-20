@@ -120,7 +120,7 @@ class addressController extends Controller
     {
         $data = $request->only(['id']);
         $fetchDataAddress = Address::where('idUser', $data['id'])->get();
-        if ($fetchDataAddress) {
+        if ($fetchDataAddress->count() > 0) {
             return response()->json(['status' => 1, 'fetchDataAddress' => $fetchDataAddress]);
         } else {
             return response()->json(['status' => 0, 'fetchDataAddress' => 'No DataAddress']);

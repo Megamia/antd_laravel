@@ -175,7 +175,7 @@ const fetchData = () => {
                 dataAddress.value = store.state.dataAddress;
             }
             dataUserOrder.value = store.state.dataUserOrder;
-            console.log("data: ", dataUserOrder.value);
+            // console.log("data: ", dataUserOrder.value);
             if (store.state.dataUserOrder != "guest") {
                 isGuest.value = false;
                 isUser.value = true;

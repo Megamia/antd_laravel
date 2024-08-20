@@ -2,15 +2,21 @@
     <div class="mainBoomInfor">
         <div class="content">
             <div class="name">
-                <span>{{ dataUserOrder.name }} |
-                    {{ dataUserOrder.phoneNumber }}</span>
+                <span
+                    >{{ dataUserOrder.name }} |
+                    {{ dataUserOrder.phoneNumber }}</span
+                >
             </div>
             <div class="boomRate">
                 <div class="boomRateDiv">
-                    <span class="boomRateSpan">{{ boomRate }} shop đánh giá boom hàng</span>
+                    <span class="boomRateSpan"
+                        >{{ boomRate }} shop đánh giá boom hàng</span
+                    >
                 </div>
                 <div class="levelWaringDiv">
-                    <span class="levelWaringSpan">Cảnh báo cấp {{ levelWarning }}</span>
+                    <span class="levelWaringSpan"
+                        >Cảnh báo cấp {{ levelWarning }}</span
+                    >
                 </div>
             </div>
 
@@ -35,8 +41,10 @@
                         {{ quantityAddress }} địa chỉ giao hàng
                     </span>
                 </div>
-                <div class="detailAddress" >
-                    <span v-for="data in address" :key="data.id"> {{ data.data }}</span>
+                <div class="detailAddress">
+                    <span v-for="data in address" :key="data.id">
+                        {{ data.data }}</span
+                    >
                 </div>
             </div>
         </div>
@@ -46,6 +54,7 @@
 import { AkLocation } from "@kalimahapps/vue-icons";
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import store from "../../../store";
 
 const dataUserOrder = ref("");
 const boomRate = ref("5");
@@ -68,11 +77,14 @@ const address = ref([
 ]);
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
-        );
-        if (response.data.status === 1) {
-            dataUserOrder.value = response.data.dataUserOrder;
+        // const response = await axios.get(
+        //     `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        // );
+        // if (response.data.status === 1) {
+        //     dataUserOrder.value = response.data.dataUserOrder;
+        // }
+        if (store.state.dataUserOrder) {
+            dataUserOrder.value = store.state.dataUserOrder;
         } else {
             console.log("Faile");
         }
@@ -115,13 +127,13 @@ onMounted(() => fetchData());
 
             .boomRateSpan {
                 padding: 8px;
-                background-color: #FFCCC7;
+                background-color: #ffccc7;
                 border-radius: 4px;
             }
 
             .levelWaringSpan {
                 padding: 8px;
-                background-color: #FFF1B8;
+                background-color: #fff1b8;
                 border-radius: 4px;
             }
         }
@@ -153,37 +165,37 @@ onMounted(() => fetchData());
                 }
 
                 .cancelRateSpan {
-                    color: #FF4D4F;
+                    color: #ff4d4f;
                 }
             }
         }
-        .address{
+        .address {
             display: flex;
-            flex:1;
+            flex: 1;
             flex-direction: column;
-            gap:20px;
-            .quantityAddress{
+            gap: 20px;
+            .quantityAddress {
                 display: flex;
-                flex:1;
+                flex: 1;
                 flex-direction: row;
-                align-items:center ;
-                span{
+                align-items: center;
+                span {
                     display: flex;
-                    flex:1;
+                    flex: 1;
                     flex-direction: row;
-                    gap:10px;
-                    svg{
+                    gap: 10px;
+                    svg {
                         display: flex;
-                        color:#1890FF;
+                        color: #1890ff;
                     }
                 }
             }
-            .detailAddress{
+            .detailAddress {
                 display: flex;
-                flex:1;
+                flex: 1;
                 flex-direction: column;
                 padding-inline: 25px;
-                gap:20px;
+                gap: 20px;
                 font-size: 14px;
                 color: #00000073;
             }

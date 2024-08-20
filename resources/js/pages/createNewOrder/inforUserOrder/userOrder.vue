@@ -89,7 +89,7 @@ const fetchData = async () => {
         //     showChoose.value = true;
         // }
         // return;
-        console.log(store.state.dataUserOrder);
+        // console.log(store.state.dataUserOrder);
         if (store.state.dataUserOrder) {
             dataUserOrder.value = store.state.dataUserOrder;
             showChoose.value = false;

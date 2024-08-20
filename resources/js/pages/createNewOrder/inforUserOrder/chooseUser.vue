@@ -70,7 +70,7 @@ const fetchData = async () => {
         if (response.data.status === 1) {
             data.value = response.data.dataUser;
         } else if (response.data.status === 0) {
-            console.log(response.data);
+            // console.log(response.data);
         } else {
             console.log("Faile");
         }

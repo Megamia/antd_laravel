@@ -11,40 +11,67 @@
             </div>
             <div class="email">
                 <span class="nameData">Email</span>
-                <span class="data">{{ dataUserOrder.email
-                    }}</span>
+                <span class="data">{{ dataUserOrder.email }}</span>
             </div>
             <div class="text">
                 <span class="nameData">Tên trường text</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.text : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text ? dataUserOrder.text : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="number">
                 <span class="nameData">Tên trường số</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.phoneNumber : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.phoneNumber
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="time">
                 <span class="nameData">Tên trường thời gian</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.date : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text ? dataUserOrder.date : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="dropList">
                 <span class="nameData">Tên trường dropdown list</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.dropDown : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.dropDown
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="checkBox">
                 <span class="nameData">Tên trường checkbox</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.checkBox : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.checkBox
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="address">
                 <span class="nameData">Tên trường địa chỉ</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.address : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.address
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="phone">
                 <span class="nameData">Tên trường số điện thoại</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.number : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.number
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
             <div class="mail">
                 <span class="nameData">Trường email</span>
-                <span class="data">{{ dataUserOrder.text ? dataUserOrder.email2 : "Chưa có dữ liệu" }}</span>
+                <span class="data">{{
+                    dataUserOrder.text
+                        ? dataUserOrder.email2
+                        : "Chưa có dữ liệu"
+                }}</span>
             </div>
         </div>
     </div>
@@ -52,18 +79,24 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import store from "../../../store";
 
 const dataUserOrder = ref("");
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
-        );
-        if (response.data.status === 1) {
-            dataUserOrder.value = response.data.dataUserOrder;
+        // const response = await axios.get(
+        //     `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
+        // );
+        // if (response.data.status === 1) {
+        //     dataUserOrder.value = response.data.dataUserOrder;
+        // } else {
+
+        // }
+        if (store.state.dataUserOrder) {
+            dataUserOrder.value = store.state.dataUserOrder;
         } else {
-            
+            console.log("Lỗi");
         }
     } catch (e) {
         console.log("Error: ", e);

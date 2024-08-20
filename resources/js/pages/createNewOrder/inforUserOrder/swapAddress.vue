@@ -128,7 +128,6 @@ const fetchData = async () => {
             }
         );
         if (response.data.status === 1) {
-            // console.log("FetchDataAddress: ", response.data.fetchDataAddress);
             address.value = response.data.fetchDataAddress;
         } else {
             return (address.value = null);
@@ -164,7 +163,7 @@ const buttonSave = async () => {
                         idAddress: a.value,
                     }
                 );
-                console.log(response.data.swapAddress);
+                // console.log(response.data.swapAddress);
                 store.commit("setDataAddress", {
                     dataAddress: response.data.swapAddress,
                 });
