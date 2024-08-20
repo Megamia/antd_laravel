@@ -5,6 +5,7 @@ import router from "./router";
 import VueAxios from "vue-axios";
 import VueCookies from "vue-cookies";
 import axios from "axios";
+import store from "./store";
 import "ant-design-vue/dist/reset.css";
 import {
     Alert,
@@ -68,4 +69,5 @@ app.use(router)
     .use(Modal)
     .use(VueAxios, axios)
     .use(VueCookies)
+    .use(store)
     .mount("#app");

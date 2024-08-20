@@ -15,6 +15,7 @@ class Address extends Model
         'district',
         'ward',
         'address',
+        'idUser',
     ];
     public $timestamps = false;
     protected $table = 'Address';

@@ -20,10 +20,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('Voucher')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('idInforUser');
-            $table->foreign('idInforUser')
+            $table->unsignedBigInteger('idAddress');
+            $table->foreign('idAddress')
                 ->references('id')
-                ->on('InforUser')
+                ->on('Address')
                 ->onDelete('cascade');
             $table->timestamps();
         });

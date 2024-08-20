@@ -2,7 +2,7 @@
     <div class="mainSwapAddress">
         <div class="title">
             <AnOutlinedArrowLeft @click="back" />
-            <span > Đổi địa chỉ </span>
+            <span> Đổi địa chỉ </span>
         </div>
         <div class="content">
             <div class="userInfor">
@@ -80,6 +80,7 @@ import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import eventBus from "../../../eventBus";
+import store from "../../../store";
 import ModalSwapAddress from "./ModalSwapAddress.vue";
 
 const a = ref(null);
@@ -92,14 +93,13 @@ const address = ref("");
 
 const id = route.params.id;
 
-
 const Cancel = () => {
     open.value = false;
 };
 const Apply = async (id) => {
     try {
         const response = await axios.delete(
-            `${import.meta.env.VITE_APP_URL_API}/deleteAddress/${id}`
+            `${import.meta.env.VITE_APP_URL_API}/DeleteAddress/${id}`
         );
         if (response.data.status === 1) {
             alert("Delete address success");
@@ -119,17 +119,17 @@ const showModal = (id) => {
     idUser = id;
 };
 
-
 const fetchData = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/AddressUserWithId`,
+            `${import.meta.env.VITE_APP_URL_API}/FetchDataAddress`,
             {
                 id: id,
             }
         );
         if (response.data.status === 1) {
-            address.value = response.data.DetailAddress;
+            // console.log("FetchDataAddress: ", response.data.fetchDataAddress);
+            address.value = response.data.fetchDataAddress;
         } else {
             return (address.value = null);
         }
@@ -137,7 +137,9 @@ const fetchData = async () => {
         console.log("Error: ", e);
     }
 };
-onMounted(() => fetchData());
+onMounted(() => {
+    fetchData();
+});
 
 const back = () => {
     router.back();
@@ -156,12 +158,16 @@ const buttonSave = async () => {
             eventBus.id = a.value;
             try {
                 const response = await axios.post(
-                    `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
+                    `${import.meta.env.VITE_APP_URL_API}/SwapAddress`,
                     {
                         idUser: id,
                         idAddress: a.value,
                     }
                 );
+                console.log(response.data.swapAddress);
+                store.commit("setDataAddress", {
+                    dataAddress: response.data.swapAddress,
+                });
                 // if (response.data.status === 1) {
 
                 // } else {

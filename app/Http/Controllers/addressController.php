@@ -30,15 +30,13 @@ class addressController extends Controller
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                if (is_null($newAddress['idAddress'])) {
-                    $inforUser = InforUser::where('idUser', $user_id)
-                        ->orderBy('idAddress')
-                        ->first();
+                // if (is_null($newAddress['idAddress'])) {
+                //     $inforUser = Address::where('idUser', $user_id)->first();
 
-                    if ($inforUser && $inforUser->idAddress) {
-                        $newAddress['idAddress'] = $inforUser->idAddress;
-                    }
-                }
+                //     if ($inforUser && $inforUser->idUser) {
+                //         $newAddress['idAddress'] = $inforUser->idUser;
+                //     }
+                // }
 
                 $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
 
@@ -71,7 +69,7 @@ class addressController extends Controller
         $address->delete();
         return response()->json(['status' => 1, 'message' => "Delete address success"]);
     }
-    public function addNewAddress(Request $request)
+    public function AddNewAddress(Request $request)
     {
         $data = $request->only(
             'username',
@@ -79,27 +77,33 @@ class addressController extends Controller
             'city',
             'district',
             'ward',
-            'address'
+            'address',
+            'idUser'
         );
         $idUserWithPhone = DetailInforUserOrder::where('phoneNumber', $data['phoneNumber'])->first();
 
         if (is_null($data['username'])) {
             $data['username'] = 'user';
         }
-        $newAddress = Address::create([
-            'name' => $data['username'],
-            'phoneNumber' => $data['phoneNumber'],
-            'city' => $data['city'],
-            'district' => $data['district'],
-            'ward' => $data['ward'],
-            'address' => $data['address'],
-        ]);
+        if ($idUserWithPhone) {
+            return response()->json(['status' => 0, 'newAddress' => 'User has been already']);
+        } else {
 
-        return response()->json([
-            'status' => 1,
-            'message' => 'Address has been add to database',
-            'newAddress' => $newAddress
-        ]);
+            $newAddress = Address::create([
+                'name' => $data['username'],
+                'phoneNumber' => $data['phoneNumber'],
+                'city' => $data['city'],
+                'district' => $data['district'],
+                'ward' => $data['ward'],
+                'address' => $data['address'],
+                'idUser' => $data['idUser'],
+            ]);
+
+            return response()->json([
+                'status' => 1,
+                'newAddress' => $newAddress
+            ]);
+        }
     }
     public function DetailAddressWithIdUser(Request $request)
     {
@@ -110,6 +114,27 @@ class addressController extends Controller
             return response()->json(['status' => 1, 'DetailAddressWithIdUser' => $DetailAddressWithIdUser]);
         } else {
             return response()->json(['status' => 0, 'DetailAddressWithIdUser' => "No DetailAddressWithIdUser"]);
+        }
+    }
+    public function fetchDataAddress(Request $request)
+    {
+        $data = $request->only(['id']);
+        $fetchDataAddress = Address::where('idUser', $data['id'])->get();
+        if ($fetchDataAddress) {
+            return response()->json(['status' => 1, 'fetchDataAddress' => $fetchDataAddress]);
+        } else {
+            return response()->json(['status' => 0, 'fetchDataAddress' => 'No DataAddress']);
+        }
+    }
+    public function SwapAddress(Request $request)
+    {
+        $data = $request->only(['idUser', 'idAddress']);
+        $swapAddress = Address::where('idUser', $data['idUser'])
+            ->where('id', $data['idAddress'])->first();
+        if ($swapAddress) {
+            return response()->json(['status' => 1, 'swapAddress' => $swapAddress]);
+        } else {
+            return response()->json(['status' => 0, 'swapAddress' => 'Can not swapaddress']);
         }
     }
 }

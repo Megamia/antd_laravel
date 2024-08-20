@@ -21,35 +21,59 @@ class DetailInforUserOrderController extends Controller
     {
         $data = $request->only('id');
         if ($data['id'] === 'guest') {
-            $request->session()->put('user_id', 'guest');
-            $request->session()->put('user_id_expires_at', now()->addHours(1)); //addSeconds, addMinutes
-            return response()->json(['status' => 1, 'dataUserOrder' => 'Khách lẻ']);
+            $userData = 'guest';
+            $userExpiry = now()->addHours(1);
+            return response()->json([
+                'status' => 1,
+                'dataUserOrder' => $userData,
+                'userExpiry' => $userExpiry,
+            ]);
         } else {
             $dataUser = DetailInforUserOrder::where('id', $data['id'])->first();
             if ($dataUser) {
-                $request->session()->put('user_id', $data['id']);
-                $request->session()->put('user_id_expires_at', now()->addHours(1));
-                return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
+                $userExpiry = now()->addHours(1); //addHours,addMinutes
+                return response()->json([
+                    'status' => 1,
+                    'dataUserOrder' => $dataUser,
+                    'userExpiry' => $userExpiry,
+                ]);
             } else {
                 return response()->json(['status' => 0, 'message' => 'no data user']);
             }
         }
     }
+
+    // public function dataUserOrder(Request $request)
+    // {
+    //     $user_id = $request->session()->get('user_id');
+    //     $user_id_expires_at = $request->session()->get('user_id_expires_at');
+
+    //     if ($user_id && $user_id_expires_at && now()->lessThanOrEqualTo($user_id_expires_at)) {
+    //         if ($user_id === 'guest') {
+    //             return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
+    //         } else {
+    //             $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
+    //             return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
+    //         }
+    //     } else {
+    //         $request->session()->forget('user_id');
+    //         $request->session()->forget('user_id_expires_at');
+    //         return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
+    //     }
+    // }
+
     public function dataUserOrder(Request $request)
     {
-        $user_id = $request->session()->get('user_id');
-        $user_id_expires_at = $request->session()->get('user_id_expires_at');
+        $data = $request->only(['idUser']);
 
-        if ($user_id && $user_id_expires_at && now()->lessThanOrEqualTo($user_id_expires_at)) {
-            if ($user_id === 'guest') {
+        if (isset($data['idUser']) && !empty($data['idUser'])) {
+            if ($data['idUser'] === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
+                $dataUser = DetailInforUserOrder::where('id', $data['idUser'])->first();
                 return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
             }
         } else {
-            $request->session()->forget('user_id');
-            $request->session()->forget('user_id_expires_at');
             return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
         }
     }
@@ -84,7 +108,8 @@ class DetailInforUserOrderController extends Controller
 
         return response()->json([
             'status' => 1,
-            'message' => 'User has been add to inforUserOrder', 'data' => $users
+            'message' => 'User has been add to inforUserOrder',
+            'data' => $users
         ]);
     }
     public function inforUserCRM(Request $request)
@@ -94,7 +119,7 @@ class DetailInforUserOrderController extends Controller
 
         foreach ($data as $record) {
             if (isset($record->isUserCRM) && $record->isUserCRM === 1) {
-                $inforUserCRM[] = $record; 
+                $inforUserCRM[] = $record;
             }
         }
 

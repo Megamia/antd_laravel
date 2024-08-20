@@ -7,15 +7,14 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DetailOrderController;
-use App\Http\Controllers\InforUserController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 //DetailInforUserOrder
 Route::get('dataUser', [DetailInforUserOrderController::class, 'data']);
 Route::post('chooseUserOrder', [DetailInforUserOrderController::class, 'chooseUserOrder']);
-Route::get('dataUserOrder', [DetailInforUserOrderController::class, 'dataUserOrder']);
-Route::get('deleteSession', [DetailInforUserOrderController::class, 'deleteSession']);
+Route::post('dataUserOrder', [DetailInforUserOrderController::class, 'dataUserOrder']);
+Route::post('deleteSession', [DetailInforUserOrderController::class, 'deleteSession']);
 Route::post('addUserOrder', [DetailInforUserOrderController::class, 'addUserOrder']);
 Route::post('newDataUserOrderAfterSwap', [AddressController::class, 'newDataUserOrderAfterSwap']);
 Route::get('inforUserCRM', [DetailInforUserOrderController::class, 'inforUserCRM']);
@@ -24,17 +23,12 @@ Route::get('inforUserCRM', [DetailInforUserOrderController::class, 'inforUserCRM
 //Address
 Route::get('inforAddress', [AddressController::class, 'inforAddress']);
 Route::post('swapAnotherAddress', [AddressController::class, 'swapAnotherAddress']);
-Route::delete('deleteAddress/{id}', [AddressController::class, 'deleteAddress']);
-Route::get('dataAfterSwap', [AddressController::class, 'dataAfterSwap']);
-Route::post('addNewAddress', [AddressController::class, 'addNewAddress']);
+Route::delete('DeleteAddress/{id}', [AddressController::class, 'DeleteAddress']);
+Route::post('FetchDataAddress', [AddressController::class, 'FetchDataAddress']);
+Route::post('AddNewAddress', [AddressController::class, 'AddNewAddress']);
 Route::post('DetailAddressWithIdUser', [AddressController::class, 'DetailAddressWithIdUser']);
+Route::post('SwapAddress', [AddressController::class, 'SwapAddress']);
 //Address
-
-//InforUser
-Route::post('InforUser', [InforUserController::class, 'InforUser']);
-Route::post('AddressUserWithId', [InforUserController::class, 'AddressUserWithId']);
-Route::post('AddNewInforUser', [InforUserController::class, 'AddNewInforUser']);
-//InforUser
 
 // DetailProduct
 Route::get('inforProduct', [DetailProductController::class, 'inforProduct']);

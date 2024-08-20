@@ -47,7 +47,9 @@
                 </span>
             </div>
             <div class="detailAddress">
-                {{ displayData ? formattedAddress : "Chưa có thông tin địa chỉ" }}
+                {{
+                    displayData ? formattedAddress : "Chưa có thông tin địa chỉ"
+                }}
             </div>
         </div>
     </div>
@@ -61,10 +63,12 @@ import { ref, onMounted, defineEmits, computed } from "vue";
 import ModalInforUserOrder from "./ModalInforUserOrder.vue";
 import { useRouter } from "vue-router";
 import eventBus from "../../../eventBus";
+import store from "../../../store";
 
 const emit = defineEmits(["fet", "InforUser"]);
 
 const dataUserOrder = ref("");
+const dataAddress = ref("");
 const isUser = ref(null);
 const isGuest = ref(null);
 const isShowModalInforUser = ref(false);
@@ -72,8 +76,8 @@ const checkShow = ref(false);
 const router = useRouter();
 
 const displayData = computed(() => {
-    if (dataUserOrder.value.address) {
-        return dataUserOrder.value.address;
+    if (dataAddress.value) {
+        return dataAddress.value;
     } else {
         return null;
     }
@@ -91,17 +95,17 @@ const formattedAddress = computed(() => {
 });
 
 const displayName = computed(() => {
-    return dataUserOrder.value.dataUser.name;
+    return dataUserOrder.value.name;
 });
 
 const displayPhoneNumber = computed(() => {
-    return dataUserOrder.value.dataUser.phoneNumber;
+    return dataUserOrder.value.phoneNumber;
 });
 
 const swapAddress = async () => {
     let id;
-    if (dataUserOrder.value.dataUser && dataUserOrder.value.dataUser.id) {
-        id = dataUserOrder.value.dataUser.id;
+    if (dataUserOrder.value && dataUserOrder.value.id) {
+        id = dataUserOrder.value.id;
     }
 
     router.push({
@@ -126,42 +130,67 @@ const closeModal = () => {
     isShowModalInforUser.value = false;
 };
 
-const fetchData = async () => {
-    try {
-        let response;
+// const fetchData = async () => {
+//     try {
+//         let response;
+//         if (eventBus.id) {
+//             response = await axios.post(
+//                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
+//                 { idAddress: eventBus.id }
+//             );
+//         } else {
+//             response = await axios.post(
+//                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
+//                 { idAddress: null }
+//             );
+//         }
+//         handleResponseData(response.data);
+//     } catch (e) {
+//         console.log("Error: ", e);
+//     }
+// };
 
-        if (eventBus.id) {
-            response = await axios.post(
-                `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-                { idAddress: eventBus.id }
-            );
+// const handleResponseData = (data) => {
+//     if (data.status === 1) {
+//         dataUserOrder.value = data.dataUserOrder;
+//         console.log("data: ", dataUserOrder.value);
+//         if (data.dataUser != "guest") {
+//             isGuest.value = false;
+//             isUser.value = true;
+//         } else {
+//             isGuest.value = true;
+//             isUser.value = false;
+//         }
+//         checkShow.value = true;
+//     } else {
+//         checkShow.value = false;
+//     }
+//     emit("InforUser", dataUserOrder.value);
+// };
+
+const fetchData = () => {
+    try {
+        if (store.state.dataUserOrder) {
+            if (store.state.dataAddress) {
+                dataAddress.value = store.state.dataAddress;
+            }
+            dataUserOrder.value = store.state.dataUserOrder;
+            console.log("data: ", dataUserOrder.value);
+            if (store.state.dataUserOrder != "guest") {
+                isGuest.value = false;
+                isUser.value = true;
+            } else {
+                isGuest.value = true;
+                isUser.value = false;
+            }
+            checkShow.value = true;
         } else {
-            response = await axios.post(
-                `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-                { idAddress: null }
-            );
+            checkShow.value = false;
         }
-        handleResponseData(response.data);
+        emit("InforUser", dataUserOrder.value);
     } catch (e) {
         console.log("Error: ", e);
     }
-};
-
-const handleResponseData = (data) => {
-    if (data.status === 1) {
-        dataUserOrder.value = data.dataUserOrder;
-        if (data.dataUser != "guest") {
-            isGuest.value = false;
-            isUser.value = true;
-        } else {
-            isGuest.value = true;
-            isUser.value = false;
-        }
-        checkShow.value = true;
-    } else {
-        checkShow.value = false;
-    }
-    emit("InforUser", dataUserOrder.value);
 };
 
 onMounted(() => fetchData());

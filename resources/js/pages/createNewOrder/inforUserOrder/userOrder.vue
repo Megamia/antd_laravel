@@ -40,8 +40,9 @@ import {
 import DetailInforUserOrder from "./DetailInforUserOrder.vue";
 import { ref, onMounted, defineEmits } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import eventBus from "../../../eventBus";
+import store from "../../../store";
 
 const emit = defineEmits(["dataInforUser"]);
 
@@ -50,35 +51,51 @@ const dataUserOrder = ref("");
 
 const Esc = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/deleteSession`
-        );
-        if (response.data.status === 1) {
-            eventBus.clear();
-            emit("dataInforUser", null);
-        }
+        // const response = await axios.post(
+        //     `${import.meta.env.VITE_APP_URL_API}/deleteSession`
+        // );
+        // if (response.data.status === 1) {
+        //     eventBus.clear();
+        //     emit("dataInforUser", null);
+        // }
+        store.commit("clearDataUserOrder");
     } catch (e) {
         console.log("Error: ", e);
     }
     fetchData();
 };
+const clearData = () => {
+    window.addEventListener("beforeunload", () => {
+        store.dispatch("clearUserData");
+    });
+};
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(
-            `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`
-        );
-        if (response.data.status === 1) {
-            if (response.data.dataUserOrder != "guest") {
-                dataUserOrder.value = response.data.dataUserOrder.name;
-            } else {
-                dataUserOrder.value = response.data.dataUserOrder;
-            }
+        // const response = await axios.post(
+        //     `${import.meta.env.VITE_APP_URL_API}/dataUserOrder`,
+        //     {
+        //         idUser: idUser,
+        //     }
+        // );
+        // if (response.data.status === 1) {
+        //     if (response.data.dataUserOrder != "guest") {
+        //         dataUserOrder.value = response.data.dataUserOrder.name;
+        //     } else {
+        //         dataUserOrder.value = response.data.dataUserOrder;
+        //     }
+        //     showChoose.value = false;
+        // } else {
+        //     showChoose.value = true;
+        // }
+        // return;
+        console.log(store.state.dataUserOrder);
+        if (store.state.dataUserOrder) {
+            dataUserOrder.value = store.state.dataUserOrder;
             showChoose.value = false;
         } else {
             showChoose.value = true;
         }
-        return;
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -91,9 +108,14 @@ const fet = async () => {
 const InforUser = async (data) => {
     emit("dataInforUser", data);
 };
-onMounted(() => fetchData());
+onMounted(() => {
+    fetchData();
+    clearData();
+});
 
 const router = useRouter();
+const route = useRoute();
+const idUser = route.params.idUser;
 const nothing = () => {
     alert("Chưa xử lý sự kiện này");
 };

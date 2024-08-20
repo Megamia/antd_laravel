@@ -178,38 +178,18 @@ const onFinish = async () => {
             district: formState.value.district,
             ward: formState.value.ward,
             address: formState.value.address,
+            idUser:id,
         };
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/addNewAddress`,
+            `${import.meta.env.VITE_APP_URL_API}/AddNewAddress`,
             payload
         );
         if (response.data.status === 1) {
-            idAddress = response.data.newAddress.id;
             alert("Thêm địa chỉ mới thành công");
-            await addInforUser();
             router.back();
         } else {
             alert("Thêm địa chỉ mới thất bại");
         }
-    } catch (e) {
-        console.log("Error: ", e);
-    }
-};
-
-const addInforUser = async () => {
-    try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/AddNewInforUser`,
-            {
-                idUser: id,
-                idAddress: idAddress,
-            }
-        );
-        // if (response.data.status === 1) {
-
-        // } else {
-
-        // }
     } catch (e) {
         console.log("Error: ", e);
     }

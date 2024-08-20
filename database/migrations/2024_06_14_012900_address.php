@@ -20,6 +20,11 @@ return new class extends Migration
             $table->string('district');
             $table->string('ward');
             $table->string('address');
+            $table->unsignedBigInteger('idUser')->nullable();
+            $table->foreign('idUser')
+                ->references('id')
+                ->on('DetailInforUserOrder')
+                ->onDelete('cascade');
         });
 
         $data = [
@@ -30,6 +35,7 @@ return new class extends Migration
                 'district' => 'Thanh Xuân',
                 'ward' => 'Thanh Xuân Trung',
                 'address' => '85 Vũ Trọng Phụng',
+                'idUser' => 1,
             ],
             [
                 'name' => 'Trần Xuyến Chi',
@@ -38,6 +44,7 @@ return new class extends Migration
                 'district' => 'Thanh Xuân',
                 'ward' => 'Thanh Xuân Trung',
                 'address' => '85 Vũ Trọng Phụng',
+                'idUser' => 1,
             ],
             [
                 'name' => 'Chi Phu',
@@ -57,6 +64,9 @@ return new class extends Migration
             $address->district = $item['district'];
             $address->ward = $item['ward'];
             $address->address = $item['address'];
+            if (isset($item['idUser'])) {
+                $address->idUser = $item['idUser'];
+            }
             $address->save();
         }
     }

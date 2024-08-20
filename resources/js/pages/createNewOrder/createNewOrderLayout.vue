@@ -274,7 +274,6 @@ const createVoucher = async (idDetailOrder) => {
             }
         );
         if (response.data.status === 1) {
-            console.log(response.data);
             if (response.data.message !== "Voucher(s) already exists") {
                 data.value = response.data.createVoucher;
                 const idVoucher = data.value.map((item) => item.id);

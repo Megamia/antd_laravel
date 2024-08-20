@@ -53,6 +53,7 @@
 import { AnOutlinedArrowLeft, CaAddAlt } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
+import store from "../../../store";
 import axios from "axios";
 
 const a = ref(null);
@@ -96,6 +97,10 @@ const buttonSave = async () => {
             }
         );
         if (response.data.status === 1) {
+            store.commit("setDataUserOrder", {
+                dataUserOrder: response.data.dataUserOrder,
+                userExpiry: response.data.userExpiry,
+            });
             router.back();
         }
     } catch (e) {
