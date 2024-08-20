@@ -170,13 +170,13 @@ const closeModal = () => {
 
 const fetchData = () => {
     try {
-        if (store.state.dataUserOrder) {
-            if (store.state.dataAddress) {
-                dataAddress.value = store.state.dataAddress;
+        if (store.state.user.dataUser) {
+            if (store.state.address.dataAddress) {
+                dataAddress.value = store.state.address.dataAddress;
             }
-            dataUserOrder.value = store.state.dataUserOrder;
+            dataUserOrder.value = store.state.user.dataUser;
             // console.log("data: ", dataUserOrder.value);
-            if (store.state.dataUserOrder != "guest") {
+            if (store.state.user.dataUser != "guest") {
                 isGuest.value = false;
                 isUser.value = true;
             } else {
@@ -187,7 +187,6 @@ const fetchData = () => {
         } else {
             checkShow.value = false;
         }
-        emit("InforUser", dataUserOrder.value);
     } catch (e) {
         console.log("Error: ", e);
     }

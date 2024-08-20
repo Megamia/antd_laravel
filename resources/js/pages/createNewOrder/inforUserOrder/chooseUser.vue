@@ -96,15 +96,17 @@ const buttonSave = async () => {
                 id: a.value,
             }
         );
+
         if (response.data.status === 1) {
-            store.commit("setDataUserOrder", {
-                dataUserOrder: response.data.dataUserOrder,
+            store.commit("user/setDataUser", {
+                dataUser: response.data.dataUserOrder,
                 userExpiry: response.data.userExpiry,
             });
+            console.log(store.state.user.dataUser, store.state.user.userExpiry);
             router.back();
         }
     } catch (e) {
-        console.log("Lỗi: " + e);
+        console.error("Lỗi: ", e.response ? e.response.data : e.message);
     }
 };
 const filter = computed(() => {

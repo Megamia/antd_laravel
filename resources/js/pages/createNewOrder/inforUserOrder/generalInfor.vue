@@ -93,8 +93,8 @@ const fetchData = async () => {
         // } else {
 
         // }
-        if (store.state.dataUserOrder) {
-            dataUserOrder.value = store.state.dataUserOrder;
+        if (store.state.user.dataUserOrder) {
+            dataUserOrder.value = store.state.user.dataUserOrder;
         } else {
             console.log("Lỗi");
         }

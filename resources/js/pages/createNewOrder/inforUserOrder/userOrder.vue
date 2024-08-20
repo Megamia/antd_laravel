@@ -27,7 +27,7 @@
             </div>
         </div>
         <div v-else>
-            <DetailInforUserOrder @fet="fet" @infor-user="InforUser" />
+            <DetailInforUserOrder />
         </div>
     </div>
 </template>
@@ -44,8 +44,6 @@ import { useRouter, useRoute } from "vue-router";
 import eventBus from "../../../eventBus";
 import store from "../../../store";
 
-const emit = defineEmits(["dataInforUser"]);
-
 const showChoose = ref(true);
 const dataUserOrder = ref("");
 
@@ -58,7 +56,7 @@ const Esc = async () => {
         //     eventBus.clear();
         //     emit("dataInforUser", null);
         // }
-        store.commit("clearDataUserOrder");
+        store.commit("clearAllData");
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -66,7 +64,7 @@ const Esc = async () => {
 };
 const clearData = () => {
     window.addEventListener("beforeunload", () => {
-        store.dispatch("clearUserData");
+        store.dispatch("user/clearUserData");
     });
 };
 
@@ -90,8 +88,8 @@ const fetchData = async () => {
         // }
         // return;
         // console.log(store.state.dataUserOrder);
-        if (store.state.dataUserOrder) {
-            dataUserOrder.value = store.state.dataUserOrder;
+        if (store.state.user.dataUser) {
+            dataUserOrder.value = store.state.user.dataUser;
             showChoose.value = false;
         } else {
             showChoose.value = true;
@@ -101,13 +99,6 @@ const fetchData = async () => {
     }
 };
 
-const fet = async () => {
-    fetchData();
-};
-
-const InforUser = async (data) => {
-    emit("dataInforUser", data);
-};
 onMounted(() => {
     fetchData();
     clearData();

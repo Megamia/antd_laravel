@@ -164,7 +164,7 @@ const buttonSave = async () => {
                     }
                 );
                 // console.log(response.data.swapAddress);
-                store.commit("setDataAddress", {
+                store.commit("address/setDataAddress", {
                     dataAddress: response.data.swapAddress,
                 });
                 // if (response.data.status === 1) {
