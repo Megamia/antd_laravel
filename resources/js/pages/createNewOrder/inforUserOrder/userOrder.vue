@@ -64,7 +64,7 @@ const Esc = async () => {
 };
 const clearData = () => {
     window.addEventListener("beforeunload", () => {
-        store.dispatch("user/clearUserData");
+        store.commit("clearAllData");
     });
 };
 

@@ -17,7 +17,6 @@
             v-if="isModalShip"
             @close-modal-ship="closeModalShip"
             @value-in-modal-ship="valueInModalShip"
-            @fetch-data-modal="fetchDataModal"
         />
         <div class="VAT" @click="closeModalVAT">
             <span class="name" @click="test">Thuế VAT (10%)</span>
@@ -38,7 +37,11 @@ import { ref, defineEmits, onMounted, defineExpose } from "vue";
 import eventBus from "../../../eventBus";
 import { useRoute } from "vue-router";
 
-const emit = defineEmits(["closeModalShip", "fetchData", "fetchDataVAT"]);
+const emit = defineEmits([
+    "closeModalShip",
+    "fetchDataVoucher",
+    "fetchDataVAT",
+]);
 const route = useRoute();
 const valueVoucher = ref("0");
 valueVoucher.value = eventBus.voucher.valueVoucher.toString();
@@ -60,34 +63,45 @@ const valueInModalShip = (data1) => {
     eventBus.voucher.valueShip = valueShip.value;
     valueShip.value = valueShip.value.toString();
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    emit("fetchData");
+    emitFetchData();
 };
 //ModalShip
 
 //ModalVAT
 const isModalVAT = ref(false);
 const closeModalVAT = () => {
-    isModalVAT.value = !isModalVAT.value;
+    if (eventBus.product.idProduct == null) {
+        alert("Chưa chọn sản phẩm");
+        isModalVAT.value = false;
+        return;
+    } else {
+        isModalVAT.value = !isModalVAT.value;
+    }
 };
 const VATvalue = ref("0");
-const valueInModalVAT = () => {
-    VATvalue.value = parseFloat(
-        (eventBus.product.priceProduct *
-            parseFloat(eventBus.voucher.valueVAT)) /
-            100
-    );
-
+const valueInModalVAT = (data) => {
+    if (eventBus.voucher.valueVAT) {
+        VATvalue.value = eventBus.voucher.valueVAT;
+    }
+    if (eventBus.product.priceProduct != 0 && data != undefined) {
+        VATvalue.value = parseFloat(
+            (eventBus.product.priceProduct * data) / 100
+        );
+        eventBus.voucher.valueVAT = VATvalue.value;
+        console.log(
+            "eventBus.product.priceProduct: ",
+            eventBus.product.priceProduct
+        );
+        console.log("data: ", data);
+        console.log("VATvalue.value: ", VATvalue.value);
+    }
     VATvalue.value = VATvalue.value.toString();
     VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    emit("fetchDataVAT", VATvalue.value);
+    emitFetchData();
 };
 
 const test = () => {};
 //ModalVAT
-
-const fetchDataModal = () => {
-    emit("fetchData");
-};
 
 const fetchData = async () => {
     if (eventBus.voucher.valueShip) {
@@ -97,6 +111,10 @@ const fetchData = async () => {
     }
 };
 onMounted(() => fetchData());
+
+const emitFetchData = () => {
+    emit("fetchDataVoucher");
+};
 
 defineExpose({
     fetchData,

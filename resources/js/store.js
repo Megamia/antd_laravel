@@ -3,7 +3,7 @@ import storeDataUser from "./store/storeDataUser";
 import storeDataAddress from "./store/storeDataAddress";
 import storeDataProduct from "./store/storeDataProduct";
 import storeDataVoucher from "./store/storeDataVoucher";
-
+import createPersistedState from "vuex-persistedstate";
 const store = createStore({
     modules: {
         user: storeDataUser,
@@ -15,9 +15,14 @@ const store = createStore({
         clearAllData(state) {
             store.commit("user/clearDataUser");
             store.commit("address/clearDataAddress");
-            // store.commit('user/clearDataUser');
+            // store.commit('product/clearDataProduct');
         },
     },
+    plugins: [
+        createPersistedState({
+            storage: window.sessionStorage,
+        }),
+    ],
 });
 
 export default store;

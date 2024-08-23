@@ -2,7 +2,7 @@
     <div class="mainInforOrder">
         <div class="header">
             <div class="title">
-                <span class="inforText"> Sản phẩm </span>
+                <span class="inforText" @click="test2"> Sản phẩm </span>
                 <span class="showMore" @click="show" v-if="showOrder">
                     <AkChevronDownSmall />
                 </span>
@@ -183,8 +183,9 @@ import {
     AnOutlinedEdit,
 } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, defineEmits, onMounted } from "vue";
+import { ref, defineEmits, onMounted, computed } from "vue";
 import eventBus from "../../../eventBus";
+import store from "../../../store";
 import axios from "axios";
 
 const emit = defineEmits([
@@ -293,31 +294,43 @@ const totalPrice = ref("");
 
 const fetchTotalPrice = () => {
     let totalPriceNumber = 0;
+    if (dataProductSelected.value != null) {
+        if (dataProductSelected.value.length > 0) {
+            for (let i = 0; i < dataProductSelected.value.length; i++) {
+                let priceProduct = dataProductSelected.value[i].price.replace(
+                    /\./g,
+                    ""
+                );
+                priceProduct = priceProduct.replace(/\,/g, "");
 
-    for (let i = 0; i < dataProductSelected.value.length; i++) {
-        let priceProduct = dataProductSelected.value[i].price.replace(
-            /\./g,
-            ""
-        );
-        priceProduct = priceProduct.replace(/\,/g, "");
-
-        let numberSelectedProduct =
-            numberSelected.value[dataProductSelected.value[i].id] ?? 1;
-        totalPriceNumber += priceProduct * numberSelectedProduct;
-        priceProduct = parseFloat(priceProduct);
+                let numberSelectedProduct =
+                    numberSelected.value[dataProductSelected.value[i].id] ?? 1;
+                totalPriceNumber += priceProduct * numberSelectedProduct;
+                priceProduct = parseFloat(priceProduct);
+            }
+        } else {
+            totalPriceNumber = 0;
+        }
+    } else {
+        totalPriceNumber = 0;
     }
-
+    eventBus.product.priceProduct = totalPriceNumber;
     totalPrice.value = totalPriceNumber.toString();
     totalPrice.value = totalPrice.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    eventBus.product.priceProduct = totalPriceNumber;
-    emit("fetchData");
 };
 
 const fetchData = async () => {
+    const dataProductStore = store.getters["product/getDataProduct"];
+
     const idProductSelected = ref("");
-    if (eventBus.product.idProduct) {
-        idProductSelected.value = eventBus.product.idProduct;
-        try {
+    if (eventBus.product.idProduct && eventBus.product.idProduct.length >= 0) {
+        countProduct = eventBus.product.idProduct.length;
+
+        idProductSelected.value = eventBus.product.idProduct.toString();
+        if (dataProductStore) {
+            dataProductSelected.value = dataProductStore;
+            fetchTotalPrice();
+        } else {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
                 {
@@ -326,22 +339,18 @@ const fetchData = async () => {
             );
             if (response.data.status === 1) {
                 dataProductSelected.value = response.data.choosedProduct;
+                store.commit("product/setDataProduct", {
+                    dataProduct: response.data.choosedProduct,
+                });
                 fetchTotalPrice();
-                countProduct = eventBus.product.idProduct.replace(/\,/g, "");
-                countProduct = countProduct.length;
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
-        } catch (e) {
-            console.log("Error: ", e);
         }
     } else {
-        dataProductSelected.value = "No choosedProduct";
+        dataProductSelected.value = null;
     }
-    if (
-        dataProductSelected.value &&
-        dataProductSelected.value != "No choosedProduct"
-    ) {
+    if (dataProductSelected.value && dataProductSelected.value != null) {
         const productSelected = {};
 
         for (const item of dataProductSelected.value) {
@@ -357,32 +366,34 @@ const fetchData = async () => {
                 numberSelected: numberSelected.value[item.id],
             };
         }
-        emit("productSelected", productSelected);
     }
 
-    emit(
-        "inforProduct",
-        countProduct,
-        totalPrice.value,
-        dataProductSelected.value
-    );
+    emit("fet", countProduct);
 };
 
 let countProduct = 0;
 
 const del = (id) => {
-    dataProductSelected.value = dataProductSelected.value.filter(
-        (product) => product.id !== id
-    );
-
-    eventBus.product.idProduct = eventBus.product.idProduct.replace(id, "");
-
-    countProduct = eventBus.product.idProduct.replace(/\,/g, "");
-    countProduct = countProduct.length;
-    fetchData();
-    fetchTotalPrice();
-    emit("fetchData");
-    emit("inforProduct", countProduct, totalPrice.value);
+    if (
+        eventBus.product.idProduct !== null &&
+        eventBus.product.idProduct !== undefined
+    ) {
+        dataProductSelected.value = dataProductSelected.value.filter(
+            (product) => product.id !== id
+        );
+        const index = eventBus.product.idProduct.findIndex(
+            (productId) => productId === id
+        );
+        if (index !== -1) {
+            if (eventBus.product.idProduct.length > 0) {
+                eventBus.product.idProduct.splice(index, 1);
+            } else {
+                eventBus.product.idProduct = null;
+            }
+        }
+        fetchData();
+        fetchTotalPrice();
+    }
 };
 </script>
 

@@ -2,7 +2,7 @@
     <div class="mainAddNewProduct">
         <div class="title">
             <AnOutlinedArrowLeft @click="back" />
-            <span> Thêm sản phẩm </span>
+            <span @click="test"> Thêm sản phẩm </span>
         </div>
         <div class="content">
             <div class="details">
@@ -103,6 +103,7 @@ import ModalFilterWithSelection from "./ModalFilterWithSelection.vue";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted, defineEmits } from "vue";
 import axios from "axios";
+import store from "../../../store";
 import eventBus from "../../../eventBus";
 const emit = defineEmits(["choosedProduct", "fetchData"]);
 
@@ -125,12 +126,49 @@ const filterWithTag = (data) => {
 };
 
 const data = ref({});
+// const idDetailProductt = store.state.product.idDetailProduct;
+
+// const test = () => {
+//     if (idDetailProductt.value && idDetailProductt.value > 0) {
+//         console.log("addew: ", idDetailProductt.value);
+//     }
+// };
 
 const fetchData = async () => {
-    if (eventBus.product.idProduct) {
-        let values = Object.values(eventBus.product.idProduct);
-        eventBus.product.idProduct = values.join(",").split(",").map(Number);
-        a.value = eventBus.product.idProduct.filter((item) => item !== 0);
+    // if (idDetailProduct.value && idDetailProduct.value > 0) {
+    //     console.log("addew: ", idDetailProduct.value);
+    //     a.value = idDetailProduct.value;
+    // }
+    // if (idDetailProduct.value) {
+    // let values = Object.values(store.state.product.idDetailProduct);
+    // store.state.product.idDetailProduct = values
+    //     .join(",")
+    //     .split(",")
+    //     .map(Number);
+    // a.value = store.state.product.idDetailProduct.filter(
+    //     (item) => item !== 0
+    // );
+    //     console.log("a.value: ", idDetailProduct.value);
+    //     a.value = idDetailProduct.value;
+    // }
+    const idDetail = store.getters["product/getIdDetailProduct"];
+
+    const idProductArray = Array.isArray(eventBus.product.idProduct)
+        ? eventBus.product.idProduct
+        : eventBus.product.idProduct
+        ? [eventBus.product.idProduct]
+        : [1];
+    const idDetailArray = Array.isArray(idDetail)
+        ? idDetail
+        : idDetail
+        ? [idDetail]
+        : [1];
+
+    if (idProductArray.length > 0 || idDetailArray.length > 0) {
+        store.commit("product/setDataProduct", {
+            idDetailProduct: idProductArray,
+        });
+        a.value = idProductArray.length > 0 ? idProductArray : idDetailArray;
     }
 
     try {
@@ -153,6 +191,9 @@ const fetchData = async () => {
             );
             if (response.data.status === 1) {
                 data.value = response.data.inforProduct;
+                // store.commit("product/setDataProduct", {
+                //     dataProduct: response.data.inforProduct,
+                // });
                 return data.value;
             } else {
                 console.log("Faile");
@@ -173,6 +214,16 @@ const back = () => {
 //     router.push("/addProduct");
 // };
 
+// const store1 = computed(() => store.getters["product/getDataProduct"]);
+// const store2 = computed(() => store.getters["product/getIdDetailProduct"]);
+
+// const abcs = () => {
+//     console.log("onStore1: ", store1.value);
+//     console.log("onStore2: ", store2.value);
+// };
+// onMounted(() => {
+//     abcs();
+// });
 const buttonSave = async () => {
     if (!a.value || a.value.length <= 0) {
         alert("Hãy chọn ít nhất 1 sản phẩm");
@@ -186,10 +237,11 @@ const buttonSave = async () => {
                 }
             );
             if (response.data.status === 1) {
-                eventBus.product.idProduct = a.value.sort().toString();
+                // store.commit("product/setDataProduct", {
+                //     idDetailProduct: a.value,
+                // });
+                eventBus.product.idProduct = a.value;
                 router.back();
-
-                // emit("choosedProduct", response.data.choosedProduct);
             } else {
                 console.log("No choosedProduct");
             }

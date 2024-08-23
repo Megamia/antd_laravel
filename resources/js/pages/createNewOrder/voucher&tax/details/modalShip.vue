@@ -48,7 +48,6 @@ import eventBus from "../../../../eventBus";
 const emit = defineEmits([
     "closeModalShip",
     "valueInModalShip",
-    "fetchDataModal",
 ]);
 let valueShip = 0;
 
@@ -64,7 +63,6 @@ const apply = async () => {
                 valueShip = "0";
             }
             emit("valueInModalShip", valueShip);
-            emit("fetchDataModal");
         } else {
             console.log("Tiền ship không thể cao hơn giá trị sản phẩm");
         }

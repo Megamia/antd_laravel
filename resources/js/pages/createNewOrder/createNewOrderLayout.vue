@@ -17,20 +17,20 @@
             </div>
 
             <div class="productOrderDiv">
-                <InforOrder
-                    @show="showOrHidden"
+                <InforOrder @fet="fetchDataInforOrder" />
+                <!-- @show="showOrHidden"
                     @showModal="ClickShowModal"
                     @infor-product="inforProduct"
                     @fetch-data="click"
                     @product-selected="productSelected"
-                    @fet="fet"
-                />
+                    @fet="fet" -->
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
             <div class="voucherAndTax">
+                <!-- @fetch-data-VAT="fetchDataVoucher" -->
                 <VoucherAndTax
-                    @fetch-data-VAT="fetchDataVoucher"
                     ref="updateVAT"
+                    @fetch-data-voucher="fetchDataVoucher"
                 />
             </div>
             <div class="noteOrder">
@@ -59,7 +59,7 @@
                     <div class="titleCostOrder">
                         <span class="left">Tổng cộng </span>
                         <span class="right"
-                            >({{ quantityProduct }} sản phẩm)</span
+                            >({{ numberProductSelected }} sản phẩm)</span
                         >
                     </div>
                     <div class="cost">
@@ -91,7 +91,7 @@ import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
 import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, computed, watch } from "vue";
 import axios from "axios";
 import eventBus from "../../eventBus";
 import store from "../../store";
@@ -115,6 +115,7 @@ let VATvalue = 0;
 const updateVoucher = ref(null);
 const updateVAT = ref(null);
 const priceProductValueText = ref("0");
+let numberProductSelected = 0;
 const click = () => {
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
@@ -128,24 +129,29 @@ const click = () => {
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     priceProductValue = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = priceProductValue;
-    priceProductValueText.value = priceProductValueText.value.toString();
-    priceProductValueText.value = priceProductValueText.value.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ","
-    );
+    // priceProductValueText.value = priceProductValueText.value.toString();
+    // priceProductValueText.value = priceProductValueText.value.replace(
+    //     /\B(?=(\d{3})+(?!\d))/g,
+    //     ","
+    // );
 };
-const fetchDataVoucher = (data) => {
+const fetchDataVoucher = () => {
     // click();
-    if (data) {
-        VATvalue = data;
-        VATvalue = VATvalue.replace(/\,/g, "");
-        VATvalue = parseFloat(VATvalue);
-    }
+    // if (data) {
+    //     VATvalue = data;
+    //     VATvalue = VATvalue.replace(/\,/g, "");
+    //     VATvalue = parseFloat(VATvalue);
+    // }
+    
+    // console.log("ship: ", eventBus.voucher.valueShip);
+    // console.log("vat: ", eventBus.voucher.valueVAT);
+    fetchDataInforOrder();
 };
 onMounted(() => click());
 
 const fetchData = () => {
     click();
+
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
     }
@@ -173,8 +179,9 @@ const test = () => {
 
     //     return;
     // }
-    if (store.state.user && store.state.address) {
+    if (store.state.user.length > 0 && store.state.address.length > 0) {
         console.log("Ok");
+        console.log(store.state.user, store.state.address);
     } else {
         console.log("Not ok");
         return;
@@ -183,12 +190,10 @@ const test = () => {
 //UserOrder
 
 //InforOrder
-let quantityProduct = 0;
 const priceProduct = ref("0");
 const dataProduct = ref("");
 const inforProduct = (data1, data2, data3) => {
     dataProduct.value = data3;
-    quantityProduct = data1;
     if (data2) {
         priceProduct.value = data2;
     }
@@ -207,9 +212,36 @@ const productSelected = (data) => {
         console.log("Error: ", e);
     }
 };
-const fet = () => {
-    fetchDataOrder();
+
+//Cost
+const fetchDataInforOrder = (data) => {
+    // if (updateVAT.value) {
+    //     updateVAT.value.valueInModalVAT();
+    // }
+    numberProductSelected = data;
+    giamgia =
+        eventBus.voucher.valueVoucher +
+        eventBus.voucher.valueShip +
+        eventBus.voucher.valueVAT;
+    priceProductValueText.value = eventBus.product.priceProduct - giamgia;
+    priceProductValueText.value = priceProductValueText.value.toString();
+    priceProductValueText.value = priceProductValueText.value.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ","
+    );
+
+    voucher.value = giamgia.toString();
+    voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // console.log(
+    //     "Price: ",
+    //     priceProductValueText.value,
+    //     "\n",
+    //     "Giamgia: ",
+    //     giamgia
+    // );
 };
+//Cost
+
 const product = ref("");
 const idProduct = ref("");
 const idDetailProduct = ref("");

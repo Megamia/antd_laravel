@@ -1,17 +1,20 @@
 const storeDataProduct = {
     namespaced: true,
     state: {
-        price: null,
-        idDetailProduct: null,
+        totalPrice: null,
+        idDetailProduct: [],
+        dataProduct:null,
     },
     mutations: {
         setDataProduct(state, payload) {
-            state.price = payload.price;
+            state.totalPrice = payload.totalPrice;
             state.idDetailProduct = payload.idDetailProduct;
+            state.dataProduct = payload.dataProduct;
         },
         clearDataProduct(state) {
-            state.price = null;
+            state.totalPrice = null;
             state.idDetailProduct = null;
+            state.dataProduct = null;
         },
     },
     actions: {
@@ -23,8 +26,9 @@ const storeDataProduct = {
         },
     },
     getters: {
-        getPrice: (state) => state.price,
+        getTotalPrice: (state) => state.totalPrice,
         getIdDetailProduct: (state) => state.idDetailProduct,
+        getDataProduct: (state) => state.dataProduct,
     },
 };
 

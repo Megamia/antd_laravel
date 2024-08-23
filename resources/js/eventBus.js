@@ -11,6 +11,7 @@ const eventBus = reactive({
             this.idProduct = null;
         },
         priceProduct: 0,
+        numberSelected: 0,
     },
     voucher: {
         idVoucherCode: 0,

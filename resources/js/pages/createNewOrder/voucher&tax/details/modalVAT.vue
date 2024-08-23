@@ -50,13 +50,12 @@ const Cancel = () => {
     emit("closeModalVAT");
 };
 
-const valueVAT = ref("0");
+let valueVAT = 0;
 const valueReason = ref("");
 const apply = async () => {
     try {
         // console.log("VAT: ", valueVAT.value);
-        eventBus.voucher.valueVAT = valueVAT.value;
-        emit("valueInModalVAT");
+        emit("valueInModalVAT", valueVAT);
         emit("closeModalVAT");
     } catch (e) {
         console.log("Error: ", e);
