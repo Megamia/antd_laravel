@@ -319,18 +319,19 @@ const fetchTotalPrice = () => {
     totalPrice.value = totalPrice.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const checkDel = ref(null);
 const fetchData = async () => {
     const dataProductStore = store.getters["product/getDataProduct"];
-
     const idProductSelected = ref("");
-    if (eventBus.product.idProduct && eventBus.product.idProduct.length >= 0) {
-        countProduct = eventBus.product.idProduct.length;
+    countProduct = eventBus.product.idProduct.length;
 
-        idProductSelected.value = eventBus.product.idProduct.toString();
-        if (dataProductStore) {
-            dataProductSelected.value = dataProductStore;
-            fetchTotalPrice();
-        } else {
+    if (checkDel.value) {
+        if (
+            eventBus.product.idProduct &&
+            eventBus.product.idProduct.length >= 0
+        ) {
+
+            idProductSelected.value = eventBus.product.idProduct.toString();
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
                 {
@@ -346,25 +347,82 @@ const fetchData = async () => {
             } else if (response.data.status == 0) {
                 dataProductSelected.value = response.data.choosedProduct;
             }
+            // }
+        } else {
+            dataProductSelected.value = null;
+        }
+        if (dataProductSelected.value && dataProductSelected.value != null) {
+            const productSelected = {};
+
+            for (const item of dataProductSelected.value) {
+                if (
+                    numberSelected.value[item.id] === undefined ||
+                    numberSelected.value[item.id] === null
+                ) {
+                    numberSelected.value[item.id] = 1;
+                }
+
+                productSelected[item.id] = {
+                    idDetailProduct: item.id,
+                    numberSelected: numberSelected.value[item.id],
+                };
+            }
         }
     } else {
-        dataProductSelected.value = null;
-    }
-    if (dataProductSelected.value && dataProductSelected.value != null) {
-        const productSelected = {};
-
-        for (const item of dataProductSelected.value) {
+        if (dataProductStore) {
+            dataProductSelected.value = dataProductStore;
+            fetchTotalPrice();
+        } else {
             if (
-                numberSelected.value[item.id] === undefined ||
-                numberSelected.value[item.id] === null
+                eventBus.product.idProduct &&
+                eventBus.product.idProduct.length >= 0
             ) {
-                numberSelected.value[item.id] = 1;
-            }
+                countProduct = eventBus.product.idProduct.length;
 
-            productSelected[item.id] = {
-                idDetailProduct: item.id,
-                numberSelected: numberSelected.value[item.id],
-            };
+                idProductSelected.value = eventBus.product.idProduct.toString();
+                // if (dataProductStore) {
+                //     dataProductSelected.value = dataProductStore;
+                //     fetchTotalPrice();
+                // } else {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+                    {
+                        id: idProductSelected.value,
+                    }
+                );
+                if (response.data.status === 1) {
+                    dataProductSelected.value = response.data.choosedProduct;
+                    store.commit("product/setDataProduct", {
+                        dataProduct: response.data.choosedProduct,
+                    });
+                    fetchTotalPrice();
+                } else if (response.data.status == 0) {
+                    dataProductSelected.value = response.data.choosedProduct;
+                }
+                // }
+            } else {
+                dataProductSelected.value = null;
+            }
+            if (
+                dataProductSelected.value &&
+                dataProductSelected.value != null
+            ) {
+                const productSelected = {};
+
+                for (const item of dataProductSelected.value) {
+                    if (
+                        numberSelected.value[item.id] === undefined ||
+                        numberSelected.value[item.id] === null
+                    ) {
+                        numberSelected.value[item.id] = 1;
+                    }
+
+                    productSelected[item.id] = {
+                        idDetailProduct: item.id,
+                        numberSelected: numberSelected.value[item.id],
+                    };
+                }
+            }
         }
     }
 
@@ -372,6 +430,7 @@ const fetchData = async () => {
 };
 
 let countProduct = 0;
+
 
 const del = (id) => {
     if (
@@ -387,6 +446,7 @@ const del = (id) => {
         if (index !== -1) {
             if (eventBus.product.idProduct.length > 0) {
                 eventBus.product.idProduct.splice(index, 1);
+                checkDel.value = true;
             } else {
                 eventBus.product.idProduct = null;
             }

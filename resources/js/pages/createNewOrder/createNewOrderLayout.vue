@@ -142,9 +142,6 @@ const fetchDataVoucher = () => {
     //     VATvalue = VATvalue.replace(/\,/g, "");
     //     VATvalue = parseFloat(VATvalue);
     // }
-    
-    // console.log("ship: ", eventBus.voucher.valueShip);
-    // console.log("vat: ", eventBus.voucher.valueVAT);
     fetchDataInforOrder();
 };
 onMounted(() => click());
@@ -240,6 +237,7 @@ const fetchDataInforOrder = (data) => {
     //     giamgia
     // );
 };
+onMounted(() => fetchDataInforOrder());
 //Cost
 
 const product = ref("");

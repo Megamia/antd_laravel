@@ -15,7 +15,7 @@ const store = createStore({
         clearAllData(state) {
             store.commit("user/clearDataUser");
             store.commit("address/clearDataAddress");
-            // store.commit('product/clearDataProduct');
+            store.commit("product/clearDataProduct");
         },
     },
     plugins: [
