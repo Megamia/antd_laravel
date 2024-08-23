@@ -323,13 +323,13 @@ const checkDel = ref(null);
 const fetchData = async () => {
     const dataProductStore = store.getters["product/getDataProduct"];
     const idProductSelected = ref("");
-    countProduct = eventBus.product.idProduct.length;
 
     if (checkDel.value) {
         if (
             eventBus.product.idProduct &&
             eventBus.product.idProduct.length >= 0
         ) {
+            countProduct = eventBus.product.idProduct.length;
 
             idProductSelected.value = eventBus.product.idProduct.toString();
             const response = await axios.post(
@@ -339,6 +339,7 @@ const fetchData = async () => {
                 }
             );
             if (response.data.status === 1) {
+
                 dataProductSelected.value = response.data.choosedProduct;
                 store.commit("product/setDataProduct", {
                     dataProduct: response.data.choosedProduct,
@@ -430,7 +431,6 @@ const fetchData = async () => {
 };
 
 let countProduct = 0;
-
 
 const del = (id) => {
     if (
