@@ -26,9 +26,9 @@ const eventBus = reactive({
         clearValueShip() {
             this.valueShip = 0;
         },
-        valueVAT: 0,
+        valuePercentVAT: 0,
         clearValueVAT() {
-            this.valueVAT = 0;
+            this.valuePercentVAT = 0;
         },
         clearAllVoucher() {
             this.clearValueVoucher();

@@ -80,20 +80,21 @@ const closeModalVAT = () => {
 };
 const VATvalue = ref("0");
 const valueInModalVAT = (data) => {
-    if (eventBus.voucher.valueVAT) {
-        VATvalue.value = eventBus.voucher.valueVAT;
+    if (eventBus.voucher.valuePercentVAT) {
+        VATvalue.value =
+            (eventBus.product.priceProduct * eventBus.voucher.valuePercentVAT) /
+            100;
     }
     if (eventBus.product.priceProduct != 0 && data != undefined) {
         VATvalue.value = parseFloat(
             (eventBus.product.priceProduct * data) / 100
         );
-        eventBus.voucher.valueVAT = VATvalue.value;
-        console.log(
-            "eventBus.product.priceProduct: ",
-            eventBus.product.priceProduct
-        );
-        console.log("data: ", data);
-        console.log("VATvalue.value: ", VATvalue.value);
+        // console.log(
+        //     "eventBus.product.priceProduct: ",
+        //     eventBus.product.priceProduct
+        // );
+        // console.log("data: ", data);
+        // console.log("VATvalue.value: ", VATvalue.value);
     }
     VATvalue.value = VATvalue.value.toString();
     VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -108,6 +109,10 @@ const fetchData = async () => {
         valueShip.value = eventBus.voucher.valueShip;
         valueShip.value = valueShip.value.toString();
         valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    if (eventBus.voucher.valuePercentVAT) {
+        VATvalue.value = VATvalue.value.toString();
+        VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 };
 onMounted(() => fetchData());

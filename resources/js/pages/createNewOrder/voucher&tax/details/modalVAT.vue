@@ -57,6 +57,7 @@ const apply = async () => {
         // console.log("VAT: ", valueVAT.value);
         emit("valueInModalVAT", valueVAT);
         emit("closeModalVAT");
+        eventBus.voucher.valuePercentVAT = valueVAT;
     } catch (e) {
         console.log("Error: ", e);
     }

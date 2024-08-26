@@ -65,8 +65,12 @@ Route::post('chooseVoucherCode', [VoucherController::class, 'chooseVoucherCode']
 Route::post('createVoucher', [VoucherController::class, 'createVoucher']);
 //Voucher
 
+//Product
+Route::post('createProduct', [ProductController::class, 'createProduct']);
+//Product
+
 //DetailOrder
-Route::post('addDetailOrder', [DetailOrderController::class, 'addDetailOrder']);
+Route::post('createDetailOrder', [DetailOrderController::class, 'createDetailOrder']);
 //DetailOrder
 
 //Order

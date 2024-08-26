@@ -27,11 +27,7 @@
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
             <div class="voucherAndTax">
-                <!-- @fetch-data-VAT="fetchDataVoucher" -->
-                <VoucherAndTax
-                    ref="updateVAT"
-                    @fetch-data-voucher="fetchDataVoucher"
-                />
+                <VoucherAndTax ref="updateVAT" />
             </div>
             <div class="noteOrder">
                 <NoteOrder />
@@ -59,7 +55,12 @@
                     <div class="titleCostOrder">
                         <span class="left">Tổng cộng </span>
                         <span class="right"
-                            >({{ numberProductSelected }} sản phẩm)</span
+                            >({{
+                                numberProductSelected
+                                    ? numberProductSelected
+                                    : 0
+                            }}
+                            sản phẩm)</span
                         >
                     </div>
                     <div class="cost">
@@ -116,38 +117,28 @@ const updateVoucher = ref(null);
 const updateVAT = ref(null);
 const priceProductValueText = ref("0");
 let numberProductSelected = 0;
-const click = () => {
-    if (updateVoucher.value) {
-        updateVoucher.value.fetchData();
-    }
-    if (updateVAT.value) {
-        updateVAT.value.valueInModalVAT();
-    }
-    giamgia =
-        eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
-    voucher.value = giamgia.toString();
-    voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    priceProductValue = eventBus.product.priceProduct - giamgia;
-    priceProductValueText.value = priceProductValue;
-    // priceProductValueText.value = priceProductValueText.value.toString();
-    // priceProductValueText.value = priceProductValueText.value.replace(
-    //     /\B(?=(\d{3})+(?!\d))/g,
-    //     ","
-    // );
-};
-const fetchDataVoucher = () => {
-    // click();
-    // if (data) {
-    //     VATvalue = data;
-    //     VATvalue = VATvalue.replace(/\,/g, "");
-    //     VATvalue = parseFloat(VATvalue);
-    // }
-    fetchDataInforOrder();
-};
-onMounted(() => click());
+// const click = () => {
+//     if (updateVoucher.value) {
+//         updateVoucher.value.fetchData();
+//     }
+//     if (updateVAT.value) {
+//         updateVAT.value.valueInModalVAT();
+//     }
+//     giamgia =
+//         eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + VATvalue;
+//     voucher.value = giamgia.toString();
+//     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     priceProductValue = eventBus.product.priceProduct - giamgia;
+//     priceProductValueText.value = priceProductValue;
+//     // priceProductValueText.value = priceProductValueText.value.toString();
+//     // priceProductValueText.value = priceProductValueText.value.replace(
+//     //     /\B(?=(\d{3})+(?!\d))/g,
+//     //     ","
+//     // );
+// };
 
 const fetchData = () => {
-    click();
+    fetchDataInforOrder();
 
     if (updateVoucher.value) {
         updateVoucher.value.fetchData();
@@ -181,6 +172,8 @@ const test = () => {
         console.log(store.state.user, store.state.address);
     } else {
         console.log("Not ok");
+        console.log(store.state.user, store.state.address);
+
         return;
     }
 };
@@ -197,18 +190,18 @@ const inforProduct = (data1, data2, data3) => {
 };
 
 const dataOrder = ref("");
-const productSelected = (data) => {
-    try {
-        click();
-        if (updateVAT.value) {
-            updateVAT.value.valueInModalVAT();
-        }
-        dataOrder.value = data;
-        fetchDataVoucher();
-    } catch (e) {
-        console.log("Error: ", e);
-    }
-};
+// const productSelected = (data) => {
+//     try {
+//         click();
+//         if (updateVAT.value) {
+//             updateVAT.value.valueInModalVAT();
+//         }
+//         dataOrder.value = data;
+//         fetchDataVoucher();
+//     } catch (e) {
+//         console.log("Error: ", e);
+//     }
+// };
 
 //Cost
 const fetchDataInforOrder = (data) => {
@@ -219,7 +212,8 @@ const fetchDataInforOrder = (data) => {
     giamgia =
         eventBus.voucher.valueVoucher +
         eventBus.voucher.valueShip +
-        eventBus.voucher.valueVAT;
+        (eventBus.voucher.valuePercentVAT * eventBus.product.priceProduct) /
+            100;
     priceProductValueText.value = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = priceProductValueText.value.toString();
     priceProductValueText.value = priceProductValueText.value.replace(
@@ -229,6 +223,9 @@ const fetchDataInforOrder = (data) => {
 
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if (updateVAT.value) {
+        updateVAT.value.valueInModalVAT();
+    }
     // console.log(
     //     "Price: ",
     //     priceProductValueText.value,
@@ -237,7 +234,7 @@ const fetchDataInforOrder = (data) => {
     //     giamgia
     // );
 };
-onMounted(() => fetchDataInforOrder());
+// onMounted(() => fetchDataInforOrder());
 //Cost
 
 const product = ref("");
@@ -262,7 +259,7 @@ const fetchDataOrder = async () => {
                 console.log("No productSelected");
             }
         }
-        click();
+        fetchDataInforOrder();
         inforProduct();
     } catch (e) {
         console.log("Error: ", e);
@@ -272,16 +269,85 @@ onMounted(() => fetchDataOrder());
 //InforOrder
 
 //CostOrder
+//cần update
 const createOrder = async () => {
-    test();
-    await fetchDataOrder();
-    await fetchDataIdAndPriceProduct();
-    if (!dataUser.value || !product.value) {
-        alert("Chọn đầy đủ thông tin");
-        return;
+    try {
+        await createVoucher();
+        await createProduct();
+        if (
+            !store.state.address ||
+            store.state.address == null ||
+            !idDetailOrder.value
+        ) {
+            alert("Chưa chọn đủ thông tin");
+        }
+        console.log("idAddress: ", store.state.address);
+        console.log("idDetailOrder: ", idDetailOrder.value);
+        console.log("idVoucher: ", idVoucher.value);
+        // const response=await axios.post(`${import.meta.env.VITE_APP_URL_API}/createOrder`,{
+
+        // })
+    } catch (e) {
+        console.log("Error: ", e);
     }
 };
+//cần update
 //CostOrder
+
+const createProduct = async () => {
+    try {
+        console.log(eventBus.product.idProduct);
+
+        if (
+            eventBus.product.idProduct != null &&
+            Array.isArray(eventBus.product.idProduct) &&
+            eventBus.product.idProduct.length > 0
+        ) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/createProduct`,
+                {
+                    idProducts: eventBus.product.idProduct,
+                }
+            );
+
+            if (response.data && response.data.status === 1) {
+                const a = response.data.createProduct.map((item) => item.id);
+                await createDetailOrder(a);
+            } else {
+                alert("Có lỗi xảy ra trong quá trình tạo Product");
+                return;
+            }
+        } else {
+            alert("Chưa chọn sản phẩm nào");
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        alert(
+            "Đã xảy ra lỗi khi gửi yêu cầu đến server. Vui lòng thử lại sau."
+        );
+    }
+};
+
+const idDetailOrder = ref([]);
+const createDetailOrder = async (a) => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/createDetailOrder`,
+            {
+                idProduct: a,
+            }
+        );
+        if (response.data.status === 1) {
+            const a = response.data.createDetailOrder.map((item) => item.id);
+            idDetailOrder.value = a;
+        } else {
+            alert("Có lỗi xảy ra trong quá trình tạo DetailOrder");
+            return;
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
 
 const productId = ref([]);
 const detailOrderProduct = ref("");
@@ -314,7 +380,8 @@ const fetchDataIdAndPriceProduct = async () => {
     }
 };
 const data = ref([]);
-const createVoucher = async (idDetailOrder) => {
+const idVoucher = ref([]);
+const createVoucher = async () => {
     try {
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createVoucher`,
@@ -326,13 +393,10 @@ const createVoucher = async (idDetailOrder) => {
         if (response.data.status === 1) {
             if (response.data.message !== "Voucher(s) already exists") {
                 data.value = response.data.createVoucher;
-                const idVoucher = data.value.map((item) => item.id);
-                await fetchDataInforUser(idDetailOrder, idVoucher);
             } else {
                 data.value = response.data.existingVouchers;
-                const idVoucher = data.value.map((item) => item.id);
-                await fetchDataInforUser(idDetailOrder, idVoucher);
             }
+            idVoucher.value = data.value.map((item) => item.id);
         } else {
             alert("Có lỗi khi thêm voucher");
             return;

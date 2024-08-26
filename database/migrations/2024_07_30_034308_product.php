@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('Product', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idTagTitle');
+            $table->unsignedBigInteger('idTagTitle')->nullable();
             $table->foreign('idTagTitle')
                 ->references('id')
                 ->on('TagTitle');

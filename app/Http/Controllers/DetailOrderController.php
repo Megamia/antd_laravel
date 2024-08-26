@@ -9,17 +9,19 @@ use App\Models\Product;
 
 class DetailOrderController extends Controller
 {
-    //
-    public function addDetailOrder(Request $request)
+    public function createDetailOrder(Request $request)
     {
-        $idProducts = $request->input('idProducts');
+        $idProducts = $request->input('idProduct');
+
+        if (!$idProducts) {
+            return response()->json(['status' => 0, 'error' => 'Invalid input idProducts']);
+        }
 
         if (!is_array($idProducts)) {
-            return response()->json(['error' => 'Invalid input. idProducts should be an array.'], 400);
+            $idProducts = [$idProducts];
         }
 
         $products = Product::whereIn('id', $idProducts)->get();
-
         $result = [];
 
         foreach ($products as $product) {
@@ -46,14 +48,21 @@ class DetailOrderController extends Controller
                 ];
             }
         }
+
+        $createdDetailOrders = [];
         foreach ($result as $data) {
-            $addDetailOrder = DetailOrder::create([
-                'idProduct' => $data['id'],
-                'price' => $data['price']
-            ]);
-            $addDetailOrders[] = $addDetailOrder;
+            if (isset($data['price'])) {
+                $createDetailOrder = DetailOrder::create([
+                    'idProduct' => $data['id'],
+                    'price' => $data['price']
+                ]);
+                $createdDetailOrders[] = $createDetailOrder;
+            }
         }
-        return response()->json(['status' => 1, 'addDetailOrders' => $addDetailOrders]);
+
+        return response()->json(['status' => 1, 'createDetailOrder' => $createdDetailOrders]);
+
+
 
         // $exsitingDetailOrder = DetailOrder::where('id', $result['id']);
         // if (!$exsitingDetailOrder) {

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->integer('idProduct');
             $table->dateTime('timeCreateOrder')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('sale')->default(0);
+            $table->string('sale')->default(0)->nullable();
             $table->string('price');
         });
     }

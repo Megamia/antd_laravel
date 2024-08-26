@@ -279,10 +279,11 @@ const buttonDelOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product) {
         const currentQuantity = numberSelected.value[id] ?? 1;
-        if (currentQuantity > 0) {
+        if (currentQuantity > 1) {
             numberSelected.value[id] = currentQuantity - 1;
         } else {
-            return (numberSelected.value[id] = 0);
+            del(id);
+            // return (numberSelected.value[id] = 0);
         }
         fetchTotalPrice();
     }
@@ -339,7 +340,6 @@ const fetchData = async () => {
                 }
             );
             if (response.data.status === 1) {
-
                 dataProductSelected.value = response.data.choosedProduct;
                 store.commit("product/setDataProduct", {
                     dataProduct: response.data.choosedProduct,
@@ -451,8 +451,8 @@ const del = (id) => {
                 eventBus.product.idProduct = null;
             }
         }
-        fetchData();
         fetchTotalPrice();
+        fetchData();
     }
 };
 </script>
