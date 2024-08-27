@@ -100,28 +100,33 @@ const aVl = ref([]);
 const handleButtonChange = (value) => {
     currentSelection.value = value;
 };
-const slt = ref([1]);
+const slt = ref([]);
 const listPromotion = ref([]);
 const Cancel = () => {
     emit("closeModalPromotion");
 };
 const apply = async () => {
     try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/chooseVoucherPromotion`,
-            {
-                id: slt.value,
-            }
-        );
-
-        // if (response.data.status === 1) {
-
-        // } else {
-
-        // }
         let total = 0;
-        for (let i = 0; i < response.data.chooseVoucherPromotion.length; i++) {
-            total += parseFloat(response.data.chooseVoucherPromotion[i].value);
+        if (slt.value && slt.value[0] != null && slt.value.length > 0) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/chooseVoucherPromotion`,
+                {
+                    id: slt.value,
+                }
+            );
+            for (
+                let i = 0;
+                i < response.data.chooseVoucherPromotion.length;
+                i++
+            ) {
+                total += parseFloat(
+                    response.data.chooseVoucherPromotion[i].value
+                );
+            }
+        } else {
+            total = 0;
+            slt.value = null;
         }
         eventBus.voucher.idVoucherPromotion = slt.value;
         emit("valueInModalPromotion", total.toFixed(3), slt.value);

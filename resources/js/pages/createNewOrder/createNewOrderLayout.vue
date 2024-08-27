@@ -92,11 +92,23 @@ import AnotherInfor from "./AnotherInfor/AnotherInfor.vue";
 import ModalCostOrder from "./InforOrder/ModalCostOrder.vue";
 import { AkCircleCheckFill } from "@kalimahapps/vue-icons";
 import { useRouter } from "vue-router";
-import { ref, onMounted, reactive, computed, watch } from "vue";
+import { ref, onMounted, reactive, onBeforeUnmount } from "vue";
 import axios from "axios";
 import eventBus from "../../eventBus";
 import store from "../../store";
 // import axios from "axios";
+
+const clearEventBus = () => {
+    eventBus.voucher.clearAllVoucher();
+};
+
+onMounted(() => {
+    window.addEventListener("beforeunload", clearEventBus);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("beforeunload", clearEventBus);
+});
 
 const router = useRouter();
 
@@ -204,16 +216,21 @@ const dataOrder = ref("");
 // };
 
 //Cost
-const fetchDataInforOrder = (data) => {
+const fetchDataInforOrder = () => {
     // if (updateVAT.value) {
     //     updateVAT.value.valueInModalVAT();
     // }
-    numberProductSelected = data;
+    if (eventBus.product.idProduct && eventBus.product.idProduct.length > 0) {
+        numberProductSelected = eventBus.product.idProduct.length;
+    } else {
+        numberProductSelected = 0;
+    }
     giamgia =
         eventBus.voucher.valueVoucher +
         eventBus.voucher.valueShip +
         (eventBus.voucher.valuePercentVAT * eventBus.product.priceProduct) /
             100;
+    eventBus.product.priceAfterSale = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = priceProductValueText.value.toString();
     priceProductValueText.value = priceProductValueText.value.replace(
@@ -274,19 +291,28 @@ const createOrder = async () => {
     try {
         await createVoucher();
         await createProduct();
-        if (
-            !store.state.address ||
-            store.state.address == null ||
-            !idDetailOrder.value
-        ) {
-            alert("Chưa chọn đủ thông tin");
+        if (store.state.address && idDetailOrder.value) {
+            console.log("idAddress: ", store.state.address);
+            console.log("idDetailOrder: ", idDetailOrder.value);
+            console.log("idVoucher: ", idVoucher.value);
+        } else {
+            console.log("Chưa chọn đủ thông tin");
+            return;
         }
-        console.log("idAddress: ", store.state.address);
-        console.log("idDetailOrder: ", idDetailOrder.value);
-        console.log("idVoucher: ", idVoucher.value);
-        // const response=await axios.post(`${import.meta.env.VITE_APP_URL_API}/createOrder`,{
-
-        // })
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/createOrder`,
+            {
+                idDetailOrder: idDetailOrder.value,
+                idInforUser: store.state.address.id,
+                idVoucher: idVoucher.value,
+                valueOrder: eventBus.product.priceAfterSale,
+            }
+        );
+        if (response.data.status === 1) {
+            console.log("Success: ", response.data);
+        } else {
+            console.log("Faile");
+        }
     } catch (e) {
         console.log("Error: ", e);
     }
@@ -296,8 +322,6 @@ const createOrder = async () => {
 
 const createProduct = async () => {
     try {
-        console.log(eventBus.product.idProduct);
-
         if (
             eventBus.product.idProduct != null &&
             Array.isArray(eventBus.product.idProduct) &&
@@ -396,6 +420,7 @@ const createVoucher = async () => {
             } else {
                 data.value = response.data.existingVouchers;
             }
+            console.log(data.value);
             idVoucher.value = data.value.map((item) => item.id);
         } else {
             alert("Có lỗi khi thêm voucher");
@@ -426,25 +451,25 @@ const createVoucher = async () => {
 //     }
 // };
 
-const completeCreateOrder = async (idDetailOrder, idInforUser, idVoucher) => {
-    try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createOrder`,
-            {
-                idDetailOrder: idDetailOrder,
-                idInforUser: idInforUser,
-                idVoucher: idVoucher,
-            }
-        );
-        if (response.data.status === 1) {
-            router.push("/CreateOrderSuccess");
-        } else {
-            alert("Tạo mới đơn hàng thất bại");
-        }
-    } catch (e) {
-        console.log("Error: ", e);
-    }
-};
+// const completeCreateOrder = async (idDetailOrder, idInforUser, idVoucher) => {
+//     try {
+//         const response = await axios.post(
+//             `${import.meta.env.VITE_APP_URL_API}/createOrder`,
+//             {
+//                 idDetailOrder: idDetailOrder,
+//                 idInforUser: idInforUser,
+//                 idVoucher: idVoucher,
+//             }
+//         );
+//         if (response.data.status === 1) {
+//             router.push("/CreateOrderSuccess");
+//         } else {
+//             alert("Tạo mới đơn hàng thất bại");
+//         }
+//     } catch (e) {
+//         console.log("Error: ", e);
+//     }
+// };
 </script>
 
 <style scoped>

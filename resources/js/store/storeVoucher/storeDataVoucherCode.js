@@ -1,27 +1,27 @@
-const storeDataVoucher = {
+const storeDataVoucherCode = {
     namespaced: true,
     state: {
-        dataVoucher: null,
+        dataVoucherCode: null,
     },
     mutations: {
-        setDataVoucher(state, payload) {
-            state.dataVoucher = payload.dataVoucher;
+        setDataVoucherCode(state, payload) {
+            state.dataVoucherCode = payload.dataVoucherCode;
         },
-        clearDataVoucher(state) {
-            state.dataVoucher = null;
+        clearDataVoucherCode(state) {
+            state.dataVoucherCode = null;
         },
     },
     actions: {
-        updateDataVoucher({ commit }, data) {
-            commit("setDataVoucher", data);
+        updateDataVoucherCode({ commit }, data) {
+            commit("setDataVoucherCode", data);
         },
-        clearDataVoucher({ commit }) {
-            commit("clearDataVoucher");
+        clearDataVoucherCode({ commit }) {
+            commit("clearDataVoucherCode");
         },
     },
     getters: {
-        getDataVoucher: (state) => state.dataVoucher,
+        getDataVoucherCode: (state) => state.dataVoucherCode,
     },
 };
 
-export default storeDataVoucher;
+export default storeDataVoucherCode;

@@ -25,6 +25,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('Address')
                 ->onDelete('cascade');
+            $table->string('valueVoucher');
+            $table->string('valueOrder');
             $table->timestamps();
         });
     }

@@ -12,11 +12,15 @@ const eventBus = reactive({
         },
         priceProduct: 0,
         numberSelected: 0,
+        priceAfterSale: 0,
     },
     voucher: {
-        idVoucherCode: 0,
-        idVoucherPromotion: [],
-
+        idVoucherCode: null,
+        idVoucherPromotion: null,
+        clearIdVoucher() {
+            this.idVoucherCode = null;
+            this.idVoucherPromotion = null;
+        },
         valueVoucher: 0,
         isLoyalty: false,
         clearValueVoucher() {
@@ -34,6 +38,7 @@ const eventBus = reactive({
             this.clearValueVoucher();
             this.clearValueShip();
             this.clearValueVAT();
+            this.clearIdVoucher();
         },
     },
     // newOrder() {

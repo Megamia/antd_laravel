@@ -64,34 +64,6 @@ class voucherController extends Controller
         $idVoucherCode = $data['idVoucherCode'] ?? null;
         $idVoucherPromotions = $data['idVoucherPromotion'] ?? [];
 
-        $query = Voucher::query();
-
-        if (!is_null($idVoucherCode)) {
-            if ($idVoucherCode === 0) {
-                $query->whereNull('idVoucherCodeValue');
-            } else {
-                $query->where('idVoucherCodeValue', $idVoucherCode);
-            }
-        } else {
-            $query->whereNull('idVoucherCodeValue');
-        }
-
-        if (!empty($idVoucherPromotions)) {
-            $query->whereIn('idVoucherPromotionValue', $idVoucherPromotions);
-        } else {
-            $query->whereNull('idVoucherPromotionValue');
-        }
-
-        $existingVouchers = $query->get();
-
-        if ($existingVouchers->isNotEmpty()) {
-            return response()->json([
-                'status' => 1,
-                'message' => 'Voucher(s) already exists',
-                'existingVouchers' => $existingVouchers
-            ]);
-        }
-
         $createVouchers = [];
         $failedOrders = [];
 
@@ -160,7 +132,6 @@ class voucherController extends Controller
                 'failedOrders' => $failedOrders
             ], 500);
         }
-
         return response()->json([
             'status' => 1,
             'createVoucher' => $createVouchers,

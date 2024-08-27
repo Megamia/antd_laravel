@@ -3,7 +3,7 @@ const storeDataProduct = {
     state: {
         totalPrice: null,
         idDetailProduct: [],
-        dataProduct:null,
+        dataProduct: null,
     },
     mutations: {
         setDataProduct(state, payload) {

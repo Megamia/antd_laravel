@@ -12,6 +12,8 @@ class Order extends Model
         'idDetailOrder',
         'idVoucher',
         'idAddress',
+        'valueVoucher',
+        'valueOrder',
     ];
     public $timestamps = false;
     protected $table = 'Order';

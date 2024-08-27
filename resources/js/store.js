@@ -16,6 +16,7 @@ const store = createStore({
             store.commit("user/clearDataUser");
             store.commit("address/clearDataAddress");
             store.commit("product/clearDataProduct");
+            store.commit("voucher/code/clearDataVoucherCode");
         },
     },
     plugins: [

@@ -207,7 +207,7 @@ const valueInModalPromotion = (datavalueInModalPromotion, slt) => {
         ","
     );
 
-    if (slt.length > 0) {
+    if (slt && slt != null && slt.length > 0) {
         selectedInModalPromotion.value.sltId = slt;
     } else {
         selectedInModalPromotion.value.sltId = null;
