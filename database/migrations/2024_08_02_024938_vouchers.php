@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('Voucher', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idVoucherCodeValue')->nullable();
-            $table->foreign('idVoucherCodeValue')
+            $table->unsignedBigInteger('idOrder')->nullable();
+            $table->foreign('idOrder')
                 ->references('id')
-                ->on('VoucherCodeValue')
+                ->on('Order')
                 ->onDelete('cascade');
             $table->unsignedBigInteger('idVoucherPromotionValue')->nullable();
             $table->foreign('idVoucherPromotionValue')

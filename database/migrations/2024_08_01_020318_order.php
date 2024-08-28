@@ -15,18 +15,18 @@ return new class extends Migration
                 ->references('id')
                 ->on('DetailOrder')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('idVoucher')->nullable();
-            $table->foreign('idVoucher')
-                ->references('id')
-                ->on('Voucher')
-                ->onDelete('cascade');
             $table->unsignedBigInteger('idAddress');
             $table->foreign('idAddress')
                 ->references('id')
                 ->on('Address')
                 ->onDelete('cascade');
-            $table->string('valueVoucher');
-            $table->string('valueOrder');
+            $table->unsignedBigInteger('idVoucherCode')->nullable();
+            $table->foreign('idVoucherCode')
+                ->references('id')
+                ->on('VoucherCodeValue')
+                ->onDelete('cascade');
+            $table->string('valueVoucher')->default("0");
+            $table->string('valueOrder')->default("0");
             $table->timestamps();
         });
     }

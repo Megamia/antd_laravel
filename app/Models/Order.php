@@ -10,8 +10,8 @@ class Order extends Model
     use HasFactory;
     protected $fillable = [
         'idDetailOrder',
-        'idVoucher',
         'idAddress',
+        'idVoucherCode',
         'valueVoucher',
         'valueOrder',
     ];

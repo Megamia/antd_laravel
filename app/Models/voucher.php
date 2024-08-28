@@ -9,8 +9,8 @@ class Voucher extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'idVoucherCodeValue',
         'idVoucherPromotionValue',
+        'idOrder',
     ];
     public $timestamps = false;
     protected $table = 'Voucher';
