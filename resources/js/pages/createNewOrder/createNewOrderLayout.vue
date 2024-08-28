@@ -201,7 +201,6 @@ const inforProduct = (data1, data2, data3) => {
     }
 };
 
-const dataOrder = ref("");
 // const productSelected = (data) => {
 //     try {
 //         click();
@@ -287,29 +286,49 @@ onMounted(() => fetchDataOrder());
 
 //CostOrder
 //cần update
+const dataOrder = ref("");
 const createOrder = async () => {
+    // try {
+    //     await createVoucher();
+    //     await createProduct();
+    //     if (store.state.address && idDetailOrder.value) {
+    //         console.log("idAddress: ", store.state.address);
+    //         console.log("idDetailOrder: ", idDetailOrder.value);
+    //         console.log("idVoucher: ", idVoucher.value);
+    //     } else {
+    //         console.log("Chưa chọn đủ thông tin");
+    //         return;
+    //     }
+    //     const response = await axios.post(
+    //         `${import.meta.env.VITE_APP_URL_API}/createOrder`,
+    //         {
+    //             idDetailOrder: idDetailOrder.value,
+    //             idInforUser: store.state.address.id,
+    //             idVoucher: idVoucher.value,
+    //             valueOrder: eventBus.product.priceAfterSale,
+    //         }
+    //     );
+    //     if (response.data.status === 1) {
+    //         console.log("Success: ", response.data);
+    //     } else {
+    //         console.log("Faile");
+    //     }
+    // } catch (e) {
+    //     console.log("Error: ", e);
+    // }
     try {
-        await createVoucher();
-        await createProduct();
-        if (store.state.address && idDetailOrder.value) {
-            console.log("idAddress: ", store.state.address);
-            console.log("idDetailOrder: ", idDetailOrder.value);
-            console.log("idVoucher: ", idVoucher.value);
-        } else {
-            console.log("Chưa chọn đủ thông tin");
-            return;
-        }
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createOrder`,
             {
                 idDetailOrder: idDetailOrder.value,
-                idInforUser: store.state.address.id,
-                idVoucher: idVoucher.value,
-                valueOrder: eventBus.product.priceAfterSale,
+                idAddress: store.state.address.id,
+                idVoucherCode: eventBus.voucher.idVoucherCode,
             }
         );
         if (response.data.status === 1) {
-            console.log("Success: ", response.data);
+            console.log("Success");
+            dataOrder.value = response.data.createOrder;
+            await createVoucher(dataOrder.value);
         } else {
             console.log("Faile");
         }
@@ -405,23 +424,22 @@ const fetchDataIdAndPriceProduct = async () => {
 };
 const data = ref([]);
 const idVoucher = ref([]);
-const createVoucher = async () => {
+const createVoucher = async (dataOrder) => {
     try {
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createVoucher`,
             {
-                idVoucherCode: eventBus.voucher.idVoucherCode,
+                idOrder: dataOrder,
                 idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
             }
         );
         if (response.data.status === 1) {
-            if (response.data.message !== "Voucher(s) already exists") {
-                data.value = response.data.createVoucher;
-            } else {
-                data.value = response.data.existingVouchers;
-            }
-            console.log(data.value);
-            idVoucher.value = data.value.map((item) => item.id);
+            // if (response.data.message !== "Voucher(s) already exists") {
+            //     data.value = response.data.createVoucher;
+            // } else {
+            //     data.value = response.data.existingVouchers;
+            // }
+            // console.log(data.value);
         } else {
             alert("Có lỗi khi thêm voucher");
             return;
