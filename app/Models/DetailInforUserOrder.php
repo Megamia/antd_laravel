@@ -35,7 +35,7 @@ class DetailInforUserOrder extends Model
      *
      * @return array<string, string>
      */
-    public $timestamps = true;
+    public $timestamps = false;
     protected $table = 'DetailInforUserOrder';
     protected $hidden = [];
 }

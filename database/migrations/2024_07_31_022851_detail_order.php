@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('timeCreateOrder')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('sale')->default(0)->nullable();
             $table->string('price');
+            $table->timestamps();
         });
     }
 

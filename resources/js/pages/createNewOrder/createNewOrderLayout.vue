@@ -299,6 +299,7 @@ const createOrderWithoutValue = async () => {
             console.log(response.data.detail);
         } else {
             console.log("Tạo order không có value thất bại");
+            return;
         }
     } catch (e) {
         console.log("Error: ", e);
@@ -308,14 +309,15 @@ const createOrderWithoutValue = async () => {
 const createOrderWithValue = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createOrderWithouValue`,
+            `${import.meta.env.VITE_APP_URL_API}/createOrderWithValue`,
             {
                 idOrder: idDataOrderWithoutValue.value,
                 idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
             }
         );
         if (response.data.status === 1) {
-            console.log("Tạo order không có value thành công");
+            console.log("Tạo order có value thành công");
+            console.log(response.data);
         } else {
             console.log("Tạo order không có value thất bại");
             return;

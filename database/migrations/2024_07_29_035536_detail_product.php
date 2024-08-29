@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreign('idTagTitle')
                 ->references('id')
                 ->on('TagTitle');
+            $table->timestamps();
         });
 
         $data = [

@@ -25,6 +25,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('DetailInforUserOrder')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
 
         $data = [
