@@ -27,7 +27,10 @@
                 <ModalCostOrder v-if="showModal" @showModal="ClickShowModal" />
             </div>
             <div class="voucherAndTax">
-                <VoucherAndTax ref="updateVAT" />
+                <VoucherAndTax
+                    ref="updateVAT"
+                    @fetch-data-voucher="fetchDataVoucher"
+                />
             </div>
             <div class="noteOrder">
                 <NoteOrder />
@@ -152,9 +155,9 @@ let numberProductSelected = 0;
 const fetchData = () => {
     fetchDataInforOrder();
 
-    if (updateVoucher.value) {
-        updateVoucher.value.fetchData();
-    }
+    // if (updateVoucher.value) {
+    //     updateVoucher.value.fetchData();
+    // }
     isLoyalty.value = eventBus.voucher.isLoyalty;
 };
 onMounted(() => fetchData());
@@ -214,21 +217,31 @@ const inforProduct = (data1, data2, data3) => {
 //     }
 // };
 
-//Cost
+let valueVAT = 0;
+
+const fetchDataVoucher = (data) => {
+    console.log(eventBus.product.priceAfterSale);
+    valueVAT = data;
+    mathCost();
+};
+
 const fetchDataInforOrder = () => {
-    // if (updateVAT.value) {
-    //     updateVAT.value.valueInModalVAT();
-    // }
+    mathCost();
+    if (updateVAT.value) {
+        updateVAT.value.valueInModalVAT();
+    }
+};
+// onMounted(() => fetchDataInforOrder());
+//Cost
+const mathCost = () => {
     if (eventBus.product.idProduct && eventBus.product.idProduct.length > 0) {
         numberProductSelected = eventBus.product.idProduct.length;
     } else {
         numberProductSelected = 0;
     }
+
     giamgia =
-        eventBus.voucher.valueVoucher +
-        eventBus.voucher.valueShip +
-        (eventBus.voucher.valuePercentVAT * eventBus.product.priceProduct) /
-            100;
+        eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + valueVAT;
     eventBus.product.priceAfterSale = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = eventBus.product.priceProduct - giamgia;
     priceProductValueText.value = priceProductValueText.value.toString();
@@ -239,18 +252,7 @@ const fetchDataInforOrder = () => {
 
     voucher.value = giamgia.toString();
     voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    if (updateVAT.value) {
-        updateVAT.value.valueInModalVAT();
-    }
-    // console.log(
-    //     "Price: ",
-    //     priceProductValueText.value,
-    //     "\n",
-    //     "Giamgia: ",
-    //     giamgia
-    // );
 };
-// onMounted(() => fetchDataInforOrder());
 //Cost
 
 const product = ref("");
