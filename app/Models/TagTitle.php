@@ -11,7 +11,7 @@ class TagTitle extends Model
     protected $fillable = [
         'name',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'TagTitle';
     protected $hidden = [];
 }

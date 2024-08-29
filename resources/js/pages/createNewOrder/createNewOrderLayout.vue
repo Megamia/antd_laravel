@@ -172,26 +172,6 @@ const dataUser = reactive({
     },
 });
 
-const test = () => {
-    // if (store.state.user.dataUser && store.state.address.dataAddress) {
-    //     dataUser.value.inforUser = store.state.user.dataUser;
-    //     dataUser.value.inforAddress = store.state.address.dataAddress;
-    //     console.log("Ok");
-    // } else {
-    //     console.log("Not ok");
-
-    //     return;
-    // }
-    if (store.state.user.length > 0 && store.state.address.length > 0) {
-        console.log("Ok");
-        console.log(store.state.user, store.state.address);
-    } else {
-        console.log("Not ok");
-        console.log(store.state.user, store.state.address);
-
-        return;
-    }
-};
 //UserOrder
 
 //InforOrder
@@ -220,7 +200,7 @@ const inforProduct = (data1, data2, data3) => {
 let valueVAT = 0;
 
 const fetchDataVoucher = (data) => {
-    console.log(eventBus.product.priceAfterSale);
+    // console.log(eventBus.product.priceAfterSale);
     valueVAT = data;
     mathCost();
 };
@@ -289,53 +269,75 @@ onMounted(() => fetchDataOrder());
 //CostOrder
 //cần update
 const dataOrder = ref("");
-const createOrder = async () => {
-    // try {
-    //     await createVoucher();
-    //     await createProduct();
-    //     if (store.state.address && idDetailOrder.value) {
-    //         console.log("idAddress: ", store.state.address);
-    //         console.log("idDetailOrder: ", idDetailOrder.value);
-    //         console.log("idVoucher: ", idVoucher.value);
-    //     } else {
-    //         console.log("Chưa chọn đủ thông tin");
-    //         return;
-    //     }
-    //     const response = await axios.post(
-    //         `${import.meta.env.VITE_APP_URL_API}/createOrder`,
-    //         {
-    //             idDetailOrder: idDetailOrder.value,
-    //             idInforUser: store.state.address.id,
-    //             idVoucher: idVoucher.value,
-    //             valueOrder: eventBus.product.priceAfterSale,
-    //         }
-    //     );
-    //     if (response.data.status === 1) {
-    //         console.log("Success: ", response.data);
-    //     } else {
-    //         console.log("Faile");
-    //     }
-    // } catch (e) {
-    //     console.log("Error: ", e);
-    // }
+const test = () => {
+    console.log("Address: ", store.state.address);
+    console.log("DetailOrder: ", idDetailOrder.value);
+    console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
+    if (store.state.address.length > 0 && idDetailOrder.value.length > 0) {
+        console.log("Address: ", store.state.address);
+        console.log("DetailOrder: ", idDetailOrder.value);
+        console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
+    } else {
+        console.log("Chưa đủ thông tin");
+    }
+};
+const idDataOrderWithoutValue = ref("");
+const createOrderWithoutValue = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createOrder`,
+            `${import.meta.env.VITE_APP_URL_API}/createOrderWithoutValue`,
             {
                 idDetailOrder: idDetailOrder.value,
-                idAddress: store.state.address.id,
+                idAddress: store.state.address.dataAddress.id,
                 idVoucherCode: eventBus.voucher.idVoucherCode,
             }
         );
         if (response.data.status === 1) {
-            console.log("Success");
-            dataOrder.value = response.data.createOrder;
-            await createVoucher(dataOrder.value);
+            console.log("Tạo order không có value thành công");
+            idDataOrderWithoutValue.value =
+                response.data.createOrderWithoutValue.map((item) => item.id);
+            console.log(response.data.detail);
         } else {
-            console.log("Faile");
+            console.log("Tạo order không có value thất bại");
         }
     } catch (e) {
         console.log("Error: ", e);
+    }
+};
+
+const createOrderWithValue = async () => {
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_APP_URL_API}/createOrderWithouValue`,
+            {
+                idOrder: idDataOrderWithoutValue.value,
+                idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
+            }
+        );
+        if (response.data.status === 1) {
+            console.log("Tạo order không có value thành công");
+        } else {
+            console.log("Tạo order không có value thất bại");
+            return;
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+    }
+};
+
+const createOrder = async () => {
+    await createProduct();
+    if (!checkValidInputCreateOrder()) {
+        return;
+    }
+    await createOrderWithoutValue();
+};
+const checkValidInputCreateOrder = () => {
+    if (store.state.address.dataAddress && idDetailOrder.value.length > 0) {
+        return true;
+    } else {
+        alert("Chưa điền đủ thông tin");
+        return false;
     }
 };
 //cần update
@@ -372,7 +374,6 @@ const createProduct = async () => {
         );
     }
 };
-
 const idDetailOrder = ref([]);
 const createDetailOrder = async (a) => {
     try {

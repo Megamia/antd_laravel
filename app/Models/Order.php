@@ -15,7 +15,7 @@ class Order extends Model
         'valueVoucher',
         'valueOrder',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'Order';
     protected $hidden = [];
 }

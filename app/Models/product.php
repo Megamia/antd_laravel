@@ -13,7 +13,7 @@ class Product extends Model
         'idTagTitle',
         'numberSelected',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'Product';
     protected $hidden = [];
 }

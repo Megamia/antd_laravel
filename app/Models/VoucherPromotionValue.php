@@ -12,7 +12,7 @@ class VoucherPromotionValue extends Model
         'text',
         'value',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'VoucherPromotionValue';
     protected $hidden = [];
 }

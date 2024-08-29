@@ -12,7 +12,7 @@ class Voucher extends Model
         'idVoucherPromotionValue',
         'idOrder',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'Voucher';
     protected $hidden = [];
 }

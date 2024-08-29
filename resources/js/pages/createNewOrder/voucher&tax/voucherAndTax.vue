@@ -96,7 +96,6 @@ const valueInModalVAT = (data) => {
         // console.log("data: ", data);
         // console.log("VATvalue.value: ", VATvalue.value);
     }
-    console.log(VATvalue.value);
     emitFetchData(VATvalue.value);
     VATvalue.value = VATvalue.value.toString();
     VATvalue.value = VATvalue.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");

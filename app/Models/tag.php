@@ -14,7 +14,7 @@ class Tag extends Model
         'id_item',
         'itemChil'
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'Tag';
     protected $hidden = [];
 }

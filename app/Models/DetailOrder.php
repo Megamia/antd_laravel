@@ -14,7 +14,7 @@ class DetailOrder extends Model
         'sale',
         'price',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'DetailOrder';
     protected $hidden = [];
 }

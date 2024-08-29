@@ -15,7 +15,7 @@ class DetailProduct extends Model
         'price',
         'img'
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'DetailProduct';
     protected $hidden = [];
 }

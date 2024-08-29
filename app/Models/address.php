@@ -17,7 +17,7 @@ class Address extends Model
         'address',
         'idUser',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'Address';
     protected $hidden = [];
 }
