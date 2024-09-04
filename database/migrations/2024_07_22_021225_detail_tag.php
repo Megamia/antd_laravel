@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\DetailTag;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use  App\Models\Tag;
 
 return new class extends Migration
 {
@@ -12,14 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Tag', function (Blueprint $table) {
+        Schema::create('DetailTag', function (Blueprint $table) {
             $table->id();
-            
+            $table->unsignedBigInteger('idTag')->default(1);
+            $table->foreign('idTag')
+                ->references('id')
+                ->on('Tag');
             $table->string('name');
             $table->integer('parent_id')->nullable();
-            
             $table->integer('id_item')->nullable();
-           
             $table->boolean('itemChil');
             $table->timestamps();
         });
@@ -29,7 +30,7 @@ return new class extends Migration
                 'name' => 'TagC1',
                 'parent_id' => null,
                 'id_item' => 1,
-                'itemChil' => false
+                'itemChil' => false,
             ],
             [
                 'name' => 'Tag1C2-A',
@@ -129,17 +130,20 @@ return new class extends Migration
             ],
         ];
         foreach ($data as $item) {
-            $tag = new Tag();
-            $tag->name = $item['name'];
-            $tag->parent_id = $item['parent_id'];
-            $tag->id_item = $item['id_item'];
-            $tag->itemChil = $item['itemChil'];
-            $tag->save();
+            $detailTag = new DetailTag();
+            $detailTag->name = $item['name'];
+            if (isset($item['idTag'])) {
+                $detailTag->idTag = $item['idTag'];
+            }
+            $detailTag->parent_id = $item['parent_id'];
+            $detailTag->id_item = $item['id_item'];
+            $detailTag->itemChil = $item['itemChil'];
+            $detailTag->save();
         }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('Tag');
+        Schema::dropIfExists('DetailTag');
     }
 };

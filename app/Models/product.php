@@ -9,8 +9,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'idDetailProduct',
-        'idTagTitle',
+        'name',
         'numberSelected',
     ];
     public $timestamps = true;

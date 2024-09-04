@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\TagTitle;
+use App\Models\Tag;
 
 return new class extends Migration
 {
@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('TagTitle', function (Blueprint $table) {
+        Schema::create('Tag', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('idTag')->default(1);
-            $table->foreign('idTag')
+            $table->unsignedBigInteger('idProduct')->default(1);
+            $table->foreign('idProduct')
                 ->references('id')
-                ->on('Tag');
+                ->on('Product');
             $table->timestamps();
         });
 
@@ -30,14 +30,17 @@ return new class extends Migration
         ];
 
         foreach ($data as $item) {
-            $tag_title = new TagTitle();
-            $tag_title->name = $item['name'];
-            $tag_title->save();
+            $tag = new Tag();
+            $tag->name = $item['name'];
+            if (isset($item['idProduct'])) {
+                $tag->idProduct = $item['idProduct'];
+            }
+            $tag->save();
         }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('TagTitle');
+        Schema::dropIfExists('Tag');
     }
 };

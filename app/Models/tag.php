@@ -9,10 +9,8 @@ class Tag extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'idProduct',
         'name',
-        'parent_id',
-        'id_item',
-        'itemChil'
     ];
     public $timestamps = true;
     protected $table = 'Tag';

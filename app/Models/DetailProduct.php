@@ -9,6 +9,7 @@ class DetailProduct extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'idProduct',
         'name',
         'quantity',
         'defaultPrice',

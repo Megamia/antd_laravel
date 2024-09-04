@@ -59,35 +59,29 @@ class OrderController extends Controller
     public function createOrderWithoutValue(Request $request)
     {
         $validated = $request->validate([
-            'idDetailOrder' => 'required|array',
-            'idDetailOrder.*' => 'exists:DetailOrder,id',
             'idAddress' => 'required|exists:Address,id',
             'idVoucherCode' => 'nullable|exists:VoucherCodeValue,id',
         ]);
 
-        $idDetailOrders = $validated['idDetailOrder'];
         $idAddress = $validated['idAddress'];
         $idVoucherCode = $validated['idVoucherCode'] ?? null;
 
         $createOrderWithoutValues = [];
         $detailCreateOrderWithoutValues = [];
-        foreach ($idDetailOrders as $idDetailOrder) {
-            try {
-                $orderData = [
-                    'idDetailOrder' => $idDetailOrder,
-                    'idAddress' => $idAddress,
-                ];
+        try {
+            $orderData = [
+                'idAddress' => $idAddress,
+            ];
 
-                if ($idVoucherCode !== null) {
-                    $orderData['idVoucherCode'] = $idVoucherCode;
-                }
-
-                $createOrderWithoutValue = Order::create($orderData);
-                $createOrderWithoutValues[] = $createOrderWithoutValue;
-                $detailCreateOrderWithoutValues[] = Order::find($createOrderWithoutValue->id);
-            } catch (\Exception $e) {
-                return response()->json(['status' => 0, 'message' => 'Failed to create order without value', 'error' => $e->getMessage()]);
+            if ($idVoucherCode !== null) {
+                $orderData['idVoucherCode'] = $idVoucherCode;
             }
+
+            $createOrderWithoutValue = Order::create($orderData);
+            $createOrderWithoutValues[] = $createOrderWithoutValue;
+            $detailCreateOrderWithoutValues[] = Order::find($createOrderWithoutValue->id);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 0, 'message' => 'Failed to create order without value', 'error' => $e->getMessage()]);
         }
 
         return response()->json(['status' => 1, 'createOrderWithoutValue' => $createOrderWithoutValues, 'detail' => $detailCreateOrderWithoutValues]);
@@ -95,36 +89,43 @@ class OrderController extends Controller
     public function createOrderWithValue(Request $request)
     {
         $validated = $request->validate([
-            'idVoucherPromotion.*' => 'nullable|exists:voucher_promotion_values,id',
-            'idOrder' => 'required|exists:orders,id',
-            'idVoucherCode' => 'nullable|exists:voucher_codes,id',
+            'idVoucherPromotion.*' => 'nullable|exists:VoucherPromotionValue,id',
+            'idOrder' => 'required|array',
+            'idOrder.*' => 'exists:Order,id',
         ]);
 
         $idVoucherPromotions = $validated['idVoucherPromotion'] ?? [];
-        $idOrder = $validated['idOrder'];
-        $idVoucherCode = $validated['idVoucherCode'] ?? null;
+        $idOrders = $validated['idOrder'];
 
-        $createVouchers = [];
-        $totalVoucherValue = 0;
+        $result = [];
 
-        foreach ($idVoucherPromotions as $idVoucherPromotion) {
-            try {
-                $voucherPromotionValue = VoucherPromotionValue::findOrFail($idVoucherPromotion);
-                $totalVoucherValue += $voucherPromotionValue->value;
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Failed to retrieve voucher promotion value',
-                    'error' => $e->getMessage()
-                ]);
+        foreach ($idOrders as $idOrder) {
+            $order = Order::findOrFail($idOrder);
+
+            $idVoucherCode = $order->idVoucherCode ?? null;
+
+            $createVouchers = [];
+            $totalVoucherValue = 0;
+
+            foreach ($idVoucherPromotions as $idVoucherPromotion) {
+                try {
+                    if (!is_null($idVoucherPromotion)) {
+                        $voucherPromotionValue = VoucherPromotionValue::findOrFail($idVoucherPromotion);
+                        $totalVoucherValue += $voucherPromotionValue->value;
+                    }
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to retrieve voucher promotion value',
+                        'error' => $e->getMessage()
+                    ]);
+                }
             }
-        }
 
-        if (!empty($idVoucherPromotions)) {
             foreach ($idVoucherPromotions as $idVoucherPromotion) {
                 try {
                     $createVoucher = Voucher::create([
-                        'idVoucherPromotionValue' => $idVoucherPromotion,
+                        'idVoucherPromotionValue' => $idVoucherPromotion ?? null,
                         'idOrder' => $idOrder,
                     ]);
                     $createVouchers[] = $createVoucher;
@@ -136,52 +137,39 @@ class OrderController extends Controller
                     ]);
                 }
             }
-        } else {
+
+            $orderValueVoucher = 0;
+            if ($idVoucherCode) {
+                try {
+                    $voucherCodeValue = VoucherCodeValue::findOrFail($idVoucherCode);
+                    $orderValueVoucher = $voucherCodeValue->value;
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to retrieve voucher code value',
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+
             try {
-                $createVoucher = Voucher::create([
-                    'idOrder' => $idOrder,
-                ]);
-                $createVouchers[] = $createVoucher;
+                $order->valueVoucher = ($totalVoucherValue + $orderValueVoucher) * 1000;
+                $order->save();
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'Failed to create voucher',
+                    'message' => 'Failed to update order valueVoucher',
                     'error' => $e->getMessage()
                 ]);
             }
         }
-
-        $orderValueVoucher = 0;
-        if ($idVoucherCode) {
-            try {
-                $voucherCodeValue = VoucherCodeValue::findOrFail($idVoucherCode);
-                $orderValueVoucher = $voucherCodeValue->value;
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Failed to retrieve voucher code value',
-                    'error' => $e->getMessage()
-                ]);
-            }
-        }
-
-        try {
-            $order = Order::findOrFail($idOrder);
-            $order->valueVoucher = $totalVoucherValue + $orderValueVoucher;
-            $order->save();
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update order valueVoucher',
-                'error' => $e->getMessage()
-            ]);
-        }
+        $result[] = [
+            'data' => Order::findOrFail($idOrders),
+        ];
 
         return response()->json([
             'status' => 1,
-            'createVouchers' => $createVouchers,
-            'totalVoucherValue' => $totalVoucherValue,
-            'valueVoucher' => $order->valueVoucher
+            'result' => $result
         ]);
     }
 }
