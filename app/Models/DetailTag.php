@@ -9,7 +9,6 @@ class DetailTag extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'idTag',
         'name',
         'parent_id',
         'id_item',

@@ -15,10 +15,14 @@ return new class extends Migration
         Schema::create('Tag', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('idProduct')->default(1);
+            $table->unsignedBigInteger('idProduct')->nullable();
             $table->foreign('idProduct')
                 ->references('id')
                 ->on('Product');
+            $table->unsignedBigInteger('idDetailTag')->nullable();
+            $table->foreign('idDetailTag')
+                ->references('id')
+                ->on('DetailTag');
             $table->timestamps();
         });
 

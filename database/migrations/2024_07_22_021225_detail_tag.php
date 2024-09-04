@@ -14,10 +14,6 @@ return new class extends Migration
     {
         Schema::create('DetailTag', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idTag')->default(1);
-            $table->foreign('idTag')
-                ->references('id')
-                ->on('Tag');
             $table->string('name');
             $table->integer('parent_id')->nullable();
             $table->integer('id_item')->nullable();
@@ -132,9 +128,6 @@ return new class extends Migration
         foreach ($data as $item) {
             $detailTag = new DetailTag();
             $detailTag->name = $item['name'];
-            if (isset($item['idTag'])) {
-                $detailTag->idTag = $item['idTag'];
-            }
             $detailTag->parent_id = $item['parent_id'];
             $detailTag->id_item = $item['id_item'];
             $detailTag->itemChil = $item['itemChil'];

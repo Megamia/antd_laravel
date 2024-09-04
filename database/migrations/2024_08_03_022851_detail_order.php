@@ -19,7 +19,6 @@ return new class extends Migration
             ->references('id')
             ->on('Order')
             ->onDelete('cascade');
-            $table->integer('idProduct');
             $table->dateTime('timeCreateOrder')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('sale')->default(0)->nullable();
             $table->string('price');

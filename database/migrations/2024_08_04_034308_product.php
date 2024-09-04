@@ -16,24 +16,16 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->integer('numberSelected')->default(1);
+            $table->unsignedBigInteger('idDetailProduct')->nullable();
+            $table->foreign('idDetailProduct')
+                ->references('id')
+                ->on('DetailProduct');
+            $table->unsignedBigInteger('idDetailOrder')->nullable();
+            $table->foreign('idDetailOrder')
+                ->references('id')
+                ->on('DetailOrder');
             $table->timestamps();
         });
-        $data = [
-            ['name' => 'Giày'],
-            ['name' => 'Mỹ phẩm'],
-            ['name' => 'Hoa'],
-            ['name' => 'Đồ điện tử'],
-        ];
-        foreach ($data as $product) {
-            $products = new Product();
-            if (isset($product['name'])) {
-                $products->name = $product['name'];
-            }
-            if (isset($product['numberSelected'])) {
-                $products->numberSelected = $product['numberSelected'];
-            }
-            $products->save();
-        }
     }
     public function down(): void
     {

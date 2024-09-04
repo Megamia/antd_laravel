@@ -10,7 +10,6 @@ class DetailOrder extends Model
     use HasFactory;
     protected $fillable = [
         'idOrder',
-        'idProduct',
         'timeCreateOrder',
         'sale',
         'price',

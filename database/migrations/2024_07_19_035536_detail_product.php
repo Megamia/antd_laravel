@@ -21,10 +21,7 @@ return new class extends Migration
             $table->string('defaultPrice');
             $table->string('price');
             $table->string('img', 10000);
-            $table->unsignedBigInteger('idProduct')->default(1);
-            $table->foreign('idProduct')
-                ->references('id')
-                ->on('Product');
+           
             $table->timestamps();
         });
 
@@ -35,7 +32,6 @@ return new class extends Migration
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
                 'img' => 'http://127.0.0.1:8000/uploads/b01a8548b32136d8258ebb5131b4b5b4.jfif',
-                'idProduct' => 2,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -43,7 +39,6 @@ return new class extends Migration
                 'defaultPrice' => '2.049.000',
                 'price' => '2.049.000',
                 'img' => 'http://127.0.0.1:8000/uploads/dd00e9636746a2996dfaf29abd7631b3.jfif',
-                'idProduct' => 1,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -51,7 +46,6 @@ return new class extends Migration
                 'defaultPrice' => '1.249.000',
                 'price' => '1.249.000',
                 'img' => 'http://127.0.0.1:8000/uploads/a420b252cec7770c3d6e9d3dff2a3db4.jfif',
-                'idProduct' => 4,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -59,7 +53,6 @@ return new class extends Migration
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
                 'img' => 'http://127.0.0.1:8000/uploads/0b936eb81d043d5545d8b6c5a271f7d6.jfif',
-                'idProduct' => 1,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -67,7 +60,6 @@ return new class extends Migration
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
                 'img' => 'http://127.0.0.1:8000/uploads/4275c1c38fbd2f436e76c674485646e1.jfif',
-                'idProduct' => 3,
             ],
             [
                 'name' => 'Tên của sản phẩm',
@@ -75,7 +67,6 @@ return new class extends Migration
                 'defaultPrice' => '249.000',
                 'price' => '249.000',
                 'img' => 'http://127.0.0.1:8000/uploads/680c37df0e9b8e211650a3298c009484.jfif',
-                'idProduct' => 4,
             ],
         ];
         foreach ($data as $item) {
@@ -85,9 +76,6 @@ return new class extends Migration
             $DetailProduct->defaultPrice = $item['defaultPrice'];
             $DetailProduct->price = $item['price'];
             $DetailProduct->img = $item['img'];
-            if (isset($item['idProduct'])) {
-                $DetailProduct->idProduct = $item['idProduct'];
-            }
             $DetailProduct->save();
         }
     }

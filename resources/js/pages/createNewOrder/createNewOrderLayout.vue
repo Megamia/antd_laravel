@@ -331,13 +331,14 @@ const createOrderWithValue = async () => {
 };
 
 const createOrder = async () => {
-    await createProduct();
-    if (!checkValidInputCreateOrder()) {
-        return;
-    }
-    await createOrderWithoutValue();
-    await createOrderWithValue();
-    await createDetailOrder();
+    console.log(dataOrder.value);
+    // await createProduct();
+    // if (!checkValidInputCreateOrder()) {
+    //     return;
+    // }
+    // await createOrderWithoutValue();
+    // await createOrderWithValue();
+    // await createDetailOrder();
 };
 const checkValidInputCreateOrder = () => {
     if (store.state.address.dataAddress && idDetailOrder.value.length > 0) {
@@ -389,7 +390,7 @@ const createDetailOrder = async () => {
         const response = await axios.post(
             `${import.meta.env.VITE_APP_URL_API}/createDetailOrder`,
             {
-                idOrder:idDataOrderWithoutValue.value,
+                idOrder: idDataOrderWithoutValue.value,
                 idProduct: idProductSelected.value,
             }
         );
