@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('DetailProduct', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
             $table->integer('quantity');
             $table->string('defaultPrice');

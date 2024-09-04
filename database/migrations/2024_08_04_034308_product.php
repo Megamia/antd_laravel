@@ -15,15 +15,17 @@ return new class extends Migration
         Schema::create('Product', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->integer('numberSelected')->default(1);
             $table->unsignedBigInteger('idDetailProduct')->nullable();
             $table->foreign('idDetailProduct')
                 ->references('id')
-                ->on('DetailProduct');
-            $table->unsignedBigInteger('idDetailOrder')->nullable();
+                ->on('DetailProduct')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('idDetailOrder');
             $table->foreign('idDetailOrder')
                 ->references('id')
-                ->on('DetailOrder');
+                ->on('DetailOrder')
+                ->onDelete('cascade');
+            $table->integer('numberSelected')->default(1);
             $table->timestamps();
         });
     }
