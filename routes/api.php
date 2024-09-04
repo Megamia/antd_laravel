@@ -71,6 +71,7 @@ Route::post('createProduct', [ProductController::class, 'createProduct']);
 
 //DetailOrder
 Route::post('createDetailOrder', [DetailOrderController::class, 'createDetailOrder']);
+Route::post('createDetailOrderWithouPrice', [DetailOrderController::class, 'createDetailOrderWithouPrice']);
 //DetailOrder
 
 //Order

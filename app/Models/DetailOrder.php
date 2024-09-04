@@ -16,5 +16,8 @@ class DetailOrder extends Model
     ];
     public $timestamps = true;
     protected $table = 'DetailOrder';
+    protected $casts = [
+        'timeCreateOrder' => 'datetime',
+    ];
     protected $hidden = [];
 }

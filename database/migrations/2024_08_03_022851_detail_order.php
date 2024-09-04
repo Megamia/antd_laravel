@@ -16,12 +16,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idOrder');
             $table->foreign('idOrder')
-            ->references('id')
-            ->on('Order')
-            ->onDelete('cascade');
-            $table->dateTime('timeCreateOrder')->default(DB::raw('CURRENT_TIMESTAMP'));
+                ->references('id')
+                ->on('Order')
+                ->onDelete('cascade');
+            $table->dateTime('timeCreateOrder');
             $table->string('sale')->default(0)->nullable();
-            $table->string('price');
+            $table->string('price')->default(0);
             $table->timestamps();
         });
     }

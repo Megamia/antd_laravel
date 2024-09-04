@@ -331,7 +331,6 @@ const createOrderWithValue = async () => {
 };
 
 const createOrder = async () => {
-    console.log(dataOrder.value);
     // await createProduct();
     // if (!checkValidInputCreateOrder()) {
     //     return;
@@ -339,6 +338,8 @@ const createOrder = async () => {
     // await createOrderWithoutValue();
     // await createOrderWithValue();
     // await createDetailOrder();
+    await createOrderWithoutValue();
+    await createDetailOrderWithouPrice();
 };
 const checkValidInputCreateOrder = () => {
     if (store.state.address.dataAddress && idDetailOrder.value.length > 0) {
@@ -384,20 +385,20 @@ const createProduct = async () => {
         );
     }
 };
+
 const idDetailOrder = ref([]);
-const createDetailOrder = async () => {
+const createDetailOrderWithouPrice = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createDetailOrder`,
+            `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithouPrice`,
             {
                 idOrder: idDataOrderWithoutValue.value,
-                idProduct: idProductSelected.value,
             }
         );
         if (response.data.status === 1) {
             // const a = response.data.createDetailOrder.map((item) => item.id);
+            console.log(response.data);
         } else {
-            alert("Có lỗi xảy ra trong quá trình tạo DetailOrder");
             return;
         }
     } catch (e) {
@@ -435,6 +436,7 @@ const detailOrderProduct = ref("");
 //         return;
 //     }
 // };
+
 const data = ref([]);
 const idVoucher = ref([]);
 const createVoucher = async (dataOrder) => {
