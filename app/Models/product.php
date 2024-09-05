@@ -11,6 +11,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'idDetailProduct',
+        'idDetailOrder',
         'numberSelected',
     ];
     public $timestamps = true;

@@ -60,35 +60,43 @@ class voucherController extends Controller
 
     public function createVoucher(Request $request)
     {
-        $data = $request->only('idVoucherCode', 'idVoucherPromotion');
-        $idVoucherCode = $data['idVoucherCode'] ?? null;
+        $data = $request->only('idOrder', 'idVoucherPromotion');
+        $idOrder = $data['idOrder'];
         $idVoucherPromotions = $data['idVoucherPromotion'] ?? [];
 
         $createVouchers = [];
-        $failedOrders = [];
+        $failedVoucher = [];
 
-        if (($idVoucherCode === 0 || is_null($idVoucherCode)) && empty($idVoucherPromotions)) {
+        if (isset($data['idOrder']) && is_array($data['idOrder'])) {
+            $idOrder = $data['idOrder'][0];
+        }
+        if (!$idOrder) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'ID đơn hàng không hợp lệ'
+            ], 400);
+        }
+
+        if (empty($idVoucherPromotions)) {
             try {
                 $createVoucher = Voucher::create([
-                    'idVoucherCodeValue' => null,
+                    'idOrder' => $idOrder,
                     'idVoucherPromotionValue' => null,
                 ]);
                 $createVouchers[] = $createVoucher;
             } catch (\Exception $e) {
-                $failedOrders[] = ['error' => $e->getMessage()];
+                $failedVoucher[] = ['error' => $e->getMessage()];
             }
-        }
-
-        if ((is_null($idVoucherCode) || $idVoucherCode === 0) && !empty($idVoucherPromotions)) {
+        } else {
             foreach ($idVoucherPromotions as $idVoucherPromotion) {
                 try {
                     $createVoucher = Voucher::create([
-                        'idVoucherCodeValue' => null,
+                        'idOrder' => $idOrder,
                         'idVoucherPromotionValue' => $idVoucherPromotion,
                     ]);
                     $createVouchers[] = $createVoucher;
                 } catch (\Exception $e) {
-                    $failedOrders[] = [
+                    $failedVoucher[] = [
                         'idVoucherPromotion' => $idVoucherPromotion,
                         'error' => $e->getMessage()
                     ];
@@ -96,42 +104,14 @@ class voucherController extends Controller
             }
         }
 
-        if (!is_null($idVoucherCode) && $idVoucherCode !== 0 && empty($idVoucherPromotions)) {
-            try {
-                $createVoucher = Voucher::create([
-                    'idVoucherCodeValue' => $idVoucherCode,
-                    'idVoucherPromotionValue' => null,
-                ]);
-                $createVouchers[] = $createVoucher;
-            } catch (\Exception $e) {
-                $failedOrders[] = ['error' => $e->getMessage()];
-            }
-        }
-
-        if (!is_null($idVoucherCode) && $idVoucherCode !== 0 && !empty($idVoucherPromotions)) {
-            foreach ($idVoucherPromotions as $idVoucherPromotion) {
-                try {
-                    $createVoucher = Voucher::create([
-                        'idVoucherCodeValue' => $idVoucherCode,
-                        'idVoucherPromotionValue' => $idVoucherPromotion,
-                    ]);
-                    $createVouchers[] = $createVoucher;
-                } catch (\Exception $e) {
-                    $failedOrders[] = [
-                        'idVoucherPromotion' => $idVoucherPromotion,
-                        'error' => $e->getMessage()
-                    ];
-                }
-            }
-        }
-
-        if (count($failedOrders) > 0) {
+        if (count($failedVoucher) > 0) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Một số voucher không thể được tạo',
-                'failedOrders' => $failedOrders
+                'failedVoucher' => $failedVoucher
             ], 500);
         }
+
         return response()->json([
             'status' => 1,
             'createVoucher' => $createVouchers,

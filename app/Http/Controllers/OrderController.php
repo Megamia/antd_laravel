@@ -89,87 +89,50 @@ class OrderController extends Controller
     public function createOrderWithValue(Request $request)
     {
         $validated = $request->validate([
-            'idVoucherPromotion.*' => 'nullable|exists:VoucherPromotionValue,id',
-            'idOrder' => 'required|array',
-            'idOrder.*' => 'exists:Order,id',
+            'idVoucherCode' => 'nullable|exists:VoucherCodeValue,id',
         ]);
+        $data = $request->only('idOrder', 'idVoucherCode');
 
-        $idVoucherPromotions = $validated['idVoucherPromotion'] ?? [];
-        $idOrders = $validated['idOrder'];
+        $idOrder = $data['idOrder'];
 
-        $result = [];
+        $order = Order::where('id', $idOrder)->first();
+        $idVoucherCodeFromOrder = $order ? $order->idVoucherCode : null;
 
-        foreach ($idOrders as $idOrder) {
-            $order = Order::findOrFail($idOrder);
-
-            $idVoucherCode = $order->idVoucherCode ?? null;
-
-            $createVouchers = [];
-            $totalVoucherValue = 0;
-
-            foreach ($idVoucherPromotions as $idVoucherPromotion) {
-                try {
-                    if (!is_null($idVoucherPromotion)) {
-                        $voucherPromotionValue = VoucherPromotionValue::findOrFail($idVoucherPromotion);
-                        $totalVoucherValue += $voucherPromotionValue->value;
-                    }
-                } catch (\Exception $e) {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Failed to retrieve voucher promotion value',
-                        'error' => $e->getMessage()
-                    ]);
-                }
-            }
-
-            foreach ($idVoucherPromotions as $idVoucherPromotion) {
-                try {
-                    $createVoucher = Voucher::create([
-                        'idVoucherPromotionValue' => $idVoucherPromotion ?? null,
-                        'idOrder' => $idOrder,
-                    ]);
-                    $createVouchers[] = $createVoucher;
-                } catch (\Exception $e) {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Failed to create voucher',
-                        'error' => $e->getMessage()
-                    ]);
-                }
-            }
-
-            $orderValueVoucher = 0;
-            if ($idVoucherCode) {
-                try {
-                    $voucherCodeValue = VoucherCodeValue::findOrFail($idVoucherCode);
-                    $orderValueVoucher = $voucherCodeValue->value;
-                } catch (\Exception $e) {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Failed to retrieve voucher code value',
-                        'error' => $e->getMessage()
-                    ]);
-                }
-            }
-
-            try {
-                $order->valueVoucher = ($totalVoucherValue + $orderValueVoucher) * 1000;
-                $order->save();
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Failed to update order valueVoucher',
-                    'error' => $e->getMessage()
-                ]);
+        $valueVoucherCode = 0;
+        if ($idVoucherCodeFromOrder) {
+            $valueCode = VoucherCodeValue::where('id', $idVoucherCodeFromOrder)->value('value');
+            if ($valueCode) {
+                $cleanedValueVoucherCode = str_replace([',', '.'], '', $valueCode);
+                $valueVoucherCode = (float) $cleanedValueVoucherCode;
             }
         }
-        $result[] = [
-            'data' => Order::findOrFail($idOrders),
-        ];
 
-        return response()->json([
-            'status' => 1,
-            'result' => $result
-        ]);
+        $voucherPromotions = Voucher::where('idOrder', $idOrder)
+            ->pluck('idVoucherPromotionValue');
+
+        $sumValueVoucherPromotion = VoucherPromotionValue::whereIn('id', $voucherPromotions)
+            ->pluck('value')
+            ->map(function ($valuePromotion) {
+                $cleanedValueVoucherPromotion = str_replace([',', '.'], '', $valuePromotion);
+                return (float) $cleanedValueVoucherPromotion;
+            })
+            ->sum();
+
+        $totalVoucherValue = $valueVoucherCode + $sumValueVoucherPromotion;
+        $updatedRows = Order::whereIn('id', $idOrder)
+            ->update(['valueVoucher' => $totalVoucherValue]);
+        if ($updatedRows) {
+            return response()->json([
+                'status' => 1,
+                'totalVoucherValue' => $totalVoucherValue,
+                'message' => 'Tính toán thành công'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'totalVoucherValue' => $totalVoucherValue,
+                'message' => 'Tính toán thất bại'
+            ]);
+        }
     }
 }

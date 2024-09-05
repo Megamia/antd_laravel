@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tag;
-use App\Models\TagTitle;
+use App\Models\DetailTag;
 
 class tagController extends Controller
 {
     public function itemFilterWithTag(Request $request)
     {
-        $itemFilterWithTag = Tag::all();
+        $itemFilterWithTag = DetailTag::all();
         if ($itemFilterWithTag->count() > 0) {
             return response()->json(['status' => 1, 'itemFilterWithTag' => $itemFilterWithTag]);
         } else {
@@ -20,7 +20,7 @@ class tagController extends Controller
     public function titleFilterWithTag(Request $request)
     {
         $data = $request->only('title_id');
-        $titleFilterWithTag = TagTitle::where('id', $data['title_id'])->first();
+        $titleFilterWithTag = Tag::where('id', $data['title_id'])->first();
         if ($titleFilterWithTag) {
             return response()->json(['status' => 1, 'titleFilterWithTag' => $titleFilterWithTag]);
         } else {
@@ -31,7 +31,7 @@ class tagController extends Controller
     public function choosedTag(Request $request)
     {
         $data = $request->only('parent_id');
-        $choosedTag = Tag::whereIn('parent_id', explode(',', $data['parent_id']))->get();
+        $choosedTag = DetailTag::whereIn('parent_id', explode(',', $data['parent_id']))->get();
 
         if ($choosedTag) {
             return response()->json(['status' => 1, 'choosedTag' => $choosedTag]);
@@ -43,7 +43,7 @@ class tagController extends Controller
     {
         $data = $request->only('parent_id', 'id_item');
 
-        $query = Tag::query();
+        $query = DetailTag::query();
 
         if (isset($data['parent_id']) && !empty($data['parent_id'])) {
             $parentIds = array_filter(array_map('trim', explode(',', $data['parent_id'])));

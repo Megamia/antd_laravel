@@ -43,21 +43,23 @@ class ProductController extends Controller
     }
     public function createProduct(Request $request)
     {
-        $idProducts = $request->input('idProducts');
-
-        if (empty($idProducts)) {
-            return response()->json(['status' => 0, 'error' => 'Invalid input idProducts']);
+        $data = $request->only('idDetailProduct', 'idDetailOrder');
+        $idDetailProduct = $data['idDetailProduct'];
+        $idDetailOrder = $data['idDetailOrder'];
+        if (empty($data)) {
+            return response()->json(['status' => 0, 'error' => 'Invalid input']);
         }
 
-        if (!is_array($idProducts)) {
-            $idProducts = [$idProducts];
+        if (!is_array($idDetailProduct)) {
+            $idDetailProduct = [$idDetailProduct];
         }
 
-        $detailProducts = DetailProduct::whereIn('id', $idProducts)->get();
+        $detailProducts = DetailProduct::whereIn('id', $idDetailProduct)->get();
         $createProducts = [];
 
         foreach ($detailProducts as $detailProduct) {
             $createProduct = Product::create([
+                'idDetailOrder' => $idDetailOrder,
                 'idDetailProduct' => $detailProduct->id,
             ]);
             $createProducts[] = $createProduct;

@@ -19,7 +19,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('Order')
                 ->onDelete('cascade');
-            $table->dateTime('timeCreateOrder');
+            $table->dateTime('timeCreateOrder', precision: 0)->default(now());
             $table->string('sale')->default(0)->nullable();
             $table->string('price')->default(0);
             $table->timestamps();
