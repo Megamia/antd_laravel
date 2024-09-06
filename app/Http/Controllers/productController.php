@@ -43,38 +43,28 @@ class ProductController extends Controller
     }
     public function createProduct(Request $request)
     {
-        $data = $request->only('idDetailOrder', 'dataProduct');
+        $data = $request->only('idDetailProduct', 'idDetailOrder');
+        $idDetailProduct = $data['idDetailProduct'];
         $idDetailOrder = $data['idDetailOrder'];
-        $dataProduct = $data['dataProduct'];
-
-        if (!isset($idDetailOrder) || empty($dataProduct)) {
+        if (empty($data)) {
             return response()->json(['status' => 0, 'error' => 'Invalid input']);
         }
 
-        $idDetailProducts = array_column($dataProduct, 'idDetailProduct');
+        if (!is_array($idDetailProduct)) {
+            $idDetailProduct = [$idDetailProduct];
+        }
 
-        $detailProducts = DetailProduct::whereIn('id', $idDetailProducts)->get(['id', 'price']);
-
+        $detailProducts = DetailProduct::whereIn('id', $idDetailProduct)->get();
         $createProducts = [];
-        //cần update
+
         foreach ($detailProducts as $detailProduct) {
             $createProduct = Product::create([
                 'idDetailOrder' => $idDetailOrder,
                 'idDetailProduct' => $detailProduct->id,
             ]);
             $createProducts[] = $createProduct;
-
-            if ($dataProduct) {
-                foreach ($dataProduct as $product) {
-                    if ($product['idDetailProduct'] == $detailProduct->id) {
-                        $createProduct->update([
-                            'numberSelected' => $product['selectedQuantity'],
-                        ]);
-                    }
-                }
-            }
         }
-        //cần update
+
         return response()->json(['status' => 1, 'createProduct' => $createProducts]);
     }
 }

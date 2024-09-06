@@ -283,8 +283,8 @@ const buttonAddOrder = (id) => {
         id: product.id,
         selectedQuantity: numberSelected.value[product.id] ?? 0,
     }));
-    const filterData = data.value.filter((item) => item.selectedQuantity != 1);
-    fetchData(filterData);
+    // const filterData = data.value.filter((item) => item.selectedQuantity != 1);
+    fetchData(data.value);
 };
 const buttonDelOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
@@ -302,8 +302,8 @@ const buttonDelOrder = (id) => {
         id: product.id,
         selectedQuantity: numberSelected.value[product.id] ?? 0,
     }));
-    const filterData = data.value.filter((item) => item.selectedQuantity != 1);
-    fetchData(filterData);
+    // const filterData = data.value.filter((item) => item.selectedQuantity != 1);
+    fetchData(data.value);
 };
 
 const del = (id) => {
