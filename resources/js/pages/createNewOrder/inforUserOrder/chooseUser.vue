@@ -90,20 +90,25 @@ const addNewUser = () => {
 
 const buttonSave = async () => {
     try {
-        const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
-            {
-                id: a.value,
-            }
-        );
+        if (a.value && a.value != null) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_URL_API}/chooseUserOrder`,
+                {
+                    id: a.value,
+                }
+            );
 
-        if (response.data.status === 1) {
-            store.commit("user/setDataUser", {
-                dataUser: response.data.dataUserOrder,
-                userExpiry: response.data.userExpiry,
-            });
-            // console.log(store.state.user.dataUser, store.state.user.userExpiry);
-            router.back();
+            if (response.data.status === 1) {
+                store.commit("user/setDataUser", {
+                    dataUser: response.data.dataUserOrder,
+                    userExpiry: response.data.userExpiry,
+                });
+                // console.log(store.state.user.dataUser, store.state.user.userExpiry);
+                router.back();
+            }
+        } else {
+            alert("Chưa chọn khách hàng");
+            return;
         }
     } catch (e) {
         console.error("Lỗi: ", e.response ? e.response.data : e.message);

@@ -41,6 +41,7 @@ const emit = defineEmits([
     "closeModalShip",
     "fetchDataVoucher",
     "fetchDataVAT",
+    "fetchDataShip",
 ]);
 const route = useRoute();
 const valueVoucher = ref("0");
@@ -63,7 +64,7 @@ const valueInModalShip = (data1) => {
     eventBus.voucher.valueShip = valueShip.value;
     valueShip.value = valueShip.value.toString();
     valueShip.value = valueShip.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    emitFetchData();
+    emitFetchDataShip();
 };
 //ModalShip
 
@@ -119,6 +120,10 @@ onMounted(() => fetchData());
 
 const emitFetchData = (data) => {
     emit("fetchDataVoucher", data);
+};
+
+const emitFetchDataShip = () => {
+    emit("fetchDataShip");
 };
 
 defineExpose({

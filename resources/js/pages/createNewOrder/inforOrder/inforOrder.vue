@@ -220,6 +220,10 @@ const fet = () => {
     fetchTotalPrice();
     emit("fet");
 };
+// const dataDetailProductSelected = ref({
+//     id: null,
+//     quantity: Number,
+// });
 //ModalCostOrder
 
 const test = () => {
@@ -262,6 +266,8 @@ onMounted(async () => {
     }
 });
 
+const data = ref([]);
+
 const buttonAddOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
     if (product) {
@@ -273,7 +279,12 @@ const buttonAddOrder = (id) => {
             alert("Vượt quá số lượng tồn kho");
         }
     }
-    fetchData();
+    data.value = dataProductSelected.value.map((product) => ({
+        id: product.id,
+        selectedQuantity: numberSelected.value[product.id] ?? 0,
+    }));
+    const filterData = data.value.filter((item) => item.selectedQuantity != 1);
+    fetchData(filterData);
 };
 const buttonDelOrder = (id) => {
     const product = dataProductSelected.value.find((item) => item.id === id);
@@ -287,7 +298,12 @@ const buttonDelOrder = (id) => {
         }
         fetchTotalPrice();
     }
-    fetchData();
+    data.value = dataProductSelected.value.map((product) => ({
+        id: product.id,
+        selectedQuantity: numberSelected.value[product.id] ?? 0,
+    }));
+    const filterData = data.value.filter((item) => item.selectedQuantity != 1);
+    fetchData(filterData);
 };
 
 const del = (id) => {
@@ -347,7 +363,7 @@ const fetchTotalPrice = () => {
 let countProduct = 0;
 
 const checkDel = ref(null);
-const fetchData = async () => {
+const fetchData = async (data) => {
     const dataProductStore = store.getters["product/getDataProduct"];
     const idProductSelected = ref("");
     if (eventBus.product.idProduct) {
@@ -362,7 +378,7 @@ const fetchData = async () => {
         await handleNotCheckDel(dataProductStore, idProductSelected);
     }
 
-    emit("fet");
+    emit("fet", data);
 };
 
 const handleCheckDel = async (idProductSelected) => {

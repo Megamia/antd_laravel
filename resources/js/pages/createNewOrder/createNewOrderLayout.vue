@@ -30,6 +30,7 @@
                 <VoucherAndTax
                     ref="updateVAT"
                     @fetch-data-voucher="fetchDataVoucher"
+                    @fetch-data-ship="fetchDataShip"
                 />
             </div>
             <div class="noteOrder">
@@ -204,8 +205,17 @@ const fetchDataVoucher = (data) => {
     valueVAT = data;
     mathCost();
 };
+const fetchDataShip = () => {
+    mathCost();
+};
 
-const fetchDataInforOrder = () => {
+const dataProductSelected = ref([]);
+
+const fetchDataInforOrder = (data) => {
+    if (data) {
+        console.log("dataProductSelected: ", dataProductSelected.value);
+        dataProductSelected.value = data;
+    }
     mathCost();
     if (updateVAT.value) {
         updateVAT.value.valueInModalVAT();
@@ -275,6 +285,9 @@ const test = () => {
     console.log("Address: ", store.state.address);
     console.log("DetailOrder: ", idDetailOrder.value);
     console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
+    console.log("Ship: ", eventBus.voucher.valueShip);
+    console.log("Cost: ", eventBus.product.priceAfterSale);
+    console.log("d: ", dataProductSelected.value.map(item=>item.id));
     if (store.state.address.length > 0 && idDetailOrder.value.length > 0) {
         console.log("Address: ", store.state.address);
         console.log("DetailOrder: ", idDetailOrder.value);
@@ -366,6 +379,7 @@ const createProduct = async () => {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_URL_API}/createProduct`,
                 {
+                    dataProduct: dataProductSelected.value,
                     idDetailOrder: idDetailOrder.value,
                     idDetailProduct: eventBus.product.idProduct,
                 }
