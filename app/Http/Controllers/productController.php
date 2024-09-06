@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function productSelected(Request $request)
     {
         $data = $request->input('data');
-        $productSelected = [];                      //array
+        $productSelected = [];                          //array
         //$productSelected = new \stdClass();           object
         if (!is_array($data)) {
             return response()->json([
@@ -41,6 +41,7 @@ class ProductController extends Controller
         }
         return response()->json(['status' => 1, 'productSelected' => $productSelected]);
     }
+    //update
     public function createProduct(Request $request)
     {
         $data = $request->only('idDetailProduct', 'idDetailOrder');
@@ -67,4 +68,5 @@ class ProductController extends Controller
 
         return response()->json(['status' => 1, 'createProduct' => $createProducts]);
     }
+    //update
 }
