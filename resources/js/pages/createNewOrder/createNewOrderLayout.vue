@@ -282,19 +282,23 @@ onMounted(() => fetchDataOrder());
 //cần update
 const dataOrder = ref("");
 const test = () => {
-    console.log("Address: ", store.state.address);
-    console.log("DetailOrder: ", idDetailOrder.value);
-    console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
-    console.log("Ship: ", eventBus.voucher.valueShip);
-    console.log("Cost: ", eventBus.product.priceAfterSale);
-    console.log("d: ", dataProductSelected.value.map(item=>item.id));
-    if (store.state.address.length > 0 && idDetailOrder.value.length > 0) {
-        console.log("Address: ", store.state.address);
-        console.log("DetailOrder: ", idDetailOrder.value);
-        console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
-    } else {
-        console.log("Chưa đủ thông tin");
-    }
+    // console.log("Address: ", store.state.address);
+    // console.log("DetailOrder: ", idDetailOrder.value);
+    // console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
+    // console.log("Ship: ", eventBus.voucher.valueShip);
+    // console.log("Cost: ", eventBus.product.priceAfterSale);
+    // console.log(
+    //     "d: ",
+    //     dataProductSelected.value.map((item) => item.id)
+    // );
+    // if (store.state.address.length > 0 && idDetailOrder.value.length > 0) {
+    //     console.log("Address: ", store.state.address);
+    //     console.log("DetailOrder: ", idDetailOrder.value);
+    //     console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
+    // } else {
+    //     console.log("Chưa đủ thông tin");
+    // }
+    console.log(dataProductSelected.value);
 };
 const idDataOrderWithoutValue = ref("");
 const createOrderWithoutValue = async () => {
@@ -371,6 +375,7 @@ const checkValidInputCreateOrder = () => {
 const idProductCreated = ref("");
 const createProduct = async () => {
     try {
+        console.log(dataProductSelected.value);
         if (
             eventBus.product.idProduct != null &&
             Array.isArray(eventBus.product.idProduct) &&
@@ -440,8 +445,12 @@ const createDetailOrderWithPrice = async () => {
         );
         if (response.data.status === 1) {
             console.log("createDetailOrderWithPrice thành công");
+            console.log(response.data.priceAllProduct);
+            console.log(response.data.prices);
+            console.log(response.data.quantities);
         } else {
             console.log("createDetailOrderWithPrice thất bại");
+            console.log(response.data.message);
             return;
         }
     } catch (e) {

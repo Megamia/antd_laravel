@@ -8,6 +8,7 @@ use App\Models\DetailProduct;
 use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
+use Exception;
 
 class DetailOrderController extends Controller
 {
@@ -126,24 +127,56 @@ class DetailOrderController extends Controller
             $idDetailProducts = Product::whereIn('id', $data['idProduct'])->pluck('idDetailProduct');
             $idDetailOrders = Product::whereIn('id', $data['idProduct'])->pluck('idDetailOrder')->unique();
 
-            $priceAllProduct = DetailProduct::whereIn('id', $idDetailProducts)->pluck('price')
-                ->map(function ($price) {
-                    $cleanedPrice = str_replace([',', '.'], '', $price);
-                    return (float) $cleanedPrice;
-                })
-                ->sum();
+            $prices = DetailProduct::whereIn('id', $idDetailProducts)->pluck('price');
+            $quantities = Product::whereIn('idDetailProduct', $idDetailProducts)
+                ->where('idDetailorder', $idDetailOrders)
+                ->pluck('numberSelected');
+
+            // if ($prices->count() !== $quantities->count()) {
+            //     return response()->json(['status' => 0, 'message' => 'Mismatch between prices and quantities count']);
+            // }
+
+            $priceAllProduct = 0;
+
+            foreach ($prices as $index => $price) {
+                // $price = filter_var($price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                $price = str_replace([',', '.'], '', $price);
+                $price = (float) $price;
+
+
+                $quantity = $quantities[$index];
+
+                // $quantity = filter_var($quantity, FILTER_SANITIZE_NUMBER_INT);
+                // $price = str_replace([',', '.'], '', $price);
+                $quantity = (int) $quantity;
+
+                if (is_numeric($price) && is_numeric($quantity)) {
+                    $priceAllProduct += $price * $quantity;
+                } else {
+                    return response()->json(['status' => 0, 'message' => 'Invalid price or quantity value']);
+                }
+            }
+
             $formattedPrice = number_format($priceAllProduct, 2, '.', ',');
 
             $updatedRows = DetailOrder::whereIn('id', $idDetailOrders)
                 ->update(['price' => $formattedPrice]);
-            $createDetailOrderWithPrice = DetailOrder::find($idDetailOrders);
+
+            $createDetailOrderWithPrice = DetailOrder::whereIn('id', $idDetailOrders)->get();
+
             if ($updatedRows) {
-                return response()->json(['status' => 1, 'createDetailOrderWithPrice' => $createDetailOrderWithPrice]);
+                return response()->json([
+                    'status' => 1,
+                    'createDetailOrderWithPrice' => $createDetailOrderWithPrice,
+                    'priceAllProduct' => $priceAllProduct,
+                    'prices' => $prices,
+                    'quantities' => $quantities
+                ]);
             } else {
-                return response()->json(['status' => 0, 'createDetailOrderWithPrice' => 'Failed to update detail orders']);
+                return response()->json(['status' => 0, 'message' => 'Failed to update detail orders']);
             }
         } else {
-            return response()->json(['status' => 0, 'createDetailOrderWithPrice' => 'Invalid idProduct']);
+            return response()->json(['status' => 0, 'message' => 'Invalid idProduct']);
         }
     }
 }
