@@ -383,6 +383,11 @@ const fetchData = async (data) => {
             selectedQuantity: 1,
         }));
     }
+    console.log("data: ", data);
+    store.commit("product/setDataProduct", {
+        numberSelected: data.map((item) => item.selectedQuantity),
+    });
+    console.log(store.state.product.numberSelected);
     emit("fet", data);
 };
 

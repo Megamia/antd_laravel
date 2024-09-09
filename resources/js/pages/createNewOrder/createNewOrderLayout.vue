@@ -213,7 +213,6 @@ const dataProductSelected = ref([]);
 
 const fetchDataInforOrder = (data) => {
     dataProductSelected.value = data;
-    console.log("dataProductSelected: ", dataProductSelected.value);
     mathCost();
     if (updateVAT.value) {
         updateVAT.value.valueInModalVAT();
@@ -453,12 +452,8 @@ const createDetailOrderWithValue = async () => {
         );
         if (response.data.status === 1) {
             console.log("createDetailOrderWithValue thành công");
-            console.log(response.data.priceAllProduct);
-            console.log(response.data.prices);
-            console.log(response.data.quantities);
         } else {
             console.log("createDetailOrderWithValue thất bại");
-            console.log(response.data.message);
             return;
         }
     } catch (e) {
