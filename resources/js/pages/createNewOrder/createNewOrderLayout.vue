@@ -212,10 +212,8 @@ const fetchDataShip = () => {
 const dataProductSelected = ref([]);
 
 const fetchDataInforOrder = (data) => {
-    if (data) {
-        console.log("dataProductSelected: ", dataProductSelected.value);
-        dataProductSelected.value = data;
-    }
+    dataProductSelected.value = data;
+    console.log("dataProductSelected: ", dataProductSelected.value);
     mathCost();
     if (updateVAT.value) {
         updateVAT.value.valueInModalVAT();
@@ -298,7 +296,6 @@ const test = () => {
     // } else {
     //     console.log("Chưa đủ thông tin");
     // }
-    console.log(dataProductSelected.value);
 };
 const idDataOrderWithoutValue = ref("");
 const createOrderWithoutValue = async () => {
@@ -348,27 +345,36 @@ const createOrderWithValue = async () => {
 
 const createOrder = async () => {
     // await createProduct();
-    // if (!checkValidInputCreateOrder()) {
-    //     return;
-    // }
+    if (!checkValidInputCreateOrder()) {
+        return;
+    }
     // await createOrderWithoutValue();
     // await createOrderWithValue();
     // await createDetailOrder();
     await createOrderWithoutValue();
     await createVoucher();
     await createOrderWithValue();
-    await createDetailOrderWithouPrice();
+    await createDetailOrderWithoutValue();
     await createProduct();
-    await createDetailOrderWithPrice();
+    await createDetailOrderWithValue();
 };
 const checkValidInputCreateOrder = () => {
-    if (store.state.address.dataAddress && idDetailOrder.value.length > 0) {
-        console.log("Checked");
-        return true;
-    } else {
-        alert("Chưa điền đủ thông tin");
+    // if (store.state.address.dataAddress && idDetailOrder.value.length > 0) {
+    //     console.log("Checked");
+    //     return true;
+    // } else {
+    //     alert("Chưa điền đủ thông tin");
+    //     return false;
+    // }
+    if (!store.state.address.dataAddress) {
+        alert("Chưa chọn địa chỉ");
         return false;
     }
+    if (!dataProductSelected.value) {
+        alert("Chưa chọn sản phẩm");
+        return false;
+    }
+    return true;
 };
 //cần update
 //CostOrder
@@ -414,20 +420,19 @@ const createProduct = async () => {
 };
 
 const idDetailOrder = ref([]);
-const createDetailOrderWithouPrice = async () => {
+const createDetailOrderWithoutValue = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithouPrice`,
+            `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithoutValue`,
             {
                 idOrder: idDataOrderWithoutValue.value,
             }
         );
         if (response.data.status === 1) {
-            console.log("createDetailOrderWithouPrice thành công");
-            // console.log(response.data.createDetailOrderWithouPrice.id);
-            idDetailOrder.value = response.data.createDetailOrderWithouPrice.id;
+            console.log("createDetailOrderWithoutValue thành công");
+            idDetailOrder.value = response.data.createDetailOrderWithoutValue.id;
         } else {
-            console.log("createDetailOrderWithouPrice thất bại");
+            console.log("createDetailOrderWithoutValue thất bại");
             return;
         }
     } catch (e) {
@@ -435,21 +440,24 @@ const createDetailOrderWithouPrice = async () => {
     }
 };
 
-const createDetailOrderWithPrice = async () => {
+const createDetailOrderWithValue = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithPrice`,
+            `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithValue`,
             {
                 idProduct: idProductCreated.value,
+                valueSale: giamgia,
+                // valueShip: ,
+                // valueVat: ,
             }
         );
         if (response.data.status === 1) {
-            console.log("createDetailOrderWithPrice thành công");
+            console.log("createDetailOrderWithValue thành công");
             console.log(response.data.priceAllProduct);
             console.log(response.data.prices);
             console.log(response.data.quantities);
         } else {
-            console.log("createDetailOrderWithPrice thất bại");
+            console.log("createDetailOrderWithValue thất bại");
             console.log(response.data.message);
             return;
         }

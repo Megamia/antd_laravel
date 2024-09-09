@@ -302,7 +302,6 @@ const buttonDelOrder = (id) => {
         id: product.id,
         selectedQuantity: numberSelected.value[product.id] ?? 0,
     }));
-    // const filterData = data.value.filter((item) => item.selectedQuantity != 1);
     fetchData(data.value);
 };
 
@@ -317,6 +316,7 @@ const del = (id) => {
         const index = eventBus.product.idProduct.findIndex(
             (productId) => productId === id
         );
+        data.value = data.value.filter((item) => item.id !== id);
         if (index !== -1) {
             if (eventBus.product.idProduct.length > 0) {
                 eventBus.product.idProduct.splice(index, 1);
@@ -377,7 +377,12 @@ const fetchData = async (data) => {
     } else {
         await handleNotCheckDel(dataProductStore, idProductSelected);
     }
-
+    if (!data && dataProductSelected.value) {
+        data = dataProductSelected.value.map((product) => ({
+            id: product.id,
+            selectedQuantity: 1,
+        }));
+    }
     emit("fet", data);
 };
 

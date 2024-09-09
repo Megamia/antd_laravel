@@ -102,26 +102,26 @@ class DetailOrderController extends Controller
         // }
 
     }
-    public function createDetailOrderWithouPrice(Request $request)
+    public function createDetailOrderWithoutValue(Request $request)
     {
         $data = $request->only('idOrder');
 
         if (isset($data['idOrder']) && is_array($data['idOrder'])) {
             $idOrder = $data['idOrder'][0];
         } else {
-            return response()->json(['status' => 0, 'createDetailOrderWithouPrice' => 'Invalid idOrder']);
+            return response()->json(['status' => 0, 'createDetailOrderWithoutValue' => 'Invalid idOrder']);
         }
 
-        $createDetailOrderWithouPrice = DetailOrder::create([
+        $createDetailOrderWithoutValue = DetailOrder::create([
             'idOrder' => $idOrder,
             'timeCreateOrder' => Carbon::now(),
         ]);
 
-        return response()->json(['status' => 1, 'createDetailOrderWithouPrice' => $createDetailOrderWithouPrice]);
+        return response()->json(['status' => 1, 'createDetailOrderWithoutValue' => $createDetailOrderWithoutValue]);
     }
-    public function createDetailOrderWithPrice(Request $request)
+    public function createDetailOrderwithValue(Request $request)
     {
-        $data = $request->only('idProduct');
+        $data = $request->only('idProduct', 'valueSale');
 
         if (isset($data['idProduct']) && is_array($data['idProduct'])) {
             $idDetailProducts = Product::whereIn('id', $data['idProduct'])->pluck('idDetailProduct');
@@ -137,7 +137,7 @@ class DetailOrderController extends Controller
             // }
 
             $priceAllProduct = 0;
-
+            $priceAfterSale = 0;
             foreach ($prices as $index => $price) {
                 // $price = filter_var($price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 $price = str_replace([',', '.'], '', $price);
@@ -152,23 +152,25 @@ class DetailOrderController extends Controller
 
                 if (is_numeric($price) && is_numeric($quantity)) {
                     $priceAllProduct += $price * $quantity;
+                    $priceAfterSale = $priceAllProduct - $data['valueSale'];
                 } else {
                     return response()->json(['status' => 0, 'message' => 'Invalid price or quantity value']);
                 }
             }
 
-            $formattedPrice = number_format($priceAllProduct, 2, '.', ',');
+            $formattedPrice = number_format($priceAfterSale, 2, '.', ',');
 
             $updatedRows = DetailOrder::whereIn('id', $idDetailOrders)
                 ->update(['price' => $formattedPrice]);
 
-            $createDetailOrderWithPrice = DetailOrder::whereIn('id', $idDetailOrders)->get();
+            $createDetailOrderwithValue = DetailOrder::whereIn('id', $idDetailOrders)->get();
 
             if ($updatedRows) {
                 return response()->json([
                     'status' => 1,
-                    'createDetailOrderWithPrice' => $createDetailOrderWithPrice,
+                    'createDetailOrderwithValue' => $createDetailOrderwithValue,
                     'priceAllProduct' => $priceAllProduct,
+                    'priceAfterSale' => $priceAfterSale,
                     'prices' => $prices,
                     'quantities' => $quantities
                 ]);
