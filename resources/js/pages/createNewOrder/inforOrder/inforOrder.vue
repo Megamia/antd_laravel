@@ -370,6 +370,7 @@ let countProduct = 0;
 
 const checkDel = ref(null);
 const fetchData = async (data) => {
+    
     // console.log(eventBus.product.numberSelected);
     // const a = eventBus.product.numberSelected.find((item) => item.id === 1);
     // console.log(a.selectedQuantity);
@@ -403,6 +404,10 @@ const fetchData = async (data) => {
         }));
         // console.log("data: ", data);
     }
+    console.log(dataProductSelected.value);
+    console.log(data);
+    const num = eventBus.product.numberSelected;
+    console.log(num);
     emit("fet", data);
 };
 
@@ -442,7 +447,6 @@ const handleCheckDel = async (idProductSelected) => {
                 idDetailProduct: item.id,
                 numberSelected: numberSelected.value[item.id],
             };
-            console.log("productSelected: ", productSelected[item.id]);
         }
     }
 };
@@ -489,7 +493,6 @@ const handleNotCheckDel = async (dataProductStore, idProductSelected) => {
                     idDetailProduct: item.id,
                     numberSelected: numberSelected.value[item.id],
                 };
-                console.log("productSelected: ", productSelected[item.id]);
             }
         }
     }
