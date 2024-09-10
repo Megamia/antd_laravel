@@ -283,7 +283,11 @@ const buttonAddOrder = (id) => {
         id: product.id,
         selectedQuantity: numberSelected.value[product.id] ?? 0,
     }));
-    // const filterData = data.value.filter((item) => item.selectedQuantity != 1);
+
+    eventBus.product.numberSelected = data.value.map((item) => ({
+        id: item.id,
+        selectedQuantity: item.selectedQuantity,
+    }));
     fetchData(data.value);
 };
 const buttonDelOrder = (id) => {
@@ -330,6 +334,8 @@ const del = (id) => {
     }
 };
 
+const data1 = ref([]);
+
 const dataProductSelected = ref([]);
 const totalPrice = ref("");
 
@@ -364,6 +370,19 @@ let countProduct = 0;
 
 const checkDel = ref(null);
 const fetchData = async (data) => {
+    // console.log(eventBus.product.numberSelected);
+    // const a = eventBus.product.numberSelected.find((item) => item.id === 1);
+    // console.log(a.selectedQuantity);
+    // if (dataProductSelected.value.length > 0) {
+    //     eventBus.product.numberSelected = data.map(
+    //         (item) => ({
+    //             id: item.id,
+    //             numberSelected: item.selectedQuantity,
+    //         })
+    //     );
+    //     console.log("evb: ", eventBus.product.numberSelected);
+    // }
+
     const dataProductStore = store.getters["product/getDataProduct"];
     const idProductSelected = ref("");
     if (eventBus.product.idProduct) {
@@ -382,12 +401,8 @@ const fetchData = async (data) => {
             id: product.id,
             selectedQuantity: 1,
         }));
+        // console.log("data: ", data);
     }
-    console.log("data: ", data);
-    store.commit("product/setDataProduct", {
-        numberSelected: data.map((item) => item.selectedQuantity),
-    });
-    console.log(store.state.product.numberSelected);
     emit("fet", data);
 };
 
@@ -427,6 +442,7 @@ const handleCheckDel = async (idProductSelected) => {
                 idDetailProduct: item.id,
                 numberSelected: numberSelected.value[item.id],
             };
+            console.log("productSelected: ", productSelected[item.id]);
         }
     }
 };
@@ -473,6 +489,7 @@ const handleNotCheckDel = async (dataProductStore, idProductSelected) => {
                     idDetailProduct: item.id,
                     numberSelected: numberSelected.value[item.id],
                 };
+                console.log("productSelected: ", productSelected[item.id]);
             }
         }
     }

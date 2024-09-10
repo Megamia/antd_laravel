@@ -154,7 +154,7 @@ let numberProductSelected = 0;
 // };
 
 const fetchData = () => {
-    fetchDataInforOrder();
+    // fetchDataInforOrder();
 
     // if (updateVoucher.value) {
     //     updateVoucher.value.fetchData();
