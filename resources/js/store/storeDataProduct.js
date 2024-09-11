@@ -11,7 +11,7 @@ const storeDataProduct = {
             state.totalPrice = payload.totalPrice;
             state.idDetailProduct = payload.idDetailProduct;
             state.dataProduct = payload.dataProduct;
-            state.dataSelected = payload.dataSelected;
+            state.dataSelected = payload.dataSelected !== undefined ? payload.dataSelected : state.dataSelected;
         },
         clearDataProduct(state) {
             state.totalPrice = null;
