@@ -231,7 +231,11 @@ const show = () => {
 onMounted(async () => {
   await fetchData();
 
-  if (dataProductSelected.value && dataProductSelected.value !== "No choosedProduct") {
+  if (
+    dataProductSelected.value &&
+    dataProductSelected.value !== "No choosedProduct" &&
+    store.state.product.dataSelected
+  ) {
     dataProductSelected.value.forEach((item) => {
       const matchedProduct = store.state.product.dataSelected.find(
         (product) => product.id === item.id
@@ -320,11 +324,17 @@ const fetchTotalPrice = () => {
   if (dataProductSelected.value != null) {
     if (dataProductSelected.value.length > 0) {
       for (let i = 0; i < dataProductSelected.value.length; i++) {
+        let numberSelectedProduct = 0;
+        if (store.state.product.dataSelected) {
+          const matchedProduct = store.state.product.dataSelected.find(
+            (product) => product.id === dataProductSelected.value[i].id
+          );
+          numberSelectedProduct = matchedProduct.selectedQuantity;
+        } else {
+          numberSelectedProduct = 1;
+        }
         let priceProduct = dataProductSelected.value[i].price.replace(/\./g, "");
         priceProduct = priceProduct.replace(/\,/g, "");
-
-        let numberSelectedProduct =
-          numberSelected.value[dataProductSelected.value[i].id] ?? 1;
         totalPriceNumber += priceProduct * numberSelectedProduct;
         priceProduct = parseFloat(priceProduct);
       }

@@ -118,10 +118,14 @@ class OrderController extends Controller
             })
             ->sum();
 
+        $priceDetailOrder = DetailOrder::where('idOrder', $idOrder)->value('price');
         $totalVoucherValue = $valueVoucherCode + $sumValueVoucherPromotion;
-        $updatedRows = Order::whereIn('id', $idOrder)
-            ->update(['valueVoucher' => $totalVoucherValue]);
-        if ($updatedRows) {
+        $updatedRows = Order::where('id', $idOrder)
+            ->update([
+                'valueVoucher' => $totalVoucherValue,
+                'valueOrder' => $priceDetailOrder
+            ]);
+        if ($updatedRows > 0) {
             return response()->json([
                 'status' => 1,
                 'totalVoucherValue' => $totalVoucherValue,
