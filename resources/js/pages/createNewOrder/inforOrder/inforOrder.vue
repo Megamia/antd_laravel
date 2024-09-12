@@ -234,7 +234,7 @@ onMounted(async () => {
   if (
     dataProductSelected.value &&
     dataProductSelected.value !== "No choosedProduct" &&
-    store.state.product.dataSelected
+    store.state.product.dataSelected != null
   ) {
     dataProductSelected.value.forEach((item) => {
       const matchedProduct = store.state.product.dataSelected.find(
@@ -354,6 +354,9 @@ let countProduct = 0;
 const checkDel = ref(null);
 const fetchData = async (data) => {
   // console.log(data);
+  store.commit("product/setDataProduct", {
+    dataSelected: data,
+  });
   const dataProductStore = store.getters["product/getDataProduct"];
   const idProductSelected = ref("");
   if (eventBus.product.idProduct) {
@@ -403,7 +406,9 @@ const handleCheckDel = async (idProductSelected) => {
     for (const item of dataProductSelected.value) {
       if (
         numberSelected.value[item.id] === undefined ||
-        numberSelected.value[item.id] === null
+        numberSelected.value[item.id] === null ||
+        store.state.product.dataSelected === null ||
+        !store.state.product.dataSelected
       ) {
         numberSelected.value[item.id] = 1;
       }
@@ -444,7 +449,9 @@ const handleNotCheckDel = async (dataProductStore, idProductSelected) => {
       for (const item of dataProductSelected.value) {
         if (
           numberSelected.value[item.id] === undefined ||
-          numberSelected.value[item.id] === null
+          numberSelected.value[item.id] === null ||
+          store.state.product.dataSelected === null ||
+          !store.state.product.dataSelected
         ) {
           numberSelected.value[item.id] = 1;
         }

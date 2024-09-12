@@ -279,6 +279,7 @@ const test = () => {
   // } else {
   //     console.log("Chưa đủ thông tin");
   // }
+  console.log(store.state.product.dataSelected);
 };
 const idDataOrderWithoutValue = ref("");
 const createOrderWithoutValue = async () => {
@@ -334,10 +335,10 @@ const createOrder = async () => {
   // await createDetailOrder();
   await createOrderWithoutValue();
   await createVoucher();
-  await createOrderWithValue();
   await createDetailOrderWithoutValue();
   await createProduct();
   await createDetailOrderWithValue();
+  await createOrderWithValue();
 };
 const checkValidInputCreateOrder = () => {
   if (!store.state.address.dataAddress) {
@@ -363,7 +364,7 @@ const createProduct = async () => {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_URL_API}/createProduct`,
         {
-          dataProduct: dataProductSelected.value,
+          dataProduct: store.state.product.dataSelected,
           idDetailOrder: idDetailOrder.value,
           idDetailProduct: eventBus.product.idProduct,
         }
