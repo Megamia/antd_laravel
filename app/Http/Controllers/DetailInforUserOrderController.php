@@ -43,25 +43,6 @@ class DetailInforUserOrderController extends Controller
         }
     }
 
-    // public function dataUserOrder(Request $request)
-    // {
-    //     $user_id = $request->session()->get('user_id');
-    //     $user_id_expires_at = $request->session()->get('user_id_expires_at');
-
-    //     if ($user_id && $user_id_expires_at && now()->lessThanOrEqualTo($user_id_expires_at)) {
-    //         if ($user_id === 'guest') {
-    //             return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
-    //         } else {
-    //             $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
-    //             return response()->json(['status' => 1, 'dataUserOrder' => $dataUser]);
-    //         }
-    //     } else {
-    //         $request->session()->forget('user_id');
-    //         $request->session()->forget('user_id_expires_at');
-    //         return response()->json(['status' => 0, 'message' => 'no data user or session expired']);
-    //     }
-    // }
-
     public function dataUserOrder(Request $request)
     {
         $data = $request->only(['idUser']);
@@ -84,7 +65,6 @@ class DetailInforUserOrderController extends Controller
         $request->session()->forget('user_id_expires_at');
         return response()->json(['status' => 1, 'message' => 'Success']);
     }
-
 
     public function addUserOrder(Request $request)
     {
@@ -112,6 +92,7 @@ class DetailInforUserOrderController extends Controller
             'data' => $users
         ]);
     }
+
     public function inforUserCRM(Request $request)
     {
         $data = DetailInforUserOrder::all();

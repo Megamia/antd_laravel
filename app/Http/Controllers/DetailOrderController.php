@@ -97,23 +97,13 @@ class DetailOrderController extends Controller
             $quantities = Product::whereIn('idDetailProduct', $idDetailProducts)
                 ->where('idDetailorder', $idDetailOrders)
                 ->pluck('numberSelected');
-
-            // if ($prices->count() !== $quantities->count()) {
-            //     return response()->json(['status' => 0, 'message' => 'Mismatch between prices and quantities count']);
-            // }
-
             $priceAllProduct = 0;
             $priceAfterSale = 0;
             foreach ($prices as $index => $price) {
-                // $price = filter_var($price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 $price = str_replace([',', '.'], '', $price);
                 $price = (float) $price;
 
-
                 $quantity = $quantities[$index];
-
-                // $quantity = filter_var($quantity, FILTER_SANITIZE_NUMBER_INT);
-                // $price = str_replace([',', '.'], '', $price);
                 $quantity = (int) $quantity;
 
                 if (is_numeric($price) && is_numeric($quantity)) {

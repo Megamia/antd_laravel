@@ -19,6 +19,7 @@ class addressController extends Controller
             return response()->json(['status' => 0, 'message' => 'No data address']);
         }
     }
+
     //Cần update
     public function newDataUserOrderAfterSwap(Request $request)
     {
@@ -30,16 +31,7 @@ class addressController extends Controller
             if ($user_id === 'guest') {
                 return response()->json(['status' => 1, 'dataUserOrder' => 'guest']);
             } else {
-                // if (is_null($newAddress['idAddress'])) {
-                //     $inforUser = Address::where('idUser', $user_id)->first();
-
-                //     if ($inforUser && $inforUser->idUser) {
-                //         $newAddress['idAddress'] = $inforUser->idUser;
-                //     }
-                // }
-
                 $dataUser = DetailInforUserOrder::where('id', $user_id)->first();
-
                 if ($dataUser) {
                     if (!is_null($newAddress['idAddress'])) {
                         $address = Address::where('id', $newAddress['idAddress'])->first();
@@ -62,6 +54,7 @@ class addressController extends Controller
         }
     }
     //Cần update
+    
     public function deleteAddress(Request $request, $id)
     {
         $address = Address::findOrFail($id);
