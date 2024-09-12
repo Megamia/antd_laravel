@@ -259,29 +259,22 @@ const fetchDataOrder = async () => {
 onMounted(() => fetchDataOrder());
 //InforOrder
 
-//CostOrder
-//cần update
 const dataOrder = ref("");
-const test = () => {
-  // console.log("Address: ", store.state.address);
-  // console.log("DetailOrder: ", idDetailOrder.value);
-  // console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
-  // console.log("Ship: ", eventBus.voucher.valueShip);
-  // console.log("Cost: ", eventBus.product.priceAfterSale);
-  // console.log(
-  //     "d: ",
-  //     dataProductSelected.value.map((item) => item.id)
-  // );
-  // if (store.state.address.length > 0 && idDetailOrder.value.length > 0) {
-  //     console.log("Address: ", store.state.address);
-  //     console.log("DetailOrder: ", idDetailOrder.value);
-  //     console.log("idVoucherCode: ", eventBus.voucher.idVoucherCode);
-  // } else {
-  //     console.log("Chưa đủ thông tin");
-  // }
-  console.log(store.state.product.dataSelected);
-};
+const test = () => {};
 const idDataOrderWithoutValue = ref("");
+
+const createOrder = async () => {
+  if (!checkValidInputCreateOrder()) {
+    return;
+  }
+  await createOrderWithoutValue();
+  await createVoucher();
+  await createDetailOrderWithoutValue();
+  await createProduct();
+  await createDetailOrderWithValue();
+  await createOrderWithValue();
+};
+
 const createOrderWithoutValue = async () => {
   try {
     const response = await axios.post(
@@ -325,21 +318,6 @@ const createOrderWithValue = async () => {
   }
 };
 
-const createOrder = async () => {
-  // await createProduct();
-  if (!checkValidInputCreateOrder()) {
-    return;
-  }
-  // await createOrderWithoutValue();
-  // await createOrderWithValue();
-  // await createDetailOrder();
-  await createOrderWithoutValue();
-  await createVoucher();
-  await createDetailOrderWithoutValue();
-  await createProduct();
-  await createDetailOrderWithValue();
-  await createOrderWithValue();
-};
 const checkValidInputCreateOrder = () => {
   if (!store.state.address.dataAddress) {
     alert("Chưa chọn địa chỉ");
@@ -351,8 +329,7 @@ const checkValidInputCreateOrder = () => {
   }
   return true;
 };
-//cần update
-//CostOrder
+
 const idProductCreated = ref("");
 const createProduct = async () => {
   try {
@@ -431,39 +408,7 @@ const createDetailOrderWithValue = async () => {
     console.log("Error:  ", e);
   }
 };
-const productId = ref([]);
-const detailOrderProduct = ref("");
-// const fetchDataIdAndPriceProduct = async () => {
-//     await fetchDataOrder();
-//     productId.value = Array.isArray(idProduct.value)
-//         ? Array.from(idProduct.value)
-//         : [];
-//     if (productId.value.length > 0 && product.value.length > 0) {
-//         try {
-//             const response = await axios.post(
-//                 `${import.meta.env.VITE_APP_URL_API}/addDetailOrder`,
-//                 {
-//                     idProducts: productId.value,
-//                 }
-//             );
-//             if (response.data.status === 1) {
-//                 detailOrderProduct.value = response.data.addDetailOrders;
-//                 const idDetailOrder = detailOrderProduct.value.map((b) => b.id);
-//                 await createVoucher(idDetailOrder);
-//             } else {
-//                 alert("Có lỗi khi khởi tạo đơn hàng");
-//                 return;
-//             }
-//         } catch (e) {
-//             console.log("Error: ", e);
-//         }
-//     } else {
-//         return;
-//     }
-// };
 
-const data = ref([]);
-const idVoucher = ref([]);
 const createVoucher = async (dataOrder) => {
   try {
     const response = await axios.post(
@@ -490,46 +435,6 @@ const createVoucher = async (dataOrder) => {
     console.log("Error: ", e);
   }
 };
-
-// const fetchDataInforUser = async (idDetailOrder, idVoucher) => {
-//     try {
-//         const response = await axios.post(
-//             `${import.meta.env.VITE_APP_URL_API}/InforUser`,
-//             {
-//                 idUser: dataUser.value.inforUser.id,
-//                 idAddress: dataUser.value.inforAddress.id,
-//             }
-//         );
-//         if (response.data.status === 1) {
-//             const idInforUser = response.data.InforUser.id;
-//             await completeCreateOrder(idDetailOrder, idInforUser, idVoucher);
-//         } else {
-//             console.log("Faile");
-//         }
-//     } catch (e) {
-//         console.log("Error: ", e);
-//     }
-// };
-
-// const completeCreateOrder = async (idDetailOrder, idInforUser, idVoucher) => {
-//     try {
-//         const response = await axios.post(
-//             `${import.meta.env.VITE_APP_URL_API}/createOrder`,
-//             {
-//                 idDetailOrder: idDetailOrder,
-//                 idInforUser: idInforUser,
-//                 idVoucher: idVoucher,
-//             }
-//         );
-//         if (response.data.status === 1) {
-//             router.push("/CreateOrderSuccess");
-//         } else {
-//             alert("Tạo mới đơn hàng thất bại");
-//         }
-//     } catch (e) {
-//         console.log("Error: ", e);
-//     }
-// };
 </script>
 
 <style scoped>

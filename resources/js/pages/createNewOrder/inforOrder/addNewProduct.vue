@@ -1,103 +1,81 @@
 <template>
-    <div class="mainAddNewProduct">
-        <div class="title">
-            <AnOutlinedArrowLeft @click="back" />
-            <span @click="test"> Thêm sản phẩm </span>
-        </div>
-        <div class="content">
-            <div class="details">
-                <div class="search">
-                    <a-input-search
-                        v-model:value="nameOrPhoneNumber"
-                        placeholder="Nhập tên sản phẩm/combo"
-                    />
-                </div>
-                <div class="filterWithSelection">
-                    <span
-                        class="filterSpan"
-                        @click="showModalFilterWithSelection"
-                        >Tất cả sản phẩm
-                        <AkChevronDownSmall />
-                    </span>
-                </div>
-                <modalFilterWithSelection
-                    v-if="isShowModalFilterWithSelection"
-                    @showModal="showModalFilterWithSelection"
-                    @tags="filterWithTag"
-                />
-                <div class="productInfor">
-                    <a-checkbox-group
-                        v-model:value="a"
-                        style="
-                            width: 100%;
-                            display: flex;
-                            flex-direction: column;
-                        "
-                    >
-                        <div
-                            class="productItems"
-                            v-for="product in filter"
-                            :key="product.id"
-                        >
-                            <a-checkbox
-                                :value="product.id"
-                                style="margin-left: 12px; margin-top: 12px"
-                                :disabled="product.quantity <= 0"
-                            />
-                            <div class="productInforRadio">
-                                <img
-                                    style="
-                                        width: 60px;
-                                        height: 60px;
-                                        margin-block: 10px;
-                                    "
-                                    :src="product.img"
-                                />
-                                <div class="detailsProduct">
-                                    <div class="nameAndTagProduct">
-                                        <span class="nameProduct">{{
-                                            product.name
-                                        }}</span>
-                                        <span class="tagProduct">{{
-                                            product.tag
-                                        }}</span>
-                                    </div>
-                                    <div class="priceAndQuantityProduct">
-                                        <span class="priceProduct">
-                                            {{ product.price }}đ
-                                        </span>
-                                        <span class="quantityProduct">
-                                            <span class="labelQuantity"
-                                                >Tồn kho:
-                                            </span>
-                                            <span class="textQuantity">
-                                                {{ product.quantity }}
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="height: 1000px; width: 100%" />
-                    </a-checkbox-group>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <div class="saveDive">
-                <span> Đã chọn ({{ a.length }}) sản phẩm</span>
-                <a-button type="primary" @click="buttonSave">Lưu</a-button>
-            </div>
-        </div>
+  <div class="mainAddNewProduct">
+    <div class="title">
+      <AnOutlinedArrowLeft @click="back" />
+      <span @click="test"> Thêm sản phẩm </span>
     </div>
+    <div class="content">
+      <div class="details">
+        <div class="search">
+          <a-input-search
+            v-model:value="nameOrPhoneNumber"
+            placeholder="Nhập tên sản phẩm/combo"
+          />
+        </div>
+        <div class="filterWithSelection">
+          <span class="filterSpan" @click="showModalFilterWithSelection"
+            >Tất cả sản phẩm
+            <AkChevronDownSmall />
+          </span>
+        </div>
+        <modalFilterWithSelection
+          v-if="isShowModalFilterWithSelection"
+          @showModal="showModalFilterWithSelection"
+          @tags="filterWithTag"
+        />
+        <div class="productInfor">
+          <a-checkbox-group
+            v-model:value="a"
+            style="width: 100%; display: flex; flex-direction: column"
+          >
+            <div class="productItems" v-for="product in filter" :key="product.id">
+              <a-checkbox
+                :value="product.id"
+                style="margin-left: 12px; margin-top: 12px"
+                :disabled="product.quantity <= 0"
+              />
+              <div class="productInforRadio">
+                <img
+                  style="width: 60px; height: 60px; margin-block: 10px"
+                  :src="product.img"
+                />
+                <div class="detailsProduct">
+                  <div class="nameAndTagProduct">
+                    <span class="nameProduct">{{ product.name }}</span>
+                    <span class="tagProduct">{{ product.tag }}</span>
+                  </div>
+                  <div class="priceAndQuantityProduct">
+                    <span class="priceProduct"> {{ product.price }}đ </span>
+                    <span class="quantityProduct">
+                      <span class="labelQuantity">Tồn kho: </span>
+                      <span class="textQuantity">
+                        {{ product.quantity }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="height: 1000px; width: 100%" />
+          </a-checkbox-group>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="saveDive">
+        <span> Đã chọn ({{ a.length }}) sản phẩm</span>
+        <a-button type="primary" @click="buttonSave">Lưu</a-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import {
-    AnOutlinedArrowLeft,
-    CaAddAlt,
-    AkChevronDownSmall,
+  AnOutlinedArrowLeft,
+  CaAddAlt,
+  AkChevronDownSmall,
 } from "@kalimahapps/vue-icons";
 import ModalFilterWithSelection from "./ModalFilterWithSelection.vue";
 import { useRouter } from "vue-router";
@@ -108,21 +86,19 @@ import eventBus from "../../../eventBus";
 const emit = defineEmits(["choosedProduct", "fetchData"]);
 
 const tag = ref("");
-const a = ref([1]);
+const a = ref([]);
 
 const nameOrPhoneNumber = ref("");
 const router = useRouter();
 
 const isShowModalFilterWithSelection = ref(false);
 const showModalFilterWithSelection = () => {
-    isShowModalFilterWithSelection.value =
-        !isShowModalFilterWithSelection.value;
+  isShowModalFilterWithSelection.value = !isShowModalFilterWithSelection.value;
 };
 const filterWithTag = (data) => {
-    isShowModalFilterWithSelection.value =
-        !isShowModalFilterWithSelection.value;
-    tag.value = data;
-    fetchData();
+  isShowModalFilterWithSelection.value = !isShowModalFilterWithSelection.value;
+  tag.value = data;
+  fetchData();
 };
 
 const data = ref({});
@@ -135,79 +111,80 @@ const data = ref({});
 // };
 
 const fetchData = async () => {
-    // if (idDetailProduct.value && idDetailProduct.value > 0) {
-    //     console.log("addew: ", idDetailProduct.value);
-    //     a.value = idDetailProduct.value;
-    // }
-    // if (idDetailProduct.value) {
-    // let values = Object.values(store.state.product.idDetailProduct);
-    // store.state.product.idDetailProduct = values
-    //     .join(",")
-    //     .split(",")
-    //     .map(Number);
-    // a.value = store.state.product.idDetailProduct.filter(
-    //     (item) => item !== 0
-    // );
-    //     console.log("a.value: ", idDetailProduct.value);
-    //     a.value = idDetailProduct.value;
-    // }
+  // if (idDetailProduct.value && idDetailProduct.value > 0) {
+  //     console.log("addew: ", idDetailProduct.value);
+  //     a.value = idDetailProduct.value;
+  // }
+  // if (idDetailProduct.value) {
+  // let values = Object.values(store.state.product.idDetailProduct);
+  // store.state.product.idDetailProduct = values
+  //     .join(",")
+  //     .split(",")
+  //     .map(Number);
+  // a.value = store.state.product.idDetailProduct.filter(
+  //     (item) => item !== 0
+  // );
+  //     console.log("a.value: ", idDetailProduct.value);
+  //     a.value = idDetailProduct.value;
+  // }
+  if (eventBus.product.idProductTemporary) {
+    a.value = eventBus.product.idProductTemporary;
+  } else {
     const idDetail = store.getters["product/getIdDetailProduct"];
 
     const idProductArray = Array.isArray(eventBus.product.idProduct)
-        ? eventBus.product.idProduct
-        : eventBus.product.idProduct
-        ? [eventBus.product.idProduct]
-        : [1];
-    const idDetailArray = Array.isArray(idDetail)
-        ? idDetail
-        : idDetail
-        ? [idDetail]
-        : [1];
+      ? eventBus.product.idProduct
+      : eventBus.product.idProduct
+      ? [eventBus.product.idProduct]
+      : [];
+    const idDetailArray = Array.isArray(idDetail) ? idDetail : idDetail ? [idDetail] : [];
 
     if (idProductArray.length > 0 || idDetailArray.length > 0) {
-        store.commit("product/setDataProduct", {
-            idDetailProduct: idProductArray,
-        });
-        a.value = idProductArray.length > 0 ? idProductArray : idDetailArray;
+      store.commit("product/setDataProduct", {
+        idDetailProduct: idProductArray,
+      });
+      a.value = idProductArray.length > 0 ? idProductArray : idDetailArray;
     }
+  }
 
-    try {
-        if (tag.value) {
-            const response = await axios.post(
-                `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
-                {
-                    tag: tag.value,
-                }
-            );
-            if (response.data.status === 1) {
-                data.value = response.data.inforProductWithTag;
-                return data.value;
-            } else {
-                console.log("Faile");
-            }
-        } else {
-            const response = await axios.get(
-                `${import.meta.env.VITE_APP_URL_API}/inforProduct`
-            );
-            if (response.data.status === 1) {
-                data.value = response.data.inforProduct;
-                // store.commit("product/setDataProduct", {
-                //     dataProduct: response.data.inforProduct,
-                // });
-                return data.value;
-            } else {
-                console.log("Faile");
-            }
+  try {
+    if (tag.value) {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_URL_API}/inforProductWithTag`,
+        {
+          tag: tag.value,
         }
-    } catch (e) {
-        console.log("Error: ", e);
+      );
+      if (response.data.status === 1) {
+        data.value = response.data.inforProductWithTag;
+        return data.value;
+      } else {
+        console.log("Faile");
+      }
+    } else {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_URL_API}/inforProduct`
+      );
+      if (response.data.status === 1) {
+        data.value = response.data.inforProduct;
+        // store.commit("product/setDataProduct", {
+        //     dataProduct: response.data.inforProduct,
+        // });
+        return data.value;
+      } else {
+        console.log("Faile");
+      }
     }
+  } catch (e) {
+    console.log("Error: ", e);
+  }
 };
 
 onMounted(() => fetchData());
 
 const back = () => {
-    buttonSave();
+  eventBus.product.idProductTemporary = a.value;
+  router.back();
 };
 
 // const addNewUser = () => {
@@ -225,237 +202,236 @@ const back = () => {
 //     abcs();
 // });
 const buttonSave = async () => {
-    if (!a.value || a.value.length <= 0) {
-        alert("Hãy chọn ít nhất 1 sản phẩm");
-        a.value = [1];
-    } else {
-        try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
-                {
-                    id: a.value.sort().toString(),
-                }
-            );
-            if (response.data.status === 1) {
-                // store.commit("product/setDataProduct", {
-                //     idDetailProduct: a.value,
-                // });
-                eventBus.product.idProduct = a.value;
-                router.back();
-            } else {
-                console.log("No choosedProduct");
-            }
-        } catch (e) {
-            console.log("Error: ", e);
+  if (!a.value || a.value.length <= 0) {
+    alert("Hãy chọn ít nhất 1 sản phẩm");
+  } else {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_URL_API}/choosedProduct`,
+        {
+          id: a.value.sort().toString(),
         }
+      );
+      if (response.data.status === 1) {
+        // store.commit("product/setDataProduct", {
+        //     idDetailProduct: a.value,
+        // });
+        eventBus.product.idProduct = a.value;
+        router.back();
+      } else {
+        console.log("No choosedProduct");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
     }
+  }
 };
 const filter = computed(() => {
-    if (nameOrPhoneNumber.value) {
-        return data.value.filter((product) => {
-            return nameOrPhoneNumber.value
-                .toLowerCase()
-                .split(" ")
-                .every(
-                    (v) =>
-                        product.name.toLowerCase().includes(v) ||
-                        product.price.toLowerCase().includes(v)
-                );
-        });
-    } else {
-        return data.value;
-    }
+  if (nameOrPhoneNumber.value) {
+    return data.value.filter((product) => {
+      return nameOrPhoneNumber.value
+        .toLowerCase()
+        .split(" ")
+        .every(
+          (v) =>
+            product.name.toLowerCase().includes(v) ||
+            product.price.toLowerCase().includes(v)
+        );
+    });
+  } else {
+    return data.value;
+  }
 });
 </script>
 
 <style scoped>
 .mainAddNewProduct {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background-color: #f0f2f5;
+
+  .title {
+    background-color: white;
+    display: flex;
+    max-height: 100px;
+    padding: 16px 36px 16px 12px;
+    align-items: center;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
+    text-align: center;
+
+    svg {
+      position: relative;
+      font-size: 25px;
+    }
+
+    span {
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: bold;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+    }
+  }
+  .content {
     display: flex;
     flex: 1;
-    flex-direction: column;
-    background-color: #f0f2f5;
+    overflow-y: auto;
+    padding-top: 20px;
+    .details {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      background-color: white;
 
-    .title {
-        background-color: white;
-        display: flex;
-        max-height: 100px;
-        padding: 16px 36px 16px 12px;
-        align-items: center;
-        background-color: white;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
-        text-align: center;
+      .search {
+        padding: 10px 12px 10px 12px;
+        border-bottom: 1px solid #d9d9dd;
+      }
 
-        svg {
-            position: relative;
-            font-size: 25px;
+      .filterWithSelection {
+        background-color: #f0f2f5;
+        padding: 12px;
+        gap: 8px;
+
+        .filterSpan {
+          font-size: 14px;
+          color: #000000d9;
+          font-weight: 400;
         }
+      }
 
-        span {
-            font-size: 20px;
-            line-height: 28px;
-            font-weight: bold;
-            display: flex;
-            flex: 1;
-            justify-content: center;
-        }
-    }
-    .content {
+      .productInfor {
         display: flex;
         flex: 1;
-        overflow-y: auto;
-        padding-top: 20px;
-        .details {
+        flex-direction: column;
+        margin-bottom: 70px;
+        height: 400px;
+        overflow-y: scroll;
+        button {
+          display: flex;
+          flex: 1;
+          align-items: center;
+          padding: 10px;
+          border-radius: 0;
+          color: #1890ff;
+          gap: 10px;
+        }
+
+        .productItems {
+          display: flex;
+          flex: 1;
+          flex-direction: row;
+          align-items: start;
+          border-top: 1px solid #d9d9dd;
+          gap: 10px;
+
+          .productInforRadio {
             display: flex;
             flex: 1;
-            flex-direction: column;
-            background-color: white;
+            flex-direction: row;
 
-            .search {
-                padding: 10px 12px 10px 12px;
-                border-bottom: 1px solid #d9d9dd;
-            }
+            .detailsProduct {
+              display: flex;
+              flex: 1;
+              flex-direction: column;
+              padding: 12px;
+              gap: 10px;
 
-            .filterWithSelection {
-                background-color: #f0f2f5;
-                padding: 12px;
-                gap: 8px;
-
-                .filterSpan {
-                    font-size: 14px;
-                    color: #000000d9;
-                    font-weight: 400;
-                }
-            }
-
-            .productInfor {
+              .nameAndTagProduct {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
-                margin-bottom: 70px;
-                height: 400px;
-                overflow-y: scroll;
-                button {
-                    display: flex;
-                    flex: 1;
-                    align-items: center;
-                    padding: 10px;
-                    border-radius: 0;
-                    color: #1890ff;
-                    gap: 10px;
+                .nameProduct {
+                  font-size: 14px;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  max-width: 235px;
+                  /* background-color: red; */
+                }
+                .nameProduct:hover {
+                  overflow: visible;
                 }
 
-                .productItems {
+                .tagProduct {
+                  font-size: 12px;
+                  color: #00000073;
+                }
+              }
+
+              .priceAndQuantityProduct {
+                display: flex;
+                flex: 1;
+                flex-direction: row;
+
+                .priceProduct {
+                  font-size: 14px;
+                  color: #f26722;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  max-width: 150px;
+                }
+                .priceProduct:hover {
+                  overflow: visible;
+                }
+
+                .quantityProduct {
+                  font-size: 14px;
+                  font-weight: 600;
+                  display: flex;
+                  flex: 1;
+                  justify-content: flex-end;
+                  flex-direction: row;
+                  align-items: center;
+                  gap: 5px;
+
+                  .labelQuantity {
                     display: flex;
-                    flex: 1;
-                    flex-direction: row;
-                    align-items: start;
-                    border-top: 1px solid #d9d9dd;
-                    gap: 10px;
-
-                    .productInforRadio {
-                        display: flex;
-                        flex: 1;
-                        flex-direction: row;
-
-                        .detailsProduct {
-                            display: flex;
-                            flex: 1;
-                            flex-direction: column;
-                            padding: 12px;
-                            gap: 10px;
-
-                            .nameAndTagProduct {
-                                display: flex;
-                                flex: 1;
-                                flex-direction: column;
-                                .nameProduct {
-                                    font-size: 14px;
-                                    white-space: nowrap;
-                                    text-overflow: ellipsis;
-                                    overflow: hidden;
-                                    max-width: 235px;
-                                    /* background-color: red; */
-                                }
-                                .nameProduct:hover {
-                                    overflow: visible;
-                                }
-
-                                .tagProduct {
-                                    font-size: 12px;
-                                    color: #00000073;
-                                }
-                            }
-
-                            .priceAndQuantityProduct {
-                                display: flex;
-                                flex: 1;
-                                flex-direction: row;
-
-                                .priceProduct {
-                                    font-size: 14px;
-                                    color: #f26722;
-                                    white-space: nowrap;
-                                    text-overflow: ellipsis;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                }
-                                .priceProduct:hover {
-                                    overflow: visible;
-                                }
-
-                                .quantityProduct {
-                                    font-size: 14px;
-                                    font-weight: 600;
-                                    display: flex;
-                                    flex: 1;
-                                    justify-content: flex-end;
-                                    flex-direction: row;
-                                    align-items: center;
-                                    gap: 5px;
-
-                                    .labelQuantity {
-                                        display: flex;
-                                        font-size: 12px;
-                                        font-weight: 500;
-                                        color: #00000073;
-                                    }
-                                    .textQuantity {
-                                        /* white-space: nowrap;
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: #00000073;
+                  }
+                  .textQuantity {
+                    /* white-space: nowrap;
                                         text-overflow: ellipsis;
                                         overflow: hidden; */
-                                        display: flex;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    display: flex;
+                  }
                 }
+              }
             }
+          }
         }
+      }
     }
+  }
 
-    .footer {
-        display: flex;
-        .saveDive {
-            /* position: absolute; */
-            /* fixed*/
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            bottom: 0;
-            width: 100%;
-            padding: 10px;
-            border: 0 0 10px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.15);
-            box-shadow: 0 0.15rem 0.15rem rgba(0, 0, 0, 0.15);
+  .footer {
+    display: flex;
+    .saveDive {
+      /* position: absolute; */
+      /* fixed*/
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      bottom: 0;
+      width: 100%;
+      padding: 10px;
+      border: 0 0 10px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0.15rem 0.15rem rgba(0, 0, 0, 0.15);
 
-            button {
-                position: relative;
-                width: 100%;
-                border-radius: 0;
-                margin-top: 10px;
-            }
-        }
+      button {
+        position: relative;
+        width: 100%;
+        border-radius: 0;
+        margin-top: 10px;
+      }
     }
+  }
 }
 </style>

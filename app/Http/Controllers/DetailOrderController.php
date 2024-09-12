@@ -67,40 +67,6 @@ class DetailOrderController extends Controller
         }
 
         return response()->json(['status' => 1, 'createDetailOrder' => $createdDetailOrders]);
-
-
-
-        // $exsitingDetailOrder = DetailOrder::where('id', $result['id']);
-        // if (!$exsitingDetailOrder) {
-
-        //     $addDetailOrders = [];
-        //     foreach ($result as $data) {
-        //         $addDetailOrder = DetailOrder::create([
-        //             'idProduct' => $data['id'],
-        //             'price' => $data['price']
-        //         ]);
-        //         $addDetailOrders[] = $addDetailOrder;
-        //     }
-        //     return response()->json(['status' => 1, 'addDetailOrders' => $addDetailOrders]);
-        // } else {
-        //     return response()->json(['status' => 0, 'addDetailOrders' => 'DetailOrder has been already']);
-        // }
-
-
-
-        // if (is_array($data)) {
-        //     $addDetailOrders = [];
-        //     foreach ($data as $id) {
-        //         $addDetailOrder = DetailOrder::create([
-        //             'idProduct' => $id,
-        //         ]);
-        //         $addDetailOrders[] = $addDetailOrder;
-        //     }
-        //     return response()->json(['status' => 1, 'addDetailOrder' => $addDetailOrders]);
-        // } else {
-        //     return response()->json(['status' => 0, 'message' => 'Invalid data format']);
-        // }
-
     }
     public function createDetailOrderWithoutValue(Request $request)
     {
