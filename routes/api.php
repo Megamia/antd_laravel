@@ -61,22 +61,16 @@ Route::get('dataValueVoucherCode', [VoucherController::class, 'dataValueVoucherC
 Route::post('chooseVoucherCode', [VoucherController::class, 'chooseVoucherCode']);
 //VoucherCode
 
-//Voucher
-Route::post('createVoucher', [VoucherController::class, 'createVoucher']);
-//Voucher
-
-//Product
-Route::post('createProduct', [ProductController::class, 'createProduct']);
-//Product
-
 //DetailOrder
 Route::post('createDetailOrder', [DetailOrderController::class, 'createDetailOrder']);
-Route::post('createDetailOrderWithoutValue', [DetailOrderController::class, 'createDetailOrderWithoutValue']);
-Route::post('createDetailOrderWithValue', [DetailOrderController::class, 'createDetailOrderWithValue']);
 //DetailOrder
 
 //Order
 Route::post('createOrder', [OrderController::class, 'createOrder']);
 Route::post('createOrderWithoutValue', [OrderController::class, 'createOrderWithoutValue']);
+Route::post('createVoucher', [OrderController::class, 'createVoucher']);
+Route::post('createDetailOrderWithoutValue', [OrderController::class, 'createDetailOrderWithoutValue']);
+Route::post('createProduct', [OrderController::class, 'createProduct']);
+Route::post('createDetailOrderWithValue', [OrderController::class, 'createDetailOrderWithValue']);
 Route::post('createOrderWithValue', [OrderController::class, 'createOrderWithValue']);
 //Order

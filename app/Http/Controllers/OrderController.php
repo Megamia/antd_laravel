@@ -3,26 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailOrder;
+use App\Models\DetailProduct;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Voucher;
 use App\Models\VoucherCodeValue;
 use App\Models\VoucherPromotionValue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function createOrderWithoutValue(Request $request)
+    public function createOrderWithoutValue($idAddress, $idVoucherCode = null)
     {
-        $validated = $request->validate([
-            'idAddress' => 'required|exists:Address,id',
-            'idVoucherCode' => 'nullable|exists:VoucherCodeValue,id',
-        ]);
-
-        $idAddress = $validated['idAddress'];
-        $idVoucherCode = $validated['idVoucherCode'] ?? null;
-
-        $createOrderWithoutValues = [];
-        $detailCreateOrderWithoutValues = [];
         try {
             $orderData = [
                 'idAddress' => $idAddress,
@@ -33,14 +27,186 @@ class OrderController extends Controller
             }
 
             $createOrderWithoutValue = Order::create($orderData);
-            $createOrderWithoutValues[] = $createOrderWithoutValue;
-            $detailCreateOrderWithoutValues[] = Order::find($createOrderWithoutValue->id);
+            $orderId = $createOrderWithoutValue->id;
+
+            return response()->json([
+                'status' => 1,
+                'orderId' => $orderId,
+                'Message' => 'Order created successfully'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['status' => 0, 'message' => 'Failed to create order without value', 'error' => $e->getMessage()]);
+            return response()->json([
+                'status' => 0,
+                'Message' => 'Failed to create order without value',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function createVoucher($idOrder, $idVoucherPromotion = null)
+    {
+
+        $createVouchers = [];
+        $failedVoucher = [];
+
+        if (isset($data['idOrder']) && is_array($idOrder)) {
+            $idOrder = $idOrder[0];
+        }
+        if (!$idOrder) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'ID đơn hàng không hợp lệ'
+            ], 400);
         }
 
-        return response()->json(['status' => 1, 'createOrderWithoutValue' => $createOrderWithoutValues, 'detail' => $detailCreateOrderWithoutValues]);
+        if (empty($idVoucherPromotions)) {
+            try {
+                $createVoucher = Voucher::create([
+                    'idOrder' => $idOrder,
+                    'idVoucherPromotionValue' => null,
+                ]);
+                $createVouchers[] = $createVoucher;
+            } catch (\Exception $e) {
+                $failedVoucher[] = ['error' => $e->getMessage()];
+            }
+        } else {
+            foreach ($idVoucherPromotions as $idVoucherPromotion) {
+                try {
+                    $createVoucher = Voucher::create([
+                        'idOrder' => $idOrder,
+                        'idVoucherPromotionValue' => $idVoucherPromotion,
+                    ]);
+                    $createVouchers[] = $createVoucher;
+                } catch (\Exception $e) {
+                    $failedVoucher[] = [
+                        'idVoucherPromotion' => $idVoucherPromotion,
+                        'error' => $e->getMessage()
+                    ];
+                }
+            }
+        }
+
+        if (count($failedVoucher) > 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Một số voucher không thể được tạo',
+                'failedVoucher' => $failedVoucher
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'createVoucher' => $createVouchers,
+            'message' => 'Voucher đã được tạo thành công'
+        ]);
     }
+
+    public function createDetailOrderWithoutValue(Request $request)
+    {
+        $data = $request->only('idOrder');
+
+        if (isset($data['idOrder']) && is_array($data['idOrder'])) {
+            $idOrder = $data['idOrder'][0];
+        } else {
+            return response()->json(['status' => 0, 'createDetailOrderWithoutValue' => 'Invalid idOrder']);
+        }
+
+        $createDetailOrderWithoutValue = DetailOrder::create([
+            'idOrder' => $idOrder,
+            'timeCreateOrder' => Carbon::now(),
+        ]);
+
+        return response()->json(['status' => 1, 'createDetailOrderWithoutValue' => $createDetailOrderWithoutValue]);
+    }
+
+    public function createProduct(Request $request)
+    {
+        $data = $request->only('dataProduct', 'idDetailProduct', 'idDetailOrder');
+        $idDetailProduct = $data['idDetailProduct'];
+        $idDetailOrder = $data['idDetailOrder'];
+        $dataProduct = $data['dataProduct'];
+
+        if (empty($data) || !is_array($dataProduct) || empty($idDetailOrder)) {
+            return response()->json(['status' => 0, 'error' => 'Invalid input']);
+        }
+
+        if (!is_array($idDetailProduct)) {
+            $idDetailProduct = [$idDetailProduct];
+        }
+
+        $createProducts = [];
+
+        foreach ($dataProduct as $data) {
+            if (!isset($data['id']) || !isset($data['selectedQuantity'])) {
+                return response()->json(['status' => 0, 'error' => 'Invalid dataProduct format']);
+            }
+
+            $createProduct = Product::create([
+                'idDetailOrder' => $idDetailOrder,
+                'idDetailProduct' => $data['id'],
+                'numberSelected' => $data['selectedQuantity'] ?? 1,
+            ]);
+
+            $createProducts[] = $createProduct;
+        }
+
+        return response()->json(['status' => 1, 'createProduct' => $createProducts]);
+    }
+
+    public function createDetailOrderwithValue(Request $request)
+    {
+        $data = $request->only('idProduct', 'valueSale');
+
+        if (isset($data['idProduct']) && is_array($data['idProduct'])) {
+            $idDetailProducts = Product::whereIn('id', $data['idProduct'])->pluck('idDetailProduct');
+            $idDetailOrders = Product::whereIn('id', $data['idProduct'])->pluck('idDetailOrder')->unique();
+
+            $prices = DetailProduct::whereIn('id', $idDetailProducts)->pluck('price');
+            $quantities = Product::whereIn('idDetailProduct', $idDetailProducts)
+                ->where('idDetailorder', $idDetailOrders)
+                ->pluck('numberSelected');
+            $priceAllProduct = 0;
+            $priceAfterSale = 0;
+            foreach ($prices as $index => $price) {
+                $price = str_replace([',', '.'], '', $price);
+                $price = (float) $price;
+
+                $quantity = $quantities[$index];
+                $quantity = (int) $quantity;
+
+                if (is_numeric($price) && is_numeric($quantity)) {
+                    $priceAllProduct += $price * $quantity;
+                    $priceAfterSale = $priceAllProduct - $data['valueSale'];
+                } else {
+                    return response()->json(['status' => 0, 'message' => 'Invalid price or quantity value']);
+                }
+            }
+
+            $formattedPrice = number_format($priceAfterSale, 2, '.', ',');
+
+            $updatedRows = DetailOrder::whereIn('id', $idDetailOrders)
+                ->update(['price' => $formattedPrice]);
+
+            $createDetailOrderwithValue = DetailOrder::whereIn('id', $idDetailOrders)->get();
+
+            if ($updatedRows) {
+                return response()->json([
+                    'status' => 1,
+                    'createDetailOrderwithValue' => $createDetailOrderwithValue,
+                    'priceAllProduct' => $priceAllProduct,
+                    'priceAfterSale' => $priceAfterSale,
+                    'prices' => $prices,
+                    'quantities' => $quantities
+                ]);
+            } else {
+                return response()->json(['status' => 0, 'message' => 'Failed to update detail orders']);
+            }
+        } else {
+            return response()->json(['status' => 0, 'message' => 'Invalid idProduct']);
+        }
+    }
+
     public function createOrderWithValue(Request $request)
     {
         $validated = $request->validate([
@@ -92,6 +258,64 @@ class OrderController extends Controller
                 'totalVoucherValue' => $totalVoucherValue,
                 'message' => 'Tính toán thất bại'
             ]);
+        }
+    }
+
+    public function createOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'idAddress' => 'required|exists:Address,id',
+            'idVoucherCode' => 'nullable|exists:VoucherCodeValue,id',
+            'idVoucherPromotion' => 'nullable|array',
+            'idVoucherPromotion.*' => 'exists:VoucherPromotionValue,id',
+            'dataProduct' => 'required|array',
+            'dataProduct.*.id' => 'required|integer|exists:Product,id',
+            'dataProduct.*.selectedQuantity' => 'required|integer|min:1',
+            'idDetailProduct' => 'required|exists:DetailProduct,id',
+            'valueSale' => 'nullable|integer',
+        ]);
+
+        $idAddress = $validated['idAddress'];
+        $idVoucherCode = $validated['idVoucherCode'] ?? null;
+        $idVoucherPromotions = $validated['idVoucherPromotion'] ?? [];
+        $dataProduct = $validated['dataProduct'];
+        $idDetailProduct = $validated['idDetailProduct'];
+        $valueSale = $validated['valueSale'];
+
+        DB::beginTransaction();
+
+        try {
+            $responseWithoutValue = $this->createOrderWithoutValue($idAddress, $idVoucherCode);
+            $responseData = json_decode($responseWithoutValue->getContent(), true);
+
+            if ($responseData['status'] === 1) {
+                $orderId = $responseData['orderId'];
+
+                $voucherResponse = $this->createVoucher($orderId, $idVoucherPromotions);
+                $voucherData = json_decode($voucherResponse->getContent(), true);
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => 1,
+                    'order' => $responseData['orderId'],
+                    'voucher' => $voucherData['createVoucher'],
+                    'Message' => 'Order and voucher created successfully'
+                ]);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Failed to create order'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to create order or voucher',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

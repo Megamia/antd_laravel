@@ -242,9 +242,7 @@ onMounted(async () => {
       );
 
       if (matchedProduct) {
-        if (!(item.id in numberSelected.value)) {
-          numberSelected.value[item.id] = matchedProduct.selectedQuantity;
-        }
+        numberSelected.value[item.id] = matchedProduct.selectedQuantity;
       }
     });
   }
@@ -325,11 +323,14 @@ const fetchTotalPrice = () => {
     if (dataProductSelected.value.length > 0) {
       for (let i = 0; i < dataProductSelected.value.length; i++) {
         let numberSelectedProduct = 0;
-        if (store.state.product.dataSelected) {
+        if (
+          store.state.product.dataSelected &&
+          store.state.product.dataSelected.length > 0
+        ) {
           const matchedProduct = store.state.product.dataSelected.find(
             (product) => product.id === dataProductSelected.value[i].id
           );
-          numberSelectedProduct = matchedProduct.selectedQuantity;
+          numberSelectedProduct = matchedProduct.selectedQuantity ?? 1;
         } else {
           numberSelectedProduct = 1;
         }

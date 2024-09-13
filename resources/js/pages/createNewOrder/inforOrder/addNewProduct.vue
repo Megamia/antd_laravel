@@ -213,10 +213,14 @@ const buttonSave = async () => {
         }
       );
       if (response.data.status === 1) {
-        // store.commit("product/setDataProduct", {
-        //     idDetailProduct: a.value,
-        // });
         eventBus.product.idProduct = a.value;
+        data.value = a.value.map((item) => ({
+          id: item,
+          selectedQuantity: 1,
+        }));
+        store.commit("product/setDataProduct", {
+          dataSelected: data.value,
+        });
         router.back();
       } else {
         console.log("No choosedProduct");

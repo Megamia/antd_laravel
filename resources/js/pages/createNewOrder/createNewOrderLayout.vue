@@ -267,12 +267,25 @@ const createOrder = async () => {
   if (!checkValidInputCreateOrder()) {
     return;
   }
-  await createOrderWithoutValue();
-  await createVoucher();
-  await createDetailOrderWithoutValue();
-  await createProduct();
-  await createDetailOrderWithValue();
-  await createOrderWithValue();
+  // await createOrderWithoutValue();
+  // await createVoucher();
+  // await createDetailOrderWithoutValue();
+  // await createProduct();
+  // await createDetailOrderWithValue();
+  // await createOrderWithValue();
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/createOrder`, {
+      idAddress: store.state.address.dataAddress.id,
+      idVoucherCode: eventBus.voucher.idVoucherCode,
+      idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
+      dataProduct: store.state.product.dataSelected,
+      idDetailProduct: eventBus.product.idProduct,
+      valueSale: giamgia,
+    });
+    console.log(response.data);
+  } catch (e) {
+    console.log("Error: ", e);
+  }
 };
 
 const createOrderWithoutValue = async () => {
