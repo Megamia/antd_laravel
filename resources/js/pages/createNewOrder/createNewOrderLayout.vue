@@ -267,12 +267,6 @@ const createOrder = async () => {
   if (!checkValidInputCreateOrder()) {
     return;
   }
-  // await createOrderWithoutValue();
-  // await createVoucher();
-  // await createDetailOrderWithoutValue();
-  // await createProduct();
-  // await createDetailOrderWithValue();
-  // await createOrderWithValue();
   try {
     const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/createOrder`, {
       idAddress: store.state.address.dataAddress.id,
