@@ -21,6 +21,7 @@ Route::get('inforUserCRM', [DetailInforUserOrderController::class, 'inforUserCRM
 //DetailInforUserOrder
 
 //Address
+Route::post('getDataUser', [AddressController::class, 'getDataUser']);
 Route::get('inforAddress', [AddressController::class, 'inforAddress']);
 Route::post('swapAnotherAddress', [AddressController::class, 'swapAnotherAddress']);
 Route::delete('DeleteAddress/{id}', [AddressController::class, 'DeleteAddress']);
@@ -67,10 +68,4 @@ Route::post('createDetailOrder', [DetailOrderController::class, 'createDetailOrd
 
 //Order
 Route::post('createOrder', [OrderController::class, 'createOrder']);
-Route::post('createOrderWithoutValue', [OrderController::class, 'createOrderWithoutValue']);
-Route::post('createVoucher', [OrderController::class, 'createVoucher']);
-Route::post('createDetailOrderWithoutValue', [OrderController::class, 'createDetailOrderWithoutValue']);
-Route::post('createProduct', [OrderController::class, 'createProduct']);
-Route::post('createDetailOrderWithValue', [OrderController::class, 'createDetailOrderWithValue']);
-Route::post('createOrderWithValue', [OrderController::class, 'createOrderWithValue']);
 //Order

@@ -102,31 +102,8 @@ const filterWithTag = (data) => {
 };
 
 const data = ref({});
-// const idDetailProductt = store.state.product.idDetailProduct;
-
-// const test = () => {
-//     if (idDetailProductt.value && idDetailProductt.value > 0) {
-//         console.log("addew: ", idDetailProductt.value);
-//     }
-// };
 
 const fetchData = async () => {
-  // if (idDetailProduct.value && idDetailProduct.value > 0) {
-  //     console.log("addew: ", idDetailProduct.value);
-  //     a.value = idDetailProduct.value;
-  // }
-  // if (idDetailProduct.value) {
-  // let values = Object.values(store.state.product.idDetailProduct);
-  // store.state.product.idDetailProduct = values
-  //     .join(",")
-  //     .split(",")
-  //     .map(Number);
-  // a.value = store.state.product.idDetailProduct.filter(
-  //     (item) => item !== 0
-  // );
-  //     console.log("a.value: ", idDetailProduct.value);
-  //     a.value = idDetailProduct.value;
-  // }
   if (eventBus.product.idProductTemporary) {
     a.value = eventBus.product.idProductTemporary;
   } else {
@@ -187,20 +164,6 @@ const back = () => {
   router.back();
 };
 
-// const addNewUser = () => {
-//     router.push("/addProduct");
-// };
-
-// const store1 = computed(() => store.getters["product/getDataProduct"]);
-// const store2 = computed(() => store.getters["product/getIdDetailProduct"]);
-
-// const abcs = () => {
-//     console.log("onStore1: ", store1.value);
-//     console.log("onStore2: ", store2.value);
-// };
-// onMounted(() => {
-//     abcs();
-// });
 const buttonSave = async () => {
   if (!a.value || a.value.length <= 0) {
     alert("Hãy chọn ít nhất 1 sản phẩm");

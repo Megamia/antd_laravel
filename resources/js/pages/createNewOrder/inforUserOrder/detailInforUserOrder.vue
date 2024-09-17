@@ -1,61 +1,54 @@
 <template>
-    <div class="mainDetailInforUserOrder" v-if="isUser">
-        <div class="detailInforUser">
-            <div class="nameUser">
-                <span> {{ displayName }} | {{ displayPhoneNumber }}</span>
-            </div>
-            <div class="totalInforOrderUser">
-                <div class="order ordered">
-                    <span class="upText">Đơn mua</span>
-                    <span class="downText">100</span>
-                </div>
-                <div class="order cancelOrder">
-                    <span class="upText">Đơn hủy</span>
-                    <span class="downText">5</span>
-                </div>
-                <div class="order">
-                    <span class="upText">Tỷ lệ hủy</span>
-                    <span class="downText canceledRate">5%</span>
-                </div>
-            </div>
-            <div class="seeMoreDiv">
-                <span class="seeMoreText" @click="showModalInforUser">
-                    Xem thêm
-                </span>
-            </div>
-            <ModalInforUserOrder
-                v-if="isShowModalInforUser"
-                @closeModal="closeModal"
-            />
+  <div class="mainDetailInforUserOrder" v-if="isUser">
+    <div class="detailInforUser">
+      <div class="nameUser">
+        <span> {{ displayName }} | {{ displayPhoneNumber }}</span>
+      </div>
+      <div class="totalInforOrderUser">
+        <div class="order ordered">
+          <span class="upText">Đơn mua</span>
+          <span class="downText">100</span>
         </div>
-        <div class="addressUserDiv">
-            <div class="inforAddress">
-                <div class="inforAddressText">
-                    <span>Thông tin giao hàng</span>
-                </div>
-                <div class="swapAddress">
-                    <span @click="swapAddress"> Đổi địa chỉ</span>
-                </div>
-            </div>
-            <div class="nameUser">
-                <span>
-                    {{
-                        displayData
-                            ? displayData.name + " | " + displayData.phoneNumber
-                            : "Chưa có thông tin người nhận"
-                    }}
-                </span>
-            </div>
-            <div class="detailAddress">
-                {{
-                    displayData ? formattedAddress : "Chưa có thông tin địa chỉ"
-                }}
-            </div>
+        <div class="order cancelOrder">
+          <span class="upText">Đơn hủy</span>
+          <span class="downText">5</span>
         </div>
+        <div class="order">
+          <span class="upText">Tỷ lệ hủy</span>
+          <span class="downText canceledRate">5%</span>
+        </div>
+      </div>
+      <div class="seeMoreDiv">
+        <span class="seeMoreText" @click="showModalInforUser"> Xem thêm </span>
+      </div>
+      <ModalInforUserOrder v-if="isShowModalInforUser" @closeModal="closeModal" />
     </div>
-    <div class="guest" v-if="isGuest">
-        <span> Khách lẻ </span>
+    <div class="addressUserDiv">
+      <div class="inforAddress">
+        <div class="inforAddressText">
+          <span>Thông tin giao hàng</span>
+        </div>
+        <div class="swapAddress">
+          <span @click="swapAddress"> Đổi địa chỉ</span>
+        </div>
+      </div>
+      <div class="nameUser">
+        <span>
+          {{
+            displayData
+              ? displayData.name + " | " + displayData.phoneNumber
+              : "Chưa có thông tin người nhận"
+          }}
+        </span>
+      </div>
+      <div class="detailAddress">
+        {{ displayData ? formattedAddress : "Chưa có thông tin địa chỉ" }}
+      </div>
     </div>
+  </div>
+  <div class="guest" v-if="isGuest">
+    <span> Khách lẻ </span>
+  </div>
 </template>
 
 <script setup>
@@ -76,120 +69,88 @@ const checkShow = ref(false);
 const router = useRouter();
 
 const displayData = computed(() => {
-    if (dataAddress.value) {
-        return dataAddress.value;
-    } else {
-        return null;
-    }
+  if (dataAddress.value) {
+    return dataAddress.value;
+  } else {
+    return null;
+  }
 });
 
 const formattedAddress = computed(() => {
-    const address = displayData.value?.address ?? "Chưa có thông tin";
-    const ward = displayData.value?.ward ?? "Ward";
-    const district = displayData.value?.district ?? "District";
-    const city = displayData.value?.city ?? "City";
+  const address = displayData.value?.address ?? "Chưa có thông tin";
+  const ward = displayData.value?.ward ?? "Ward";
+  const district = displayData.value?.district ?? "District";
+  const city = displayData.value?.city ?? "City";
 
-    return address !== "Chưa có thông tin"
-        ? `${address}, ${ward}, ${district}, ${city}`
-        : "Chưa có thông tin";
+  return address !== "Chưa có thông tin"
+    ? `${address}, ${ward}, ${district}, ${city}`
+    : "Chưa có thông tin";
 });
 
 const displayName = computed(() => {
-    return dataUserOrder.value.name;
+  return dataUserOrder.value.name;
 });
 
 const displayPhoneNumber = computed(() => {
-    return dataUserOrder.value.phoneNumber;
+  return dataUserOrder.value.phoneNumber;
 });
 
 const swapAddress = async () => {
-    let id;
-    if (dataUserOrder.value && dataUserOrder.value.id) {
-        id = dataUserOrder.value.id;
-    }
+  let id;
+  if (dataUserOrder.value && dataUserOrder.value.id) {
+    id = dataUserOrder.value.id;
+  }
 
-    router.push({
-        name: "SwapAddress",
-        params: { id },
-    });
+  router.push({
+    name: "SwapAddress",
+    params: { id },
+  });
 };
 
 const showModalInforUser = async () => {
-    await fetchData();
-    if (checkShow.value) {
-        isShowModalInforUser.value = true;
+  await fetchData();
+  if (checkShow.value) {
+    if (store.state.address.dataAddress) {
+      isShowModalInforUser.value = true;
     } else {
-        isShowModalInforUser.value = false;
-        alert("Vui lòng chọn lại user");
-        emit("fet");
+      isShowModalInforUser.value = false;
+      alert("Chưa chọn địa chỉ");
+      return;
     }
-    return;
+  } else {
+    isShowModalInforUser.value = false;
+    alert("Vui lòng chọn lại user");
+    emit("fet");
+  }
+  return;
 };
 
 const closeModal = () => {
-    isShowModalInforUser.value = false;
+  isShowModalInforUser.value = false;
 };
 
-// const fetchData = async () => {
-//     try {
-//         let response;
-//         if (eventBus.id) {
-//             response = await axios.post(
-//                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-//                 { idAddress: eventBus.id }
-//             );
-//         } else {
-//             response = await axios.post(
-//                 `${import.meta.env.VITE_APP_URL_API}/newDataUserOrderAfterSwap`,
-//                 { idAddress: null }
-//             );
-//         }
-//         handleResponseData(response.data);
-//     } catch (e) {
-//         console.log("Error: ", e);
-//     }
-// };
-
-// const handleResponseData = (data) => {
-//     if (data.status === 1) {
-//         dataUserOrder.value = data.dataUserOrder;
-//         console.log("data: ", dataUserOrder.value);
-//         if (data.dataUser != "guest") {
-//             isGuest.value = false;
-//             isUser.value = true;
-//         } else {
-//             isGuest.value = true;
-//             isUser.value = false;
-//         }
-//         checkShow.value = true;
-//     } else {
-//         checkShow.value = false;
-//     }
-//     emit("InforUser", dataUserOrder.value);
-// };
-
 const fetchData = () => {
-    try {
-        if (store.state.user.dataUser) {
-            if (store.state.address.dataAddress) {
-                dataAddress.value = store.state.address.dataAddress;
-            }
-            dataUserOrder.value = store.state.user.dataUser;
-            // console.log("data: ", dataUserOrder.value);
-            if (store.state.user.dataUser != "guest") {
-                isGuest.value = false;
-                isUser.value = true;
-            } else {
-                isGuest.value = true;
-                isUser.value = false;
-            }
-            checkShow.value = true;
-        } else {
-            checkShow.value = false;
-        }
-    } catch (e) {
-        console.log("Error: ", e);
+  try {
+    if (store.state.user.dataUser) {
+      if (store.state.address.dataAddress) {
+        dataAddress.value = store.state.address.dataAddress;
+      }
+      dataUserOrder.value = store.state.user.dataUser;
+      // console.log("data: ", dataUserOrder.value);
+      if (store.state.user.dataUser != "guest") {
+        isGuest.value = false;
+        isUser.value = true;
+      } else {
+        isGuest.value = true;
+        isUser.value = false;
+      }
+      checkShow.value = true;
+    } else {
+      checkShow.value = false;
     }
+  } catch (e) {
+    console.log("Error: ", e);
+  }
 };
 
 onMounted(() => fetchData());
@@ -198,133 +159,133 @@ onMounted(() => fetchData());
 <style scoped>
 .mainDetailInforUserOrder,
 .guest {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: white !important;
+  padding-block: 10px;
+  border-top: 1px solid #d9d9d9;
+
+  .title {
+    display: flex;
+    flex: 1;
+    padding: 0px 10px 10px;
+    border-bottom: 2px solid #f0f0f0;
+
+    .inforText {
+      font-size: 16px;
+      font-weight: bold;
+      justify-content: start;
+    }
+
+    .uncheckedText {
+      display: flex;
+      flex: 1;
+      justify-content: end;
+      font-size: 14px;
+      color: red;
+    }
+  }
+
+  .detailInforUser {
+    border-bottom: 2px solid #f0f0f0;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    background-color: white !important;
-    padding-block: 10px;
-    border-top: 1px solid #d9d9d9;
+    margin-inline: 10px;
 
-    .title {
-        display: flex;
-        flex: 1;
-        padding: 0px 10px 10px;
-        border-bottom: 2px solid #f0f0f0;
-
-        .inforText {
-            font-size: 16px;
-            font-weight: bold;
-            justify-content: start;
-        }
-
-        .uncheckedText {
-            display: flex;
-            flex: 1;
-            justify-content: end;
-            font-size: 14px;
-            color: red;
-        }
+    .nameUser {
+      padding-block: 10px;
+      font-size: 14px;
+      font-weight: 600;
     }
 
-    .detailInforUser {
-        border-bottom: 2px solid #f0f0f0;
+    .totalInforOrderUser {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+      justify-content: space-between;
+
+      .order {
+        padding-inline: 10px;
+
+        flex: 1;
+        gap: 10px;
         display: flex;
         flex-direction: column;
-        margin-inline: 10px;
 
-        .nameUser {
-            padding-block: 10px;
-            font-size: 14px;
-            font-weight: 600;
+        .upText {
+          color: #8c8c8c;
         }
 
-        .totalInforOrderUser {
-            display: flex;
-            flex-direction: row;
-            flex: 1;
-            justify-content: space-between;
-
-            .order {
-                padding-inline: 10px;
-
-                flex: 1;
-                gap: 10px;
-                display: flex;
-                flex-direction: column;
-
-                .upText {
-                    color: #8c8c8c;
-                }
-
-                .downText {
-                    color: black;
-                    font-weight: 600;
-                }
-
-                .canceledRate {
-                    color: red;
-                }
-            }
-
-            .ordered {
-                padding-inline: 0;
-            }
-
-            .cancelOrder {
-                border-inline: 2px solid #f0f0f0;
-            }
+        .downText {
+          color: black;
+          font-weight: 600;
         }
 
-        .seeMoreDiv {
-            padding-block: 10px;
-
-            .seeMoreText {
-                color: #1890ff;
-            }
+        .canceledRate {
+          color: red;
         }
+      }
+
+      .ordered {
+        padding-inline: 0;
+      }
+
+      .cancelOrder {
+        border-inline: 2px solid #f0f0f0;
+      }
     }
 
-    .addressUserDiv {
-        padding-inline: 10px;
-        color: #8c8c8c;
+    .seeMoreDiv {
+      padding-block: 10px;
 
-        .inforAddress {
-            display: flex;
-            flex: 1;
-            flex-direction: row;
-            padding-block: 10px;
-
-            .inforAddressText {
-                span {
-                    font-size: 12px;
-                    font-weight: bold;
-                    color: black;
-                }
-            }
-
-            .swapAddress {
-                display: flex;
-                flex: 1;
-                justify-content: end;
-                color: #1890ff;
-                font-size: 12px;
-            }
-        }
-
-        .nameUser {
-            padding-block: 10px;
-            font-size: 14px;
-            font-weight: 400;
-            color: black;
-        }
+      .seeMoreText {
+        color: #1890ff;
+      }
     }
+  }
+
+  .addressUserDiv {
+    padding-inline: 10px;
+    color: #8c8c8c;
+
+    .inforAddress {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      padding-block: 10px;
+
+      .inforAddressText {
+        span {
+          font-size: 12px;
+          font-weight: bold;
+          color: black;
+        }
+      }
+
+      .swapAddress {
+        display: flex;
+        flex: 1;
+        justify-content: end;
+        color: #1890ff;
+        font-size: 12px;
+      }
+    }
+
+    .nameUser {
+      padding-block: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: black;
+    }
+  }
 }
 
 .guest {
-    span {
-        padding-inline: 10px;
-        font-size: 14px;
-        color: #000000d9;
-    }
+  span {
+    padding-inline: 10px;
+    font-size: 14px;
+    color: #000000d9;
+  }
 }
 </style>

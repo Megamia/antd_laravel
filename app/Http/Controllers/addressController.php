@@ -6,10 +6,24 @@ use App\Models\Address;
 use App\Models\DetailInforUserOrder;
 use App\Models\InforUser;
 use Illuminate\Http\Request;
-use App\Models\InforUserOrder;
 
 class addressController extends Controller
 {
+
+    public function getDataUser(Request $request)
+    {
+        $data = $request->only('idAddress');
+        $idAddress = $data['idAddress'];
+        $idUser = Address::where('id', $idAddress)->value('idUser');
+        $getDataUser = DetailInforUserOrder::find($idUser);
+        $getDataAddress = Address::find($idAddress);
+        if ($getDataUser) {
+            return response()->json(['status' => 1, 'getDataUser' => $getDataUser, 'getDataAddress' => $getDataAddress]);
+        } else {
+            return response()->json(['status' => 0, 'getDataUser' => 'Faile to getDataUser']);
+        }
+    }
+
     public function inforAddress(Request $request)
     {
         $address = Address::all();
@@ -54,7 +68,7 @@ class addressController extends Controller
         }
     }
     //Cần update
-    
+
     public function deleteAddress(Request $request, $id)
     {
         $address = Address::findOrFail($id);

@@ -209,25 +209,36 @@ const fetchDataInforOrder = (data) => {
 // onMounted(() => fetchDataInforOrder());
 //Cost
 const mathCost = () => {
-  if (eventBus.product.idProduct && eventBus.product.idProduct.length > 0) {
+  const priceProduct = eventBus.product.priceProduct || 0;
+  const valueVoucher = eventBus.voucher.valueVoucher || 0;
+  const valueShip = eventBus.voucher.valueShip || 0;
+  valueVAT = parseFloat(valueVAT);
+
+  if (eventBus.product.idProduct && eventBus.product.idProduct.length != null) {
     numberProductSelected = eventBus.product.idProduct.length;
   } else {
     numberProductSelected = 0;
   }
 
-  giamgia =
-    eventBus.voucher.valueVoucher + eventBus.voucher.valueShip + parseFloat(valueVAT);
-  eventBus.product.priceAfterSale = eventBus.product.priceProduct - giamgia;
-  priceProductValueText.value = eventBus.product.priceProduct - giamgia;
+  const giamgia = valueVoucher + valueShip + valueVAT;
+  eventBus.product.priceAfterSale = priceProduct - giamgia;
+
+  if (numberProductSelected != 0) {
+    priceProductValueText.value = priceProduct - giamgia;
+  } else {
+    priceProductValueText.value = 0;
+  }
   priceProductValueText.value = priceProductValueText.value.toString();
   priceProductValueText.value = priceProductValueText.value.replace(
     /\B(?=(\d{3})+(?!\d))/g,
     ","
   );
 
-  voucher.value = giamgia.toString();
+  const formattedVoucherValue = giamgia.toFixed(2);
+  voucher.value = formattedVoucherValue;
   voucher.value = voucher.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
 //Cost
 
 const product = ref("");
@@ -276,49 +287,10 @@ const createOrder = async () => {
       idDetailProduct: eventBus.product.idProduct,
       valueSale: giamgia,
     });
-    console.log(response.data);
-  } catch (e) {
-    console.log("Error: ", e);
-  }
-};
-
-const createOrderWithoutValue = async () => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_URL_API}/createOrderWithoutValue`,
-      {
-        idAddress: store.state.address.dataAddress.id,
-        idVoucherCode: eventBus.voucher.idVoucherCode,
-      }
-    );
     if (response.data.status === 1) {
-      console.log("Tạo order không có value thành công");
-      idDataOrderWithoutValue.value = response.data.createOrderWithoutValue.map(
-        (item) => item.id
-      );
+      router.push("/CreateOrderSuccess");
     } else {
-      console.log("Tạo order không có value thất bại");
-      return;
-    }
-  } catch (e) {
-    console.log("Error: ", e);
-  }
-};
-
-const createOrderWithValue = async () => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_URL_API}/createOrderWithValue`,
-      {
-        idOrder: idDataOrderWithoutValue.value,
-        idVoucherCode: eventBus.voucher.idVoucherCode,
-      }
-    );
-    if (response.data.status === 1) {
-      console.log("Tạo order có value thành công");
-    } else {
-      console.log("Tạo order có value thất bại", response.data.message);
-      return;
+      alert("Có lỗi khi khởi tạo order");
     }
   } catch (e) {
     console.log("Error: ", e);
@@ -335,112 +307,6 @@ const checkValidInputCreateOrder = () => {
     return false;
   }
   return true;
-};
-
-const idProductCreated = ref("");
-const createProduct = async () => {
-  try {
-    if (
-      eventBus.product.idProduct != null &&
-      Array.isArray(eventBus.product.idProduct) &&
-      eventBus.product.idProduct.length > 0
-    ) {
-      const response = await axios.post(
-        `${import.meta.env.VITE_APP_URL_API}/createProduct`,
-        {
-          dataProduct: store.state.product.dataSelected,
-          idDetailOrder: idDetailOrder.value,
-          idDetailProduct: eventBus.product.idProduct,
-        }
-      );
-
-      if (response.data && response.data.status === 1) {
-        // idProductSelected.value = response.data.createProduct.map(
-        //     (item) => item.id
-        // );
-        console.log("createProduct thành công");
-        idProductCreated.value = response.data.createProduct.map((item) => item.id);
-      } else {
-        console.log("createProduct thất bại");
-        return;
-      }
-    } else {
-      alert("Chưa chọn sản phẩm nào");
-    }
-  } catch (e) {
-    console.log("Error: ", e);
-    alert("Đã xảy ra lỗi khi gửi yêu cầu đến server. Vui lòng thử lại sau.");
-  }
-};
-
-const idDetailOrder = ref([]);
-const createDetailOrderWithoutValue = async () => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithoutValue`,
-      {
-        idOrder: idDataOrderWithoutValue.value,
-      }
-    );
-    if (response.data.status === 1) {
-      console.log("createDetailOrderWithoutValue thành công");
-      idDetailOrder.value = response.data.createDetailOrderWithoutValue.id;
-    } else {
-      console.log("createDetailOrderWithoutValue thất bại");
-      return;
-    }
-  } catch (e) {
-    console.log("Error: ", e);
-  }
-};
-
-const createDetailOrderWithValue = async () => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_URL_API}/createDetailOrderWithValue`,
-      {
-        idProduct: idProductCreated.value,
-        valueSale: giamgia,
-        // valueShip: ,
-        // valueVat: ,
-      }
-    );
-    if (response.data.status === 1) {
-      console.log("createDetailOrderWithValue thành công");
-    } else {
-      console.log("createDetailOrderWithValue thất bại");
-      return;
-    }
-  } catch (e) {
-    console.log("Error:  ", e);
-  }
-};
-
-const createVoucher = async (dataOrder) => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_URL_API}/createVoucher`,
-      {
-        idOrder: idDataOrderWithoutValue.value,
-        idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
-      }
-    );
-    if (response.data.status === 1) {
-      console.log("createVoucher thành công");
-
-      // if (response.data.message !== "Voucher(s) already exists") {
-      //     data.value = response.data.createVoucher;
-      // } else {
-      //     data.value = response.data.existingVouchers;
-      // }
-      // console.log(data.value);
-    } else {
-      console.log("createVoucher thất bại");
-      return;
-    }
-  } catch (e) {
-    console.log("Error: ", e);
-  }
 };
 </script>
 

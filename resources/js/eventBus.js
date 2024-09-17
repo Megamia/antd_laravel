@@ -5,6 +5,7 @@ const eventBus = reactive({
     clear() {
         this.id = null;
     },
+
     product: {
         idProduct: null,
         clearProduct() {
@@ -16,6 +17,7 @@ const eventBus = reactive({
         numberSelected: 0,
         priceAfterSale: 0,
     },
+
     voucher: {
         idVoucherCode: null,
         idVoucherPromotion: null,
@@ -25,7 +27,6 @@ const eventBus = reactive({
         },
 
         valueVoucher: 0,
-        isLoyalty: false,
         clearValueVoucher() {
             this.valueVoucher = 0;
         },
@@ -47,11 +48,12 @@ const eventBus = reactive({
             this.clearIdVoucher();
         },
     },
-    // newOrder() {
-    //     this.clear();
-    //     this.product.clearProduct();
-    //     this.voucher.clearAllVoucher();
-    // },
+
+    clearAll() {
+        this.clear();
+        this.product.clearProduct();
+        this.voucher.clearAllVoucher();
+    }
 });
 
 export default eventBus;
