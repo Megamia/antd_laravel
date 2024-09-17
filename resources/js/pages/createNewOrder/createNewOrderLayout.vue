@@ -271,7 +271,7 @@ const createOrder = async () => {
     const response = await axios.post(`${import.meta.env.VITE_APP_URL_API}/createOrder`, {
       idAddress: store.state.address.dataAddress.id,
       idVoucherCode: eventBus.voucher.idVoucherCode,
-      idVoucherPromotion: eventBus.voucher.idVoucherPromotion,
+      idVoucherPromotionValue: eventBus.voucher.idVoucherPromotion,
       dataProduct: store.state.product.dataSelected,
       idDetailProduct: eventBus.product.idProduct,
       valueSale: giamgia,
